@@ -1,0 +1,131 @@
+/* src/pages/SignUpPage/SignUpPage.css */
+
+/* reset & 기본 설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* body 전체에 폰트 적용 - 한글(Noto Sans KR), 영어(Montserrat) */
+  body {
+    font-family: 'Noto Sans KR', 'Montserrat', sans-serif;
+    background-color: #FFFFFF;
+  }
+  
+  /* 영어 텍스트만 별도 처리하고 싶을 때 사용하는 클래스 */
+  .english-text {
+    font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+  }
+  
+  /* 메인 컨테이너 */
+  .signup-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 상단 헤더 영역 */
+  .signup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* 로고 영역 위치 */
+  .signup-logo {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+  }
+  
+  .signup-logo img {
+    width: 130px;
+    height: 50px;
+  }
+  
+  .signup-form-wrapper {
+    max-width: 400px;
+    margin: 120px auto 50px;
+    padding: 0 20px;
+  }
+  
+  .signup-box {
+    width: 130%;
+    max-width: 600px;
+    padding: 2rem;
+    background-color: #ffffff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transform: translateX(-50px)
+  }
+  .signup-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  
+  .signup-info {
+    text-align: center;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 2rem;
+    white-space: nowrap; /* 텍스트가 한 줄로 표시됩니다 */
+    transform: translateX(-70px); /* 전체 블록을 왼쪽으로 20px 이동 */
+  }
+  
+  .warning-icon {
+    vertical-align: middle; /* 텍스트와 수직 중앙 정렬 */
+    margin-right: 8px; /* 아이콘과 텍스트 사이 간격 */
+    width: 20px; /* 아이콘 크기는 필요에 따라 조정 */
+    height: auto;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: #F0F2F5;  /* 입력 칸의 배경색 변경 */
+    color: #3D4D5C;
+
+    border: 1px solid #F0F2F5;       /* 단순한 테두리 효과 */
+    border-radius: 8px;
+    box-shadow: none;             /* 그림자 효과 제거 */
+    outline: none;                /* 포커스 시 기본 외곽선 제거 (필요한 경우) */
+    appearance: none;             /* 브라우저 기본 스타일 제거 */
+    -webkit-appearance: none;  
+  }
+  /* placeholder(힌트 텍스트) 색 변경 */
+  .form-group input::placeholder {
+    color: #3D4D5C;  /* 연한 회색 */
+  }
+  
+  /* 제출하기 버튼 스타일 */
+  .signup-submit {
+    width: 100%;
+    padding: 12px 0;
+    background-color: #4D77FF;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+  }
+  
