@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './SignupPage.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from 'axios'; // axios import 추가
+
 
 function SignupPage() {
   const [email, setEmail] = useState('');
@@ -12,7 +14,7 @@ function SignupPage() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = {
@@ -22,15 +24,25 @@ function SignupPage() {
       yearOfEmployment,
     };
 
-    console.log('회원가입 데이터:', formData);
-    alert('회원가입이 완료되었습니다. 로그인해 주세요.');
-
-    setEmail('');
-    setPassword('');
-    setNickname('');
-    setYearOfEmployment('');
-
-    navigate('/login');
+    try {
+        // 백엔드로 POST 요청 보내기 백엔드 주소 입력하기
+        const response = await axios.post('http://localhost:4000/api/signup', formData);
+    
+        console.log('서버 응답:', response.data);
+        alert('회원가입이 완료되었습니다. 로그인해 주세요.');
+    
+        // 폼 초기화
+        setEmail('');
+        setPassword('');
+        setNickname('');
+        setYearOfEmployment('');
+    
+        navigate('/login');
+      } catch (error) {
+        console.error('회원가입 오류:', error);
+        alert('회원가입 중 문제가 발생했습니다.');
+      }
+      
   };
 
   return (
