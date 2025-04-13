@@ -21,12 +21,12 @@ function SignupPage() {
       email,
       password,
       nickname,
-      yearOfEmployment,
+      joinedYear: yearOfEmployment
     };
 
     try {
         // 백엔드로 POST 요청 보내기 백엔드 주소 입력하기
-        const response = await axios.post('http://localhost:4000/api/signup', formData);
+        const response = await axios.post('http://localhost:4000/auth/sign-up', formData);
     
         console.log('서버 응답:', response.data);
         alert('회원가입이 완료되었습니다. 로그인해 주세요.');
