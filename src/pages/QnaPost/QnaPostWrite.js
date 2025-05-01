@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './FreePostWrite.css';
+import './QnaPostWrite.css';
 import HomeBar from '../../components/HomeBar';
 
-function FreePostWrite() {
+function QnaPostWrite() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [tag, setTag] = useState('Engineering');
@@ -29,7 +29,7 @@ function FreePostWrite() {
       
       <div className="freepost-write-container">
         <h1 className="board-title" onClick={() => navigate(-1)}>
-            자유 게시판
+            질문 게시판
         </h1>
         <form className="write-form" onSubmit={handleSubmit}>
          
@@ -58,7 +58,7 @@ function FreePostWrite() {
           <p className="write-label">내용</p>
           <textarea
             className="write-textarea"
-            placeholder="자유롭게 내용을 작성해주세요."
+            placeholder="궁금한 내용을 작성해주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
@@ -68,4 +68,4 @@ function FreePostWrite() {
   );
 }
 
-export default FreePostWrite;
+export default QnaPostWrite;
