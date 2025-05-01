@@ -1,0 +1,57 @@
+/* HomeBar.css */
+
+.homebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 20px;
+    background-color: white;
+    border-bottom: 1px solid #eee;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  
+  .homebar-logo {
+    width: 130px;
+    height: 50px;
+    margin-top: 3px; 
+
+  }
+  
+  .homebar-center a,
+  .homebar-right a  {
+    margin: 0 16px;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .homebar-center a:hover,
+  .homebar-right a:hover {
+    color: #4D77FF;
+  }
+  
+  .homebar-right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .logout-button {
+    background: none;
+    border: none;
+    color: black;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 30px;
+  }
+  
+  .logout-button:hover {
+    color: #4D77FF;
+  }
+    
+  .home-link {
+    margin-right: 100px !important;
+  }
+  
