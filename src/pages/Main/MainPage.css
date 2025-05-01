@@ -1,0 +1,18 @@
+.main-container {
+    max-width: 800px;
+    margin: 100px auto;
+    padding: 0 20px;
+    text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  
+  .main-container h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  
+  .main-container p {
+    font-size: 16px;
+    color: #555;
+  }
+  
