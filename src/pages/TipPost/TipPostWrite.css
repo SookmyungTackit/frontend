@@ -1,0 +1,106 @@
+.freepost-write-container {
+    background-color: white;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  
+  .freepost-write-container h1 {
+    font-size: 28px;
+    margin-top: 20px;
+    margin-bottom: 24px;
+    font-weight: bold;
+  }
+
+  
+  .write-submit-button {
+    background-color: #4D77FF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 16px;
+
+    align-self: flex-end;   /* 🔥 오른쪽 끝으로 정렬 */
+    width: auto;            /* ✅ 내용만큼만 너비 */
+  }
+  
+  
+  
+  .write-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;  /* 👉 적당한 여백으로 줄이기 */
+  }
+  
+  
+  
+  /* 제목 영역 */
+  .write-title-input {
+    margin: 0;
+    font-size: 14px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #f8fbfd;
+    outline: none;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  /* 태그 버튼 */
+  .tag-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+  }
+  
+  .tag-button {
+    background-color: #f0f2f5;
+    border: none;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 16px;
+    color: #333;
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+  
+  .tag-button.selected {
+    background-color: #4D77FF;
+    color: white;
+  }
+  
+  /* 내용 입력창 */
+  .write-textarea {
+    margin: 0;
+    padding: 16px;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    min-height: 280px;
+    resize: vertical;
+    background-color: #f8fbfd;
+    outline: none;
+    resize: none;
+  }
+  
+
+  .write-label {
+    margin: 0;
+    margin-bottom: 0px;  /* 아래 여백 줄이기 */
+    margin-top: 0;       /* 위 여백도 없애고 싶다면 */
+    font-size: 14px;     /* (선택) 글씨 크기 조절 */
+    font-weight: 500;    /* (선택) 강조 */
+  }
+
+  .warning-icon {
+    vertical-align: middle; /* 텍스트와 수직 중앙 정렬 */
+    margin-right: 8px; /* 아이콘과 텍스트 사이 간격 */
+    width: 20px; /* 아이콘 크기는 필요에 따라 조정 */
+    height: auto;
+  }

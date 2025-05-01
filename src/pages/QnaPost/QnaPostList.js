@@ -7,23 +7,25 @@ const dummyPosts = [
   {
     id: 1,
     nickname: '닉네임',
-    created_at: '2025-04-06T17:33:45.1647',
+    date: '2022년 10월 14일 오전 9시 30분',
     tag: 'Engineering',
     title: '처음이라 많이 떨리네요! 😂 신입 인사드립니다.',
-    content: '첫 직장에서의 인사라 설렘과 긴장이 공존합니다. 함께할 팀원들과 협업을 통해 즐겁고 뜻깊은 시간을 보내고 싶습니다.',
+    content:
+      '첫 직장에서의 인사라 설렘과 긴장이 공존합니다. 함께할 팀원들과 협업을 통해 즐겁고 뜻깊은 시간을 보내고 싶습니다.',
   },
   {
     id: 2,
     nickname: '선배1',
-    created_at: '2025-04-05T10:20:00.000',
+    date: '2022년 11월 02일 오후 2시 15분',
     tag: 'Product',
     title: '프로덕트 팀에서 협업 잘하는 팁!',
-    content: '신입분들과의 소통을 잘 하기 위해선 일일 체크인과 주간 회고가 정말 도움이 됩니다. 자유롭게 질문해주세요 :)',
+    content:
+      '신입분들과의 소통을 잘 하기 위해선 일일 체크인과 주간 회고가 정말 도움이 됩니다. 자유롭게 질문해주세요 :)',
   },
   {
     id: 3,
     nickname: '사원2',
-    created_at: '2025-04-03T11:00:00.000',
+    date: '2023년 1월 10일 오전 11시 00분',
     tag: 'People',
     title: '다들 점심 뭐 드시나요?',
     content: '요즘 구내식당 메뉴가 살짝 질리네요. 근처 추천 식당 있으신가요?',
@@ -31,44 +33,32 @@ const dummyPosts = [
   {
     id: 4,
     nickname: '신입3',
-    created_at: '2025-04-01T15:30:00.000',
+    date: '2023년 3월 7일 오후 4시 45분',
     tag: 'Sales',
     title: '첫 미팅 후기 공유드려요!',
-    content: '오늘 처음으로 고객사 미팅 다녀왔습니다. 긴장했지만 팀장님 덕분에 잘 마무리했어요. 배운 점 간단히 정리해봅니다.',
+    content:
+      '오늘 처음으로 고객사 미팅 다녀왔습니다. 긴장했지만 팀장님 덕분에 잘 마무리했어요. 배운 점 간단히 정리해봅니다.',
   },
-  {
-    id: 5,
-    nickname: '사원4',
-    created_at: '2025-03-31T09:15:00.000',
-    tag: 'People',
-    title: '업무 효율 꿀팁 공유합니다!',
-    content: '일을 체계적으로 정리하는 방법을 고민하다가 이걸 써봤는데 효과 좋아요!',
-  },
-  {
-    id: 6,
-    nickname: '사원5',
-    created_at: '2025-03-30T08:45:00.000',
-    tag: 'Engineering',
-    title: '코드 리뷰는 이렇게 해요',
-    content: '협업에서 중요한 코드 리뷰 문화를 정리해봤어요.',
-  },
-  // ...더 추가 가능
 ];
 
 function QnaPostList() {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  // 한페이지에 보여주는 게시글 수 지정
+  const [selectedTag, setSelectedTag] = useState(null); // ✅ 추가
+
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
   const filteredPosts = dummyPosts
-    .filter((post) =>
-      post.title.includes(searchKeyword) ||
-      post.content.includes(searchKeyword) ||
-      post.nickname.includes(searchKeyword)
-    )
+    .filter((post) => {
+      const matchesSearch =
+        post.title.includes(searchKeyword) ||
+        post.content.includes(searchKeyword) ||
+        post.nickname.includes(searchKeyword);
+      const matchesTag = selectedTag ? post.tag === selectedTag : true;
+      return matchesSearch && matchesTag;
+    })
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
@@ -89,6 +79,12 @@ function QnaPostList() {
     if (nextGroupFirstPage <= totalPages) setCurrentPage(nextGroupFirstPage);
   };
 
+  const handleTagClick = (tag) => {
+    const plainTag = tag.replace('#', '');
+    setCurrentPage(1);
+    setSelectedTag(prev => prev === plainTag ? null : plainTag); // ✅ 토글
+  };
+
   return (
     <>
       <HomeBar />
@@ -107,7 +103,6 @@ function QnaPostList() {
           <button className="search-button">
             <img src="/search.svg" alt="검색" width="15" height="15" />
           </button>
-
         </div>
         <h1>질문 게시판</h1>
         <p>Home &gt; 질문 게시판</p>
@@ -122,7 +117,13 @@ function QnaPostList() {
 
         <div className="freepost-tags">
           {['#Product', '#Engineering', '#People', '#Sales'].map((tag, index) => (
-            <button key={index} className="tag-button">{tag}</button>
+            <button
+              key={index}
+              className={`tag-button ${selectedTag === tag.replace('#', '') ? 'active-tag' : ''}`}
+              onClick={() => handleTagClick(tag)}
+            >
+              {tag}
+            </button>
           ))}
           <button className="write-button" onClick={() => navigate('/qna/write')}>
             글쓰기

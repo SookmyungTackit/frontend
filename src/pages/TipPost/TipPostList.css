@@ -83,12 +83,6 @@ body {
     cursor: pointer;
   }
   
-  /* ✅ 선택된 태그 버튼 스타일 */
-  .tag-button.active-tag {
-    background-color: #4D77FF;
-    color: #fff;
-    font-weight: bold;
-  }
   
   .search-box input {
     border: none;
@@ -121,10 +115,9 @@ body {
   
   .post-meta {
     display: flex;
-    gap: 8px; /* or 10px for spacing between spans */
-    flex-wrap: wrap; /* 줄바꿈 대응 */
-    font-size: 14px;
+    gap: 10px;
     color: #666;
+    font-size: 13px;
     margin-bottom: 6px;
   }
   
