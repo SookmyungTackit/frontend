@@ -111,6 +111,31 @@
     appearance: none;             /* 브라우저 기본 스타일 제거 */
     -webkit-appearance: none;  
   }
+
+  .year-select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: #F0F2F5; /* input 배경색과 통일 */
+    color: #3D4D5C;
+  
+    border: 1px solid #F0F2F5; /* input 테두리와 동일 */
+    border-radius: 8px;        /* input과 동일한 radius */
+    box-shadow: none;
+    outline: none;
+    
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  
+    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+  }
+  
+  
   /* placeholder(힌트 텍스트) 색 변경 */
   .form-group input::placeholder {
     color: #3D4D5C;  /* 연한 회색 */
@@ -129,3 +154,8 @@
     margin-top: 1.5rem;
   }
   
+  .check-message {
+    font-size: 13px;
+    margin-top: 4px;
+    color: #666;
+  } 

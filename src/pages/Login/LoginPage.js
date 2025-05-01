@@ -20,7 +20,7 @@
  
      try {
        // 백엔드 로그인 API 호출 (여기서는 예시 URL 사용 - 실제 URL로 변경해야 함)
-       const response = await axios.post("http://localhost:8080/auth/sign-in", {
+       const response = await axios.post("https://7b90-211-37-42-167.ngrok-free.app/auth/sign-in", {
          email,
          password,
        });

@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './SignupPage.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import axios from 'axios'; // axios import 추가
-
+import axios from 'axios';
 
 function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
   const [yearOfEmployment, setYearOfEmployment] = useState('');
-  const [passwordVisible, setPasswordVisible] = useState(false); // 비밀번호 보임 여부 상태
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const [emailCheckMessage, setEmailCheckMessage] = useState('');
+  const [nicknameCheckMessage, setNicknameCheckMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -21,28 +23,47 @@ function SignupPage() {
       email,
       password,
       nickname,
-      joinedYear: yearOfEmployment
+      joinedYear: yearOfEmployment,
     };
 
     try {
-        // 백엔드로 POST 요청 보내기 백엔드 주소 입력하기
-        const response = await axios.post('http://localhost:8080/auth/sign-up', formData);
-    
-        console.log('서버 응답:', response.data);
-        alert('회원가입이 완료되었습니다. 로그인해 주세요.');
-    
-        // 폼 초기화
-        setEmail('');
-        setPassword('');
-        setNickname('');
-        setYearOfEmployment('');
-    
-        navigate('/login');
-      } catch (error) {
-        console.error('회원가입 오류:', error);
-        alert('회원가입 중 문제가 발생했습니다.');
+      const response = await axios.post('https://7b90-211-37-42-167.ngrok-free.app/auth/sign-up', formData);
+      alert('회원가입이 완료되었습니다. 로그인해 주세요.');
+      setEmail('');
+      setPassword('');
+      setNickname('');
+      setYearOfEmployment('');
+      navigate('/login');
+    } catch (error) {
+      console.error('회원가입 오류:', error);
+      alert('회원가입 중 문제가 발생했습니다.');
+    }
+  };
+
+  const checkEmailDuplicate = async () => {
+    try {
+      await axios.get(`https://7b90-211-37-42-167.ngrok-free.app/auth/check-email?email=${email}`);
+      setEmailCheckMessage('사용 가능한 이메일입니다.');
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        setEmailCheckMessage('이미 사용 중인 이메일입니다.');
+      } else {
+        setEmailCheckMessage('이메일 확인 중 오류 발생');
       }
-      
+    }
+  };
+
+  const checkNicknameDuplicate = async () => {
+    try {
+      await axios.get(`https://7b90-211-37-42-167.ngrok-free.app/auth/check-nickname?nickname=${nickname}`);
+      setNicknameCheckMessage('사용 가능한 닉네임입니다.');
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        setNicknameCheckMessage('이미 사용 중인 닉네임입니다.');
+      } else {
+        setNicknameCheckMessage('닉네임 확인 중 오류 발생');
+      }
+    }
   };
 
   return (
@@ -69,8 +90,10 @@ function SignupPage() {
                 value={email}
                 placeholder="Email"
                 onChange={(e) => setEmail(e.target.value)}
+                onBlur={checkEmailDuplicate}
                 required
               />
+              <div className="check-message">{emailCheckMessage}</div>
             </div>
 
             <div className="form-group">
@@ -84,7 +107,6 @@ function SignupPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                {/* 비밀번호 입력값이 있을 때만 아이콘 표시 */}
                 {password && (
                   <button
                     type="button"
@@ -117,20 +139,31 @@ function SignupPage() {
                 value={nickname}
                 placeholder="Nickname"
                 onChange={(e) => setNickname(e.target.value)}
+                onBlur={checkNicknameDuplicate}
                 required
               />
+              <div className="check-message">{nicknameCheckMessage}</div>
             </div>
 
             <div className="form-group">
               <label htmlFor="yearOfEmployment">입사년도</label>
-              <input
-                type="text"
+              <select
                 id="yearOfEmployment"
                 value={yearOfEmployment}
-                placeholder="Year of Employment"
                 onChange={(e) => setYearOfEmployment(e.target.value)}
                 required
-              />
+                className="year-select"
+              >
+                <option value="">Year of Employment</option>
+                {Array.from({ length: 10 }, (_, i) => {
+                  const year = new Date().getFullYear() - i;
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
 
             <button type="submit" className="signup-submit">
