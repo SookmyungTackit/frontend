@@ -28,7 +28,7 @@ function QnaPostWrite() {
       <HomeBar />
       
       <div className="freepost-write-container">
-        <h1 className="board-title" onClick={() => navigate(-1)}>
+        <h1 className="board-title" onClick={() => navigate('/qna')}>
             질문 게시판
         </h1>
         <form className="write-form" onSubmit={handleSubmit}>

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './FreePostWrite.css';
+import './TipPostWrite.css';
 import HomeBar from '../../components/HomeBar';
 
-
-function FreePostWrite() {
+function TipPostWrite() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [tag, setTag] = useState('Engineering');
@@ -29,8 +28,8 @@ function FreePostWrite() {
       <HomeBar />
       
       <div className="freepost-write-container">
-        <h1 className="board-title" onClick={() => navigate('/freeboard')}>
-            자유 게시판
+        <h1 className="board-title" onClick={() => navigate('/tip')}>
+            선임자의 TIP
         </h1>
         <form className="write-form" onSubmit={handleSubmit}>
          
@@ -59,7 +58,7 @@ function FreePostWrite() {
           <p className="write-label">내용</p>
           <textarea
             className="write-textarea"
-            placeholder="자유롭게 내용을 작성해주세요."
+            placeholder="신입사원에게 도움이 될 회사 생활 팁이나 조언을 작성해 주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
@@ -69,4 +68,4 @@ function FreePostWrite() {
   );
 }
 
-export default FreePostWrite;
+export default TipPostWrite;

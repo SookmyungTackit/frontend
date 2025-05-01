@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './FreePostList.css';
+import './TipPostList.css';
 import HomeBar from '../../components/HomeBar';
-import { dummyFreePosts } from '../../data/dummyFreePosts';
+import { dummyTipPosts } from '../../data/dummyTipPosts';
 
-function FreePostList() {
+
+function TipPostList() {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedTag, setSelectedTag] = useState(null); // ✅ 추가
+  const [selectedTag, setSelectedTag] = useState(null);  // ✅ 선택된 태그 상태
 
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  const filteredPosts = dummyFreePosts
+  const filteredPosts = dummyTipPosts
     .filter((post) => {
       const matchesSearch =
         post.title.includes(searchKeyword) ||
@@ -43,9 +44,8 @@ function FreePostList() {
   };
 
   const handleTagClick = (tag) => {
-    const plainTag = tag.replace('#', '');
     setCurrentPage(1);
-    setSelectedTag(prev => prev === plainTag ? null : plainTag); // ✅ 토글
+    setSelectedTag(prev => prev === tag ? null : tag); // ✅ 같은 태그 누르면 해제
   };
 
   return (
@@ -67,28 +67,29 @@ function FreePostList() {
             <img src="/search.svg" alt="검색" width="15" height="15" />
           </button>
         </div>
-        <h1>자유 게시판</h1>
-        <p>Home &gt; 자유 게시판</p>
+        <h1>선임자의 TIP</h1>
+        <p>Home &gt; 선임자의 TIP</p>
       </div>
 
       <div className="freepost-container">
         <div className="freepost-subtext-wrapper">
           <div className="freepost-subtext">
-            “자유 게시판”은 신입과 선배 모두 자유롭게 게시글과 댓글을 작성할 수 있습니다.
+            <img src="/warning.svg" alt="경고 아이콘" className="warning-icon" />
+            "선임자의 TIP"은 선배 사원만 글을 작성할 수 있으며, 신입 사원은 열람만 가능합니다. 
           </div>
         </div>
 
         <div className="freepost-tags">
-          {['#Product', '#Engineering', '#People', '#Sales'].map((tag, index) => (
+          {['Product', 'Engineering', 'People', 'Sales'].map((tag, index) => (
             <button
               key={index}
-              className={`tag-button ${selectedTag === tag.replace('#', '') ? 'active-tag' : ''}`}
+              className={`tag-button ${selectedTag === tag ? 'active-tag' : ''}`}
               onClick={() => handleTagClick(tag)}
             >
-              {tag}
+              #{tag}
             </button>
           ))}
-          <button className="write-button" onClick={() => navigate('/freeboard/write')}>
+          <button className="write-button" onClick={() => navigate('/tip/write')}>
             글쓰기
           </button>
         </div>
@@ -98,14 +99,13 @@ function FreePostList() {
             <div
               key={post.id}
               className="post-card"
-              onClick={() => navigate(`/freeboard/${post.id}`)}
+              onClick={() => navigate(`/tip/${post.id}`)}
             >
               <div className="post-meta">
-                <span className="nickname">👤 {post.nickname}|</span>
-                <span className="date">🕒 {new Date(post.created_at).toLocaleString('ko-KR')}</span>
-                <span className="tag">🏷 {post.tag}|</span>
+                <span className="nickname">{post.nickname}</span>
+                <span className="date">{new Date(post.created_at).toLocaleString('ko-KR')}</span>
+                <span className="tag">{post.tag}</span>
               </div>
-
               <div className="post-title">{post.title}</div>
               <div className="post-content-preview">{post.content}...</div>
             </div>
@@ -136,4 +136,4 @@ function FreePostList() {
   );
 }
 
-export default FreePostList;
+export default TipPostList;
