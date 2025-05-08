@@ -1,5 +1,3 @@
-// src/data/dummyPosts.js
-// src/data/dummyPosts.js
 export const dummyFreePosts = [
   {
     id: 1,

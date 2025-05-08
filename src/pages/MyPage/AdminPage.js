@@ -71,10 +71,20 @@ const AdminPage = () => {
         <section className="mypage-section" aria-labelledby="admin-title">
             <h3 id="admin-title">관리자</h3>
             <div className="btn-row">
-                <button className="mypage-btn">회원 관리</button>
+            <button
+                className="mypage-btn"
+                onClick={() => navigate('/admin/users')}
+            >
+                회원 관리
+            </button>
             </div>
             <div className="btn-row">
-                <button className="mypage-btn">가입 현황 및 신고글 관리</button>
+                <button
+                className="mypage-btn"
+                onClick={() => navigate('/mypage/post-management')}
+                >
+                가입 현황 및 신고글 관리
+                </button>
             </div>
         </section>
 

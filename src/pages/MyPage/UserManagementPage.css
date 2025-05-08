@@ -1,0 +1,113 @@
+.user-page-container {
+    min-height: 100vh;
+  }
+  
+  .user-content {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 80px 16px 40px;
+  }
+  
+  .user-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 24px;
+  }
+  
+  .user-tab-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  
+  .user-tab-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .active-tab {
+    background-color: #4D77FF;
+    color: white;
+  }
+  
+  .inactive-tab {
+    background-color: #F0F2F5;
+    color: black;
+  }
+  
+  .user-table {
+    width: 100%;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .user-table th:first-child {
+    border-top-left-radius: 12px;
+  }
+  .user-table th:last-child {
+    border-top-right-radius: 12px;
+  }
+  .user-table tr:last-child td:first-child {
+    border-bottom-left-radius: 12px;
+  }
+  .user-table tr:last-child td:last-child {
+    border-bottom-right-radius: 12px;
+  }
+  
+  .user-table th, .user-table td {
+    text-align: left;
+    padding: 16px;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  
+  .user-status-badge {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+  }
+  
+  .status-active {
+    background-color: #DBEFFF;
+    width: 100px;
+    text-align: center;
+  }
+  
+  .status-inactive {
+    background-color: #F0F2F5;
+    width: 100px;
+    text-align: center;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+  }
+  
+  .page-button {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .page-button.active {
+    background-color: #e0e0e0;
+  }
+  
+  .page-button:hover {
+    background-color: #f0f0f0;
+  }

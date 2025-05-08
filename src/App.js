@@ -16,6 +16,8 @@ import UserPage from './pages/MyPage/UserPage';
 import AdminPage from './pages/MyPage/AdminPage';
 import EditPasswordPage from './pages/MyPage/EditPasswordPage';
 import EditNicknamePage from './pages/MyPage/EditNicknamePage';
+import UserManagementPage from './pages/MyPage/UserManagementPage';
+import PostManagementPage from './pages/MyPage/PostManagementPage';
 
 
 
@@ -41,6 +43,8 @@ function App() {
         <Route path="/mypage-admin" element={<AdminPage />} />
         <Route path="/mypage/edit-password" element={<EditPasswordPage />} />
         <Route path="/mypage/edit-nickname" element={<EditNicknamePage />} />
+        <Route path="/admin/users" element={<UserManagementPage />} />
+        <Route path="/mypage/post-management" element={<PostManagementPage />} />
 
 
         

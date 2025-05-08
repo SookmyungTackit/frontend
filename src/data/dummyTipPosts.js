@@ -1,4 +1,3 @@
-// src/data/dummyTipPosts.js
 export const dummyTipPosts = [
     {
       id: 1,
