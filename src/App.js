@@ -11,7 +11,13 @@ import QnaPostWrite from './pages/QnaPost/QnaPostWrite';
 import TipPostList from './pages/TipPost/TipPostList'; 
 import TipPostDetail from './pages/TipPost/TipPostDetail';
 import TipPostWrite from './pages/TipPost/TipPostWrite';
-import MainPage from './pages/Main/MainPage'; // 추가
+import MainPage from './pages/Main/MainPage'; 
+import UserPage from './pages/MyPage/UserPage';
+import AdminPage from './pages/MyPage/AdminPage';
+import EditPasswordPage from './pages/MyPage/EditPasswordPage';
+import EditNicknamePage from './pages/MyPage/EditNicknamePage';
+
+
 
 
 function App() {
@@ -31,6 +37,12 @@ function App() {
         <Route path="/tip" element={<TipPostList />} />
         <Route path="/tip/:postId" element={<TipPostDetail />} /> 
         <Route path="/tip/write" element={<TipPostWrite />} />
+        <Route path="/mypage" element={<UserPage />} />
+        <Route path="/mypage-admin" element={<AdminPage />} />
+        <Route path="/mypage/edit-password" element={<EditPasswordPage />} />
+        <Route path="/mypage/edit-nickname" element={<EditNicknamePage />} />
+
+
         
       </Routes>
     </Router>

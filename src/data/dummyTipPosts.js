@@ -8,6 +8,7 @@ export const dummyTipPosts = [
       title: '2층 프린터기가 가장 빨리 출력합니다.',
       content: '급하게 출력할 일이 있다면 2층 프린터기를 추천드려요. 대기시간이 가장 짧습니다.',
     },
+    
     {
       id: 2,
       nickname: '선배B',

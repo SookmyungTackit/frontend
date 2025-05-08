@@ -12,7 +12,7 @@ function LoginPage() {
     // 👉 개발용 임시 로그인 처리
     localStorage.setItem("accessToken", "TEMP_TOKEN");
     localStorage.setItem("nickname", "테스트유저");
-    navigate("/freeboard");
+    navigate("/main");
   };
 
   return (
