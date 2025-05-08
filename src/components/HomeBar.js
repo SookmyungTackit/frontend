@@ -28,7 +28,7 @@ function HomeBar() {
         <Link to="/qna">질문 게시판</Link>
       </div>
       <div className="homebar-right">
-        <Link to="/profile">마이 페이지</Link>
+        <Link to="/mypage-admin">마이 페이지</Link>
         <button onClick={handleLogout} className="logout-button">로그아웃</button>
       </div>
     </div>
