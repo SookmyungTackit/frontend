@@ -13,7 +13,7 @@ body {
   }
 
   
-  .post-box {
+  .freepost-box {
     position: relative;
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
@@ -23,7 +23,7 @@ body {
     margin-bottom: 40px;
   }
   
-  .post-tags {
+  .freepost-tags {
     font-size: 13px;
     color: #4D77FF;
     margin-bottom: 12px;
@@ -39,6 +39,10 @@ body {
     font-size: 13px;
     color: #999;
     margin-bottom: 20px;
+  }
+
+  .detail-meta span:not(:last-child) {
+    margin-right: 8px;
   }
   
   .detail-content {
@@ -125,7 +129,7 @@ body {
   
   
   /* 🔥 tag + 수정/삭제를 한 줄에 정렬하기 위한 flex */
-.post-header {
+.freepost-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -133,12 +137,12 @@ body {
   }
   
   /* 수정 / 삭제 버튼 스타일 업데이트 */
-  .post-actions {
+  .freepost-actions {
     display: flex;
     gap: 10px;
   }
   
-  .post-actions button {
+  .freepost-actions button {
     background: none;
     border: none;
     color: #888;

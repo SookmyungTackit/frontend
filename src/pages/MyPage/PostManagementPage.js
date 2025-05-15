@@ -84,21 +84,21 @@ export default function PostManagementPage() {
           </div>
 
           <h2>신고 3회 이상으로 비활성화된 게시글</h2>
-          <ul className="post-list">
+          <ul className="post-management-list">
             {paginatedPosts.map((post, index) => (
-              <li key={index} className="post-item">
-                <div className="post-left">
-                  <div className="post-icon">
+              <li key={index} className="post-management-item">
+                <div className="post-management-left">
+                  <div className="post-management-icon">
                     <img src="/search.svg" alt="돋보기 아이콘" className="search-icon" />
                   </div>
-                  <div className="post-texts">
-                    <div className="post-title">{post.title}</div>
-                    <div className="post-meta">
+                  <div className="post-management-texts">
+                    <div className="post-management-title">{post.title}</div>
+                    <div className="post-management-meta">
                       신고 수: {post.reportCount}회 Posted {formatTime(post.createdAt)}, by @{post.nickname}
                     </div>
                   </div>
                 </div>
-                <div className="post-actions">
+                <div className="post-management-actions">
                   <button className="activate-btn">활성화</button>
                   <button className="delete-btn">삭제</button>
                 </div>

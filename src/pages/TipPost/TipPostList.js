@@ -4,12 +4,10 @@ import './TipPostList.css';
 import HomeBar from '../../components/HomeBar';
 import { dummyTipPosts } from '../../data/dummyTipPosts';
 
-
 function TipPostList() {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedTag, setSelectedTag] = useState(null);  // ✅ 선택된 태그 상태
 
   const postsPerPage = 5;
   const pageGroupSize = 5;
@@ -19,9 +17,8 @@ function TipPostList() {
       const matchesSearch =
         post.title.includes(searchKeyword) ||
         post.content.includes(searchKeyword) ||
-        post.nickname.includes(searchKeyword);
-      const matchesTag = selectedTag ? post.tag === selectedTag : true;
-      return matchesSearch && matchesTag;
+        post.writer.includes(searchKeyword);
+      return matchesSearch;
     })
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
@@ -41,11 +38,6 @@ function TipPostList() {
   const goToNextGroup = () => {
     const nextGroupFirstPage = endPage + 1;
     if (nextGroupFirstPage <= totalPages) setCurrentPage(nextGroupFirstPage);
-  };
-
-  const handleTagClick = (tag) => {
-    setCurrentPage(1);
-    setSelectedTag(prev => prev === tag ? null : tag); // ✅ 같은 태그 누르면 해제
   };
 
   return (
@@ -80,34 +72,24 @@ function TipPostList() {
         </div>
 
         <div className="freepost-tags">
-          {['Product', 'Engineering', 'People', 'Sales'].map((tag, index) => (
-            <button
-              key={index}
-              className={`tag-button ${selectedTag === tag ? 'active-tag' : ''}`}
-              onClick={() => handleTagClick(tag)}
-            >
-              #{tag}
-            </button>
-          ))}
           <button className="write-button" onClick={() => navigate('/tip/write')}>
             글쓰기
           </button>
         </div>
 
-        <div className="freepost-list">
+        <div className="tippost-list">
           {currentPosts.map((post) => (
             <div
               key={post.id}
-              className="post-card"
+              className="tippost-card"
               onClick={() => navigate(`/tip/${post.id}`)}
             >
-              <div className="post-meta">
-                <span className="nickname">{post.nickname}</span>
+              <div className="tippost-meta">
+                <span className="nickname">{post.writer}</span>
                 <span className="date">{new Date(post.created_at).toLocaleString('ko-KR')}</span>
-                <span className="tag">{post.tag}</span>
               </div>
-              <div className="post-title">{post.title}</div>
-              <div className="post-content-preview">{post.content}...</div>
+              <div className="tippost-title">{post.title}</div>
+              <div className="tippost-content-preview">{post.content}...</div>
             </div>
           ))}
         </div>

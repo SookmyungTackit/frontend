@@ -6,10 +6,7 @@ import HomeBar from '../../components/HomeBar';
 function TipPostWrite() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [tag, setTag] = useState('Engineering');
   const [content, setContent] = useState('');
-
-  const tagOptions = ['Product', 'Engineering', 'People', 'Sales'];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,22 +15,22 @@ function TipPostWrite() {
       return;
     }
 
-    console.log('작성된 글:', { title, tag, content });
+    console.log('작성된 글:', { title, content });
     alert('글이 작성되었습니다!');
-    navigate('/freeboard');
+    navigate('/tip');
   };
 
   return (
     <>
       <HomeBar />
       
-      <div className="freepost-write-container">
+      <div className="tippost-write-container">
         <h1 className="board-title" onClick={() => navigate('/tip')}>
-            선임자의 TIP
+          선임자의 TIP
         </h1>
         <form className="write-form" onSubmit={handleSubmit}>
-         
-          <button className="write-submit-button" onClick={handleSubmit}>등록</button>
+          <button className="write-submit-button" type="submit">등록</button>
+
           <p className="write-label">글 제목</p>
           <input
             type="text"
@@ -43,18 +40,6 @@ function TipPostWrite() {
             onChange={(e) => setTitle(e.target.value)}
           />
 
-          <div className="tag-buttons">
-            {tagOptions.map((t) => (
-              <button
-                key={t}
-                type="button"
-                className={`tag-button ${tag === t ? 'selected' : ''}`}
-                onClick={() => setTag(t)}
-              >
-                #{t}
-              </button>
-            ))}
-          </div>
           <p className="write-label">내용</p>
           <textarea
             className="write-textarea"

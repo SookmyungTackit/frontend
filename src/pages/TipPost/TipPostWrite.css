@@ -1,11 +1,11 @@
-.freepost-write-container {
+.tippost-write-container {
     background-color: white;
     max-width: 900px;
     margin: 0 auto;
     padding: 40px 20px;
   }
   
-  .freepost-write-container h1 {
+  .tippost-write-container h1 {
     font-size: 28px;
     margin-top: 20px;
     margin-bottom: 24px;

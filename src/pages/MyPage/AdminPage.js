@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const AdminPage = () => {
   const navigate = useNavigate(); 
   // 나중에 API로 대체 
-  const nickname = '테스트';
+  const nickname = '현재유저';
   const joinedYear = 2022;
   const yearsOfService = 4;
 
@@ -55,16 +55,23 @@ const AdminPage = () => {
 
         {/* 글보기 */}
         <section className="mypage-section" aria-labelledby="posts-title">
-            <h3 id="posts-title">글보기</h3>
-            <div className="btn-row">
-                <button className="mypage-btn">내가 쓴 글 보기</button>
-            </div>
-            <div className="btn-row">
-                <button className="mypage-btn">자유게시판 찜한 글 보기</button>
-            </div>
-            <div className="btn-row">
-                <button className="mypage-btn">질문게시판 찜한 글 보기</button>
-            </div>
+          <h3 id="posts-title">글보기</h3>
+          <div className="btn-row">
+            <button
+              className="mypage-btn"
+              onClick={() => navigate('/mypage/mypostpage')}
+            >
+              내가 쓴 글 보기
+            </button>
+          </div>
+          <div className="btn-row">
+            <button
+              className="mypage-btn"
+              onClick={() => navigate('/mypage/bookmarked')}  
+            >
+              찜한 글 보기
+            </button>
+          </div>
         </section>
 
         {/* 관리자 기능 */}

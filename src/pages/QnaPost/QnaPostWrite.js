@@ -20,14 +20,14 @@ function QnaPostWrite() {
 
     console.log('작성된 글:', { title, tag, content });
     alert('글이 작성되었습니다!');
-    navigate('/freeboard');
+    navigate('/qna');
   };
 
   return (
     <>
       <HomeBar />
       
-      <div className="freepost-write-container">
+      <div className="qnapost-write-container">
         <h1 className="board-title" onClick={() => navigate('/qna')}>
             질문 게시판
         </h1>

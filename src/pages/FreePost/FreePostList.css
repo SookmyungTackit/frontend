@@ -113,13 +113,13 @@ body {
     gap: 20px;
   }
   
-  .post-card {
+  .freepost-card {
     border-bottom: 1px solid #ddd;
     padding-bottom: 20px;
     cursor: pointer;
   }
   
-  .post-meta {
+  .freepost-meta {
     display: flex;
     gap: 8px; /* or 10px for spacing between spans */
     flex-wrap: wrap; /* 줄바꿈 대응 */
@@ -128,14 +128,14 @@ body {
     margin-bottom: 6px;
   }
   
-  .post-title {
+  .freepost-title {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 4px;
     color: #000;
   }
   
-  .post-content-preview {
+  .freepost-content-preview {
     font-size: 14px;
     color: #555;
     line-height: 1.5;

@@ -1,40 +1,65 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './FreePostWrite.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import './FreePostEdit.css'; // 작성 페이지와 동일한 스타일
 import HomeBar from '../../components/HomeBar';
+import { dummyFreePosts } from '../../data/dummyFreePosts';
+import { toast } from 'react-toastify';
 
-
-function FreePostWrite() {
+function FreePostEdit() {
+  const { postId } = useParams();
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
-  const [tag, setTag] = useState('Engineering');
-  const [content, setContent] = useState('');
+
+  const post = dummyFreePosts.find((p) => p.id === parseInt(postId, 10));
+  const [title, setTitle] = useState(post?.title || '');
+  const [content, setContent] = useState(post?.content || '');
+  const [tag, setTag] = useState(post?.tag || 'Engineering');
 
   const tagOptions = ['Product', 'Engineering', 'People', 'Sales'];
 
-  const handleSubmit = (e) => {
+  if (!post) return <div>해당 게시글을 찾을 수 없습니다.</div>;
+
+  const handleSave = (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       return;
     }
 
-    console.log('작성된 글:', { title, tag, content });
-    alert('글이 작성되었습니다!');
-    navigate('/free');
+    // ✨ TODO: 실제 API 호출로 저장 필요
+    post.title = title;
+    post.content = content;
+    post.tag = tag;
+
+    toast.success('게시글이 수정되었습니다.');
+    navigate(`/free/${postId}`);
+  };
+
+  const handleCancel = () => {
+    navigate(`/free/${postId}`);
   };
 
   return (
     <>
       <HomeBar />
-      
       <div className="freepost-write-container">
         <h1 className="board-title" onClick={() => navigate('/free')}>
-            자유 게시판
+          자유 게시판
         </h1>
-        <form className="write-form" onSubmit={handleSubmit}>
-         
-          <button className="write-submit-button" onClick={handleSubmit}>등록</button>
+
+        <form className="write-form" onSubmit={handleSave}>
+          <div className="button-group">
+            <button
+              type="button"
+              className="button-common button-gray"
+              onClick={handleCancel}
+            >
+              취소
+            </button>
+            <button type="submit" className="button-common">
+              저장
+            </button>
+          </div>
+
           <p className="write-label">글 제목</p>
           <input
             type="text"
@@ -56,6 +81,7 @@ function FreePostWrite() {
               </button>
             ))}
           </div>
+
           <p className="write-label">내용</p>
           <textarea
             className="write-textarea"
@@ -69,4 +95,4 @@ function FreePostWrite() {
   );
 }
 
-export default FreePostWrite;
+export default FreePostEdit;

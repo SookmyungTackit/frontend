@@ -8,7 +8,7 @@ function FreePostList() {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedTag, setSelectedTag] = useState(null); // ✅ 추가
+  const [selectedTag, setSelectedTag] = useState(null); 
 
   const postsPerPage = 5;
   const pageGroupSize = 5;
@@ -18,7 +18,7 @@ function FreePostList() {
       const matchesSearch =
         post.title.includes(searchKeyword) ||
         post.content.includes(searchKeyword) ||
-        post.nickname.includes(searchKeyword);
+        post.writer?.includes(searchKeyword);
       const matchesTag = selectedTag ? post.tag === selectedTag : true;
       return matchesSearch && matchesTag;
     })
@@ -88,7 +88,7 @@ function FreePostList() {
               {tag}
             </button>
           ))}
-          <button className="write-button" onClick={() => navigate('/freeboard/write')}>
+          <button className="write-button" onClick={() => navigate('/free/write')}>
             글쓰기
           </button>
         </div>
@@ -97,17 +97,17 @@ function FreePostList() {
           {currentPosts.map((post) => (
             <div
               key={post.id}
-              className="post-card"
-              onClick={() => navigate(`/freeboard/${post.id}`)}
+              className="freepost-card"
+              onClick={() => navigate(`/free/${post.id}`)}
             >
-              <div className="post-meta">
-                <span className="nickname">👤 {post.nickname}|</span>
-                <span className="date">🕒 {new Date(post.created_at).toLocaleString('ko-KR')}</span>
-                <span className="tag">🏷 {post.tag}|</span>
+              <div className="freepost-meta">
+                <span className="nickname">{post.writer}</span>
+                <span className="date">{new Date(post.created_at).toLocaleString('ko-KR')}</span>
+                <span className="tag">{post.tag}</span>
               </div>
 
-              <div className="post-title">{post.title}</div>
-              <div className="post-content-preview">{post.content}...</div>
+              <div className="freepost-title">{post.title}</div>
+              <div className="freepost-content-preview">{post.content}...</div>
             </div>
           ))}
         </div>

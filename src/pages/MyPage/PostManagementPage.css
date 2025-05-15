@@ -104,13 +104,14 @@
     margin-bottom: 20px;
   }
   
-  .post-list {
+  .post-management-list {
     list-style: none;
     padding: 0;
     margin: 0;
+    background-color: white;
   }
   
-  .post-item {
+  .post-management-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -118,17 +119,23 @@
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 15px;
-    background-color: #fafafa;
+    background-color: white !important ;
   }
   
-  .post-left {
+  .post-management-left {
     display: flex;
     align-items: center;
   }
   
-  .post-icon {
+  .post-management-icon {
     font-size: 22px;
-    margin-right: 16px;
+    margin-right: 20px;
+    background-color: #F0F2F5 ;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px; 
   }
   
   .search-icon {
@@ -136,23 +143,23 @@
     height: 20px;
   }
   
-  .post-texts {
+  .post-management-texts {
     display: flex;
     flex-direction: column;
   }
   
-  .post-title {
+  .post-management-title {
     font-weight: bold;
     font-size: 15px;
     margin-bottom: 4px;
   }
   
-  .post-meta {
+  .post-management-meta {
     font-size: 13px;
     color: #555;
   }
   
-  .post-actions {
+  .post-management-actions {
     display: flex;
     gap: 10px;
     min-width: 160px;
@@ -164,7 +171,7 @@
     min-width: 72px;
     height: 36px;
     padding: 0 16px;
-    border-radius: 6px;
+    border-radius: 12px;
     font-weight: 500;
     font-size: 14px;
     line-height: 36px;
@@ -177,7 +184,7 @@
     background-color: #F0F2F5 !important;
     border: none;
     cursor: pointer;
-    color: #000;
+    color: #000 !important;
   }
   
   .activate-btn:hover {

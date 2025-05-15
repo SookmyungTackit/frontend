@@ -3,7 +3,7 @@
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 40px;
-  font-family: 'Noto Sans KR', sans-serif;
+  padding-bottom: 40px; 
 }
 
 /* ---------------- 배너 전체 영역 ---------------- */
@@ -119,8 +119,12 @@
 
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 
+}
 
-
+.tip-section p,
+.board-section p {
+  color: #4F7396; 
+  margin-bottom: 10px;
 }
 
 /* 게시판 공통 */
@@ -143,39 +147,48 @@
 .more-link {
   font-size: 14px;
   color: black;
-  text-decoration: none;
 }
 
-.post-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
-}
 
-.post-item {
-  background-color: #f5f5f5;
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.post-title {
-  font-weight: 500;
-}
-
-.post-meta {
-  display: block;
-  font-size: 12px;
-  color: #666;
-  margin-top: 4px;
+.post-left {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .post-title-link {
   text-decoration: none;
-  color: white;
-  font-weight: 500;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.post-title-link:hover {
+.post-title-link:hover .post-title {
   color: #4D77FF;
+}
+
+.post-right {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #555;
+  flex-shrink: 0;
+}
+
+.post-writer,
+.post-date,
+.post-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 110px; /* ✅ 고정 너비 부여 */
+  justify-content: flex-start;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  vertical-align: middle;
 }

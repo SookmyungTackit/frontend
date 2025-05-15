@@ -9,12 +9,24 @@ import Slider from "react-slick";
 import { dummyFreePosts } from '../../data/dummyFreePosts';
 import { dummyQnaPosts } from '../../data/dummyQnaPosts';
 import { dummyTipPosts } from '../../data/dummyTipPosts';
+import BoardSection from '../../components/BoardSection';
+
 
 const bannerData = [
-  "오늘은 000님의 생일입니다! 🥳",
-  "Tackit에 오신 걸 환영합니다! 🎉",
-  "즐거운 하루 보내세요! 🌈"
+  {
+    title: "오늘은 000님의 생일입니다! 🥳",
+    description: "생일 축하 메시지를 남겨보세요!",
+  },
+  {
+    title: "Tackit에 오신 걸 환영합니다! 🎉",
+    description: "새로운 소식과 업데이트를 확인해보세요!",
+  },
+  {
+    title: "즐거운 하루 보내세요! 🌈",
+    description: "오늘도 행복한 하루 되시길 바랍니다!",
+  },
 ];
+
 
 function MainPage() {
   const sliderSettings = {
@@ -34,25 +46,29 @@ function MainPage() {
 
       {/* 배너 */}
       <section className="birthday-banner">
-        <Slider {...sliderSettings}>
-          {bannerData.map((text, index) => (
-            <div key={index} className="banner-slide">
-              <h2>{text}</h2>
-              <p>모두 축하해주세요!</p>
-            </div>
-          ))}
-        </Slider>
+      <Slider {...sliderSettings}>
+        {bannerData.map((item, index) => (
+          <div key={index} className="banner-slide">
+            <h2>{item.title}</h2>
+            <p>{item.description}</p>
+          </div>
+        ))}
+      </Slider>
       </section>
 
       <div className="main-container">
-        <section className="tip-section">
-          <h3>
-            <span>선임자의 TIP</span>
-            <Link to="/tip" className="more-link">+ 더보기</Link>
-          </h3>
-          <p>선배는 회사생활 팁 글 작성과 신입은 자유롭게 읽을 수 있어요!</p>
-          <div className="tip-boxes">
-            {dummyTipPosts.map((tip) => (
+      <section className="tip-section">
+        <h3>
+          <span>선임자의 TIP</span>
+          <Link to="/tip" className="more-link">+ 더보기</Link>
+        </h3>
+        <p>선배는 회사생활 팁 글 작성과 신입은 자유롭게 읽을 수 있어요!</p>
+        <div className="tip-boxes">
+          {dummyTipPosts
+            .slice() 
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // 최신 순 정렬
+            .slice(0, 3) // 최신 3개만
+            .map((tip) => (
               <Link
                 key={tip.id}
                 to={`/tip/${tip.id}`}
@@ -62,65 +78,24 @@ function MainPage() {
                 {tip.title}
               </Link>
             ))}
-          </div>
-        </section>
-
-        <section className="board-section">
-          <h3>자유게시판 <Link to="/freeboard" className="more-link">+ 더보기</Link></h3>
-          <p>신입과 선배 모두 게시글, 댓글 작성이 자유롭게 가능해요!</p>
-          <ul className="post-list">
-            {dummyFreePosts.slice(0, 5).map(post => {
-              const formattedDate = new Date(post.created_at).toLocaleString('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false  // 24시간제
-              });
-
-              return (
-                <li key={post.id} className="post-item">
-                  <Link to={`/freeboard/${post.id}`} className="post-title-link">
-                    <span className="post-title">{post.title}</span>
-                  </Link>
-                  <span className="post-meta">
-                    {post.writer} | {formattedDate} | {post.tag}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+        </div>
+      </section>
 
 
-        <section className="board-section">
-          <h3>질문게시판 <Link to="/qna" className="more-link">+ 더보기</Link></h3>
-          <p>신입은 질문글로, 선배는 답글로 만날 수 있어요!</p>
-          <ul className="post-list">
-            {dummyQnaPosts.slice(0, 5).map(post => {
-              const formattedDate = new Date(post.created_at).toLocaleString('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-              });
+        <BoardSection
+          title="자유게시판"
+          description="신입과 선배 모두 게시글, 댓글 작성이 자유롭게 가능해요!"
+          posts={dummyFreePosts}
+          boardPath="free"
+        />
 
-              return (
-                <li key={post.id} className="post-item">
-                  <Link to={`/qna/${post.id}`} className="post-title-link">
-                    <span className="post-title">{post.title}</span>
-                  </Link>
-                  <span className="post-meta">
-                    {post.writer} | {formattedDate} | {post.tag}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+        <BoardSection
+          title="질문게시판"
+          description="신입은 질문글로, 선배는 답글로 만날 수 있어요!"
+          posts={dummyQnaPosts}
+          boardPath="qna"
+        />
+
       </div>
     </div>
   );

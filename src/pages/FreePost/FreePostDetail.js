@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './FreePostDetail.css';
 import HomeBar from '../../components/HomeBar';
 import { dummyFreePosts } from '../../data/dummyFreePosts';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 
 function FreePostDetail() {
   const { postId } = useParams();
@@ -10,10 +13,16 @@ function FreePostDetail() {
   const textareaRef = useRef(null);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const currentUser = '현재유저'; // 이건 예시, 실제로는 로그인한 사용자 정보로 대체해야 함
+  const location = useLocation();
+  const from = location.state?.from; // 'my-posts' or undefined
+
 
   const post = dummyFreePosts.find((p) => p.id === parseInt(postId, 10));
 
   if (!post) return <div>해당 게시글을 찾을 수 없습니다.</div>;
+
+  
 
   const handleTextareaChange = (e) => {
     setComment(e.target.value);
@@ -36,6 +45,7 @@ function FreePostDetail() {
       date: new Date().toLocaleString('ko-KR'),
     };
 
+
     setComments((prev) => [newComment, ...prev]);
     setComment('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
@@ -45,31 +55,52 @@ function FreePostDetail() {
     <>
       <HomeBar />
       <div className="freepost-detail-container">
-      <h1 className="board-title" onClick={() => navigate('/freeboard')}>
+      <h1 className="board-title" onClick={() => navigate('/free')}>
         자유 게시판
       </h1>
 
-        <div className="post-box">
-          <div className="post-header">
-            <div className="post-tags">
+        <div className="freepost-box">
+          <div className="freepost-header">
+            <div className="freepost-tags">
               <span className="tag">#{post.tag.toLowerCase()}</span>
             </div>
-            <div className="post-actions">
-              <button onClick={() => alert('수정 기능 구현 예정')}>수정하기</button>
-              <button onClick={() => alert('삭제 기능 구현 예정')}>삭제하기</button>
+            <div className="freepost-actions">
+              {post.writer === currentUser ? (
+                <>
+                  <button onClick={() => navigate(`/free/edit/${postId}`)}>수정하기</button>
+                  <button
+                    onClick={() => {
+                      const confirmed = window.confirm('이 글을 삭제하시겠습니까?');
+                      if (confirmed) {
+                        if (from === 'my-posts') {
+                          navigate('/mypage/mypostpage');
+                        } else {
+                          navigate('/free');
+                        }
+                      }
+                    }}
+                  >
+                    삭제하기
+                  </button>
+
+                </>
+              ) : (
+                <button onClick={() => alert('신고 되었습니다.')}>신고하기</button>
+              )}
             </div>
           </div>
 
           <h1 className="detail-title">{post.title}</h1>
           <div className="detail-meta">
-            <span>{post.nickname}</span> · <span>{post.date}</span>
-          </div>
+              <span>{post.writer}</span> 
+              <span>{new Date(post.created_at).toLocaleString('ko-KR')}</span>
+            </div>
 
           <div className="detail-content">{post.content}</div>
 
           <button
             className="bookmark-button"
-            onClick={() => alert('찜 기능 구현 예정')}
+            onClick={() => toast.success('찜 되었습니다.')}
           >
             찜
           </button>

@@ -8,6 +8,7 @@ function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
+  const [organization, setOrganization] = useState('');
   const [yearOfEmployment, setYearOfEmployment] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -24,6 +25,7 @@ function SignupPage() {
       password,
       nickname,
       joinedYear: yearOfEmployment,
+      organization,
     };
 
     try {
@@ -144,6 +146,20 @@ function SignupPage() {
               />
               <div className="check-message">{nicknameCheckMessage}</div>
             </div>
+
+
+            <div className="form-group">
+              <label htmlFor="organization">소속</label>
+              <input
+                type="text"
+                id="organization"
+                value={organization}
+                placeholder="Organization"
+                onChange={(e) => setOrganization(e.target.value)}
+                required
+              />
+            </div>
+            
 
             <div className="form-group">
               <label htmlFor="yearOfEmployment">입사년도</label>

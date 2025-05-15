@@ -1,11 +1,11 @@
-.freepost-write-container {
+.qnapost-write-container {
     background-color: white;
     max-width: 900px;
     margin: 0 auto;
     padding: 40px 20px;
   }
   
-  .freepost-write-container h1 {
+  .qnapost-write-container h1 {
     font-size: 28px;
     margin-top: 20px;
     margin-bottom: 24px;
@@ -97,3 +97,4 @@
     font-size: 14px;     /* (선택) 글씨 크기 조절 */
     font-weight: 500;    /* (선택) 강조 */
   }
+  

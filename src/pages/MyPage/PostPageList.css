@@ -4,13 +4,13 @@ body {
     background-color: #ffffff;
   }
   
-  .qnapost-container {
+  .freepost-container {
     max-width: 900px;
     margin: 0 auto;
     padding: 0 20px 40px; /* 위쪽 padding 제거 */
   }
   
-  .qnapost-banner {
+  .freepost-banner {
     position: relative;  /* ✅ 자식 위치 기준 */
     background-color: #DBEFFF;
     text-align: center;
@@ -18,42 +18,23 @@ body {
     margin-bottom: 30px;
   }
   
-  .search-box {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: inline-flex;
-    align-items: center;
-    background-color: #F0F2F5;
-    border-radius: 20px;
-    padding: 5px 10px;
-    font-size: 14px;
-  }
-
-  .search-button img {
-    display: block;
-    margin: 0 auto;
-  }
-  
-  
-  .qnapost-banner h1 {
+  .freepost-banner h1 {
     font-size: 32px;
     margin-bottom: 10px;
   }
   
-  .qnapost-banner p {
+  .freepost-banner p {
     color: #333;
     font-size: 14px;
     margin-bottom: 0.5rem;
   }
-
-  .qnapost-subtext-wrapper {
+  
+  .freepost-subtext-wrapper {
     text-align: center; /* ✅ 가운데 정렬을 위한 설정 */
     margin-bottom: 40px;  
   }  
   
-  .qnapost-subtext {
-    
+  .freepost-subtext {
     background-color: #f1f6fb;
     padding: 12px 24px;           /* 좌우에 여유 공간 추가 */
     border-radius: 8px;
@@ -63,8 +44,7 @@ body {
     text-align: center;
   }
   
-  
-  .qnapost-tags {
+  .freepost-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -82,33 +62,15 @@ body {
     color: #3D4D5C;
     cursor: pointer;
   }
-
-    /* ✅ 선택된 태그 버튼 스타일 */
+  
+  /* ✅ 선택된 태그 버튼 스타일 */
   .tag-button.active-tag {
     background-color: #4D77FF;
     color: #fff;
     font-weight: bold;
   }
   
-  
-  .search-box input {
-    border: none;
-    outline: none;
-    background: transparent;
-    padding: 5px 6px;
-    font-size: 14px;
-    width: auto;
-    min-width: 80px;
-  }
-  
-  .search-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-  }
-  
-  .qnapost-list {
+  .freepost-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -122,9 +84,10 @@ body {
   
   .post-meta {
     display: flex;
-    gap: 10px;
+    gap: 8px; /* or 10px for spacing between spans */
+    flex-wrap: wrap; /* 줄바꿈 대응 */
+    font-size: 14px;
     color: #666;
-    font-size: 13px;
     margin-bottom: 6px;
   }
   
@@ -178,3 +141,4 @@ body {
     cursor: pointer;
     margin-left: auto;
   }
+  

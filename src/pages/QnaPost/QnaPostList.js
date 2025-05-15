@@ -2,44 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './QnaPostList.css';
 import HomeBar from '../../components/HomeBar';
-
-const dummyPosts = [
-  {
-    id: 1,
-    nickname: '닉네임',
-    date: '2022년 10월 14일 오전 9시 30분',
-    tag: 'Engineering',
-    title: '처음이라 많이 떨리네요! 😂 신입 인사드립니다.',
-    content:
-      '첫 직장에서의 인사라 설렘과 긴장이 공존합니다. 함께할 팀원들과 협업을 통해 즐겁고 뜻깊은 시간을 보내고 싶습니다.',
-  },
-  {
-    id: 2,
-    nickname: '선배1',
-    date: '2022년 11월 02일 오후 2시 15분',
-    tag: 'Product',
-    title: '프로덕트 팀에서 협업 잘하는 팁!',
-    content:
-      '신입분들과의 소통을 잘 하기 위해선 일일 체크인과 주간 회고가 정말 도움이 됩니다. 자유롭게 질문해주세요 :)',
-  },
-  {
-    id: 3,
-    nickname: '사원2',
-    date: '2023년 1월 10일 오전 11시 00분',
-    tag: 'People',
-    title: '다들 점심 뭐 드시나요?',
-    content: '요즘 구내식당 메뉴가 살짝 질리네요. 근처 추천 식당 있으신가요?',
-  },
-  {
-    id: 4,
-    nickname: '신입3',
-    date: '2023년 3월 7일 오후 4시 45분',
-    tag: 'Sales',
-    title: '첫 미팅 후기 공유드려요!',
-    content:
-      '오늘 처음으로 고객사 미팅 다녀왔습니다. 긴장했지만 팀장님 덕분에 잘 마무리했어요. 배운 점 간단히 정리해봅니다.',
-  },
-];
+import { dummyQnaPosts } from '../../data/dummyQnaPosts';
 
 function QnaPostList() {
   const navigate = useNavigate();
@@ -50,12 +13,12 @@ function QnaPostList() {
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  const filteredPosts = dummyPosts
+  const filteredPosts = dummyQnaPosts
     .filter((post) => {
       const matchesSearch =
         post.title.includes(searchKeyword) ||
         post.content.includes(searchKeyword) ||
-        post.nickname.includes(searchKeyword);
+        post.writer?.includes(searchKeyword);
       const matchesTag = selectedTag ? post.tag === selectedTag : true;
       return matchesSearch && matchesTag;
     })
@@ -89,7 +52,7 @@ function QnaPostList() {
     <>
       <HomeBar />
 
-      <div className="freepost-banner">
+      <div className="qnapost-banner">
         <div className="search-box">
           <input
             type="text"
@@ -108,14 +71,14 @@ function QnaPostList() {
         <p>Home &gt; 질문 게시판</p>
       </div>
 
-      <div className="freepost-container">
-        <div className="freepost-subtext-wrapper">
-          <div className="freepost-subtext">
+      <div className="qnapost-container">
+        <div className="qnapost-subtext-wrapper">
+          <div className="qnapost-subtext">
             “질문 게시판”은 신입은 질문글만 작성할 수 있으며, 선배는 답글만 작성할 수 있습니다. 
           </div>
         </div>
 
-        <div className="freepost-tags">
+        <div className="qnapost-tags">
           {['#Product', '#Engineering', '#People', '#Sales'].map((tag, index) => (
             <button
               key={index}
@@ -130,7 +93,7 @@ function QnaPostList() {
           </button>
         </div>
 
-        <div className="freepost-list">
+        <div className="qnapost-list">
           {currentPosts.map((post) => (
             <div
               key={post.id}
@@ -138,7 +101,7 @@ function QnaPostList() {
               onClick={() => navigate(`/qna/${post.id}`)}
             >
               <div className="post-meta">
-                <span className="nickname">{post.nickname}</span>
+                <span className="nickname">{post.writer}</span>
                 <span className="date">{new Date(post.created_at).toLocaleString('ko-KR')}</span>
                 <span className="tag">{post.tag}</span>
               </div>
