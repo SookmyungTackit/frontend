@@ -8,15 +8,7 @@ export const dummyMyPosts = [
     type: 0,  // 자유게시판
     created_at: '2025-05-16T21:00:00.000',
   },
-  {
-    id: 7,
-    writer: '현재유저',
-    title: '실제 고객 사례 기반 세일즈 전략 문의드립니다.',
-    content: '최근 고객과의 미팅에서 나온 피드백을 반영한 세일즈 전략 수립에 조언 부탁드립니다!',
-    tag: 'Sales',
-    type: 1,  // 질문게시판
-    created_at: '2025-05-16T22:00:00.000',
-  },
+
   {
     id: 5,
     writer: '현재유저',

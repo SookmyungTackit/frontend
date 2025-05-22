@@ -7,18 +7,18 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 const stats = {
   total: 2500,
-  month: 600,
-  week: 200
+  month: 400,
+  week: 20
 };
 
 const joinData = [
+  { name: 'Nov', count: 280 },
+  { name: 'Dec', count: 350 },
   { name: 'Jan', count: 300 },
   { name: 'Feb', count: 250 },
   { name: 'Mar', count: 270 },
   { name: 'Apr', count: 230 },
   { name: 'May', count: 400 },
-  { name: 'Jun', count: 280 },
-  { name: 'Jul', count: 350 }
 ];
 
 function formatTime(isoDate) {

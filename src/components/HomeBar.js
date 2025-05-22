@@ -39,7 +39,7 @@ function HomeBar() {
       </div>
 
       <div className="homebar-right desktop-menu">
-        <Link to="/mypage-admin" style={isActive('/mypage-admin')}>마이 페이지</Link>
+        <Link to="/userpage" style={isActive('/userpage')}>마이 페이지</Link>
         <button onClick={handleLogout} className="logout-button">로그아웃</button>
       </div>
 
@@ -49,7 +49,7 @@ function HomeBar() {
         <Link to="/tip" style={isActive('/tip')}>선임자의 TIP</Link>
         <Link to="/free" style={isActive('/free')}>자유 게시판</Link>
         <Link to="/qna" style={isActive('/qna')}>질문 게시판</Link>
-        <Link to="/mypage-admin" style={isActive('/mypage-admin')}>마이 페이지</Link>
+        <Link to="/userpage" style={isActive('/userpage')}>마이 페이지</Link>
         <button onClick={handleLogout} className="logout-button">로그아웃</button>
       </div>
     </div>

@@ -103,7 +103,11 @@ function QnaPostList() {
               <div className="post-meta">
                 <span className="nickname">{post.writer}</span>
                 <span className="date">{new Date(post.created_at).toLocaleString('ko-KR')}</span>
-                <span className="tag">{post.tag}</span>
+                <span
+                  className={`tag ${post.tag === selectedTag ? 'active-tag' : ''}`}
+                >
+                  {post.tag}
+                </span>
               </div>
               <div className="post-title">{post.title}</div>
               <div className="post-content-preview">{post.content}...</div>

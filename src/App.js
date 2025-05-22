@@ -16,12 +16,13 @@ import TipPostWrite from './pages/TipPost/TipPostWrite';
 import TipPostEdit from './pages/TipPost/TipPostEdit'; 
 import MainPage from './pages/Main/MainPage'; 
 import UserPage from './pages/MyPage/UserPage';
-import AdminPage from './pages/MyPage/AdminPage';
 import EditPasswordPage from './pages/MyPage/EditPasswordPage';
 import EditNicknamePage from './pages/MyPage/EditNicknamePage';
 import UserManagementPage from './pages/MyPage/UserManagementPage';
 import PostManagementPage from './pages/MyPage/PostManagementPage';
 import MyPostList from './pages/MyPage/MyPostList';
+import MyFreeComments from './pages/MyPage/MyFreeComments';
+import MyQnaComments from './pages/MyPage/MyQnaComments';
 import Bookmarked from './pages/MyPage/Bookmarked'; 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -51,13 +52,14 @@ function App() {
         <Route path="/tip/:postId" element={<TipPostDetail />} /> 
         <Route path="/tip/write" element={<TipPostWrite />} />
         <Route path="/tip/edit/:postId" element={<TipPostEdit />} />   
-        <Route path="/mypage" element={<UserPage />} />
-        <Route path="/mypage-admin" element={<AdminPage />} />
+        <Route path="/userpage" element={<UserPage />} />
         <Route path="/mypage/edit-password" element={<EditPasswordPage />} />
         <Route path="/mypage/edit-nickname" element={<EditNicknamePage />} />
         <Route path="/admin/users" element={<UserManagementPage />} />
         <Route path="/mypage/post-management" element={<PostManagementPage />} />
         <Route path="/mypage/mypostpage" element={<MyPostList />} /> 
+        <Route path="/mypage/myfreecomments" element={<MyFreeComments />} />
+        <Route path="/mypage/myqnacomments" element={<MyQnaComments />} />
         <Route path="/mypage/bookmarked" element={<Bookmarked />} /> 
   
 

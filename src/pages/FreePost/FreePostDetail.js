@@ -1,28 +1,36 @@
-import React, { useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import './FreePostDetail.css';
 import HomeBar from '../../components/HomeBar';
 import { dummyFreePosts } from '../../data/dummyFreePosts';
-import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import axios from 'axios';
 
 function FreePostDetail() {
   const { postId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const textareaRef = useRef(null);
+
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
-  const currentUser = '현재유저'; // 이건 예시, 실제로는 로그인한 사용자 정보로 대체해야 함
-  const location = useLocation();
-  const from = location.state?.from; // 'my-posts' or undefined
+  const [post, setPost] = useState(dummyFreePosts.find((p) => p.id === parseInt(postId, 10))); // 더미 데이터로 초기화
 
+  const currentUser = '현재유저'; // 로그인 사용자 정보로 대체 예정
+  const from = location.state?.from;
 
-  const post = dummyFreePosts.find((p) => p.id === parseInt(postId, 10));
+  useEffect(() => {
+    axios.get(`/free_post/{freePostId}`) // 예시 API 호출
+      .then(response => {
+        setPost(response.data); // API에서 가져온 데이터로 업데이트
+      })
+      .catch(error => {
+        console.error('API 호출 실패:', error);
+        // 실패 시 더미 데이터 유지
+      });
+  }, [postId]);
 
   if (!post) return <div>해당 게시글을 찾을 수 없습니다.</div>;
-
-  
 
   const handleTextareaChange = (e) => {
     setComment(e.target.value);
@@ -40,11 +48,10 @@ function FreePostDetail() {
 
     const newComment = {
       id: Date.now(),
-      nickname: '현재유저',
+      nickname: currentUser,
       content: comment.trim(),
       date: new Date().toLocaleString('ko-KR'),
     };
-
 
     setComments((prev) => [newComment, ...prev]);
     setComment('');
@@ -55,14 +62,12 @@ function FreePostDetail() {
     <>
       <HomeBar />
       <div className="freepost-detail-container">
-      <h1 className="board-title" onClick={() => navigate('/free')}>
-        자유 게시판
-      </h1>
+        <h1 className="board-title" onClick={() => navigate('/free')}>자유 게시판</h1>
 
         <div className="freepost-box">
           <div className="freepost-header">
             <div className="freepost-tags">
-              <span className="tag">#{post.tag.toLowerCase()}</span>
+              <span className="tag">#{post.tag ? post.tag.toLowerCase() : '없음'}</span>
             </div>
             <div className="freepost-actions">
               {post.writer === currentUser ? (
@@ -82,7 +87,6 @@ function FreePostDetail() {
                   >
                     삭제하기
                   </button>
-
                 </>
               ) : (
                 <button onClick={() => alert('신고 되었습니다.')}>신고하기</button>
@@ -92,9 +96,9 @@ function FreePostDetail() {
 
           <h1 className="detail-title">{post.title}</h1>
           <div className="detail-meta">
-              <span>{post.writer}</span> 
-              <span>{new Date(post.created_at).toLocaleString('ko-KR')}</span>
-            </div>
+            <span>{post.writer}</span> 
+            <span>{new Date(post.created_at).toLocaleString('ko-KR')}</span>
+          </div>
 
           <div className="detail-content">{post.content}</div>
 

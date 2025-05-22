@@ -178,3 +178,9 @@ body {
     cursor: pointer;
     margin-left: auto;
   }
+
+  
+  .tag.active-tag {
+    color: #4D77FF;
+  }
+  

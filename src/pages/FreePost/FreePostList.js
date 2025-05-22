@@ -3,17 +3,33 @@ import { useNavigate } from 'react-router-dom';
 import './FreePostList.css';
 import HomeBar from '../../components/HomeBar';
 import { dummyFreePosts } from '../../data/dummyFreePosts';
+import { useEffect } from 'react';
+import axios from 'axios';
+
 
 function FreePostList() {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTag, setSelectedTag] = useState(null); 
+  const [posts, setPosts] = useState(dummyFreePosts); // 초기엔 더미 데이터로 세팅
+
+useEffect(() => {
+  axios.get('/free_post/list') // 백엔드에서 주는 URL 확인 필요
+    .then(response => {
+      setPosts(response.data); // 응답 데이터 형태 맞춰서 필요 시 수정
+    })
+    .catch(error => {
+      console.error('API 호출 실패:', error);
+      // 실패하면 더미 데이터 그대로 사용
+    });
+}, []);
+
 
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  const filteredPosts = dummyFreePosts
+  const filteredPosts = posts
     .filter((post) => {
       const matchesSearch =
         post.title.includes(searchKeyword) ||

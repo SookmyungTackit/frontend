@@ -32,9 +32,9 @@ function MainPage() {
   const sliderSettings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 400,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 1500,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
