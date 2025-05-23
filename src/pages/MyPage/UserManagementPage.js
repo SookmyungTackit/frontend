@@ -1,16 +1,35 @@
-// UserManagementPage.jsx
-import React, { useState } from 'react';
-import HomeBar from '../../components/HomeBar';
+import React, { useEffect, useState } from 'react';
+import HomeBar from '../../components/layout/HomeBar';
 import './UserManagementPage.css';
-import usersFromApi from '../../data/users';
+import api from '../../api/api'; // ✅ axios 인스턴스
 
 const USERS_PER_PAGE = 5;
 
 export default function UserManagementPage() {
   const [filter, setFilter] = useState('ACTIVE');
   const [currentPage, setCurrentPage] = useState(1);
+  const [users, setUsers] = useState([]);
 
-  const filteredUsers = usersFromApi
+  // ✅ 회원 목록 불러오기
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await api.get('/api/admin/members', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUsers(response.data);
+      } catch (error) {
+        console.error('회원 목록 불러오기 실패:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const filteredUsers = users
     .filter((user) => user.status === filter)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
@@ -34,7 +53,10 @@ export default function UserManagementPage() {
 
         <div className="user-tab-buttons">
           <button
-            onClick={() => { setFilter('ACTIVE'); setCurrentPage(1); }}
+            onClick={() => {
+              setFilter('ACTIVE');
+              setCurrentPage(1);
+            }}
             className={`user-tab-button ${
               filter === 'ACTIVE' ? 'active-tab' : 'inactive-tab'
             }`}
@@ -42,7 +64,10 @@ export default function UserManagementPage() {
             사용 계정
           </button>
           <button
-            onClick={() => { setFilter('DELETED'); setCurrentPage(1); }}
+            onClick={() => {
+              setFilter('DELETED');
+              setCurrentPage(1);
+            }}
             className={`user-tab-button ${
               filter === 'DELETED' ? 'active-tab' : 'inactive-tab'
             }`}
@@ -80,7 +105,6 @@ export default function UserManagementPage() {
           </tbody>
         </table>
 
-        {/* Pagination */}
         <div className="pagination">
           <button
             className="page-button"

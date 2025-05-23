@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './PostPageList.css';
-import HomeBar from '../../components/HomeBar';
+import HomeBar from '../../components/layout/HomeBar';
 import { dummyBookmarked } from '../../data/dummyBookmarked';
 
 function Bookmarked() {

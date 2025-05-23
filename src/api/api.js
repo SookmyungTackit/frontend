@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// ✅ axios 인스턴스 생성
+// ✅ axios 인스턴스 생성( 끝에 / 하나 떼기 )
 const api = axios.create({
   baseURL: " ", // 백엔드 서버 주소
 });
@@ -9,6 +9,7 @@ const api = axios.create({
 const reissueAccessToken = async () => {
   try {
     const refreshToken = localStorage.getItem("refreshToken");
+    // accessToken 토큰 재발급 Api (url : /auth/reissue , post)
     const response = await axios.post("/auth/reissue", null, {
       headers: {
         "Content-Type": "application/json",

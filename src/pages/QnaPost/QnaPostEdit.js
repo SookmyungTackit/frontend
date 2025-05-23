@@ -1,36 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './QnaPostEdit.css'; // QnA 스타일 (작성 페이지와 통일)
-import HomeBar from '../../components/HomeBar';
-import { dummyQnaPosts } from '../../data/dummyQnaPosts';
+import './QnaPostEdit.css';
+import HomeBar from '../../components/layout/HomeBar';
 import { toast } from 'react-toastify';
+import api from '../../api/api';
 
 function QnaPostEdit() {
   const { postId } = useParams();
   const navigate = useNavigate();
 
-  const post = dummyQnaPosts.find((p) => p.id === parseInt(postId, 10));
-  const [title, setTitle] = useState(post?.title || '');
-  const [content, setContent] = useState(post?.content || '');
-  const [tag, setTag] = useState(post?.tag || 'Engineering');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [tagOptions, setTagOptions] = useState([]); // 전체 태그 목록
+  const [selectedTagId, setSelectedTagId] = useState(null);
 
-  const tagOptions = ['Product', 'Engineering', 'People', 'Sales'];
+  useEffect(() => {
+    async function fetchPost() {
+      try {
+        const { data } = await api.get(`/qna_post/${postId}`);
+        setTitle(data.title);
+        setContent(data.content);
 
-  if (!post) return <div>해당 게시글을 찾을 수 없습니다.</div>;
+        const tagsRes = await api.get('/qna_tags/list');
+        setTagOptions(tagsRes.data);
+        const matchedTag = tagsRes.data.find(tag => tag.tagName === data.tags[0]);
+        setSelectedTagId(matchedTag?.id || null);
+      } catch (err) {
+        toast.error('게시글 정보를 불러오는 데 실패했습니다.');
+        console.error(err);
+      }
+    }
+    fetchPost();
+  }, [postId]);
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
       toast.warn('제목과 내용을 모두 입력해주세요!');
       return;
     }
 
-    post.title = title;
-    post.content = content;
-    post.tag = tag;
-
-    toast.success('게시글이 수정되었습니다.');
-    navigate(`/qna/${postId}`);
+    try {
+      const payload = {
+        title,
+        content,
+        tagIds: selectedTagId ? [selectedTagId] : [],
+      };
+      await api.put(`/qna_post/${postId}`, payload);
+      toast.success('게시글이 수정되었습니다.');
+      navigate(`/qna/${postId}`);
+    } catch (err) {
+      toast.error('수정에 실패했습니다.');
+      console.error(err);
+    }
   };
 
   const handleCancel = () => {
@@ -64,15 +86,16 @@ function QnaPostEdit() {
             onChange={(e) => setTitle(e.target.value)}
           />
 
-          <div className="tag-buttons">
-            {tagOptions.map((t) => (
+          <p className="write-label">태그 선택</p>
+          <div className="tag-list">
+            {tagOptions.map(tag => (
               <button
-                key={t}
+                key={tag.id}
                 type="button"
-                className={`tag-button ${tag === t ? 'selected' : ''}`}
-                onClick={() => setTag(t)}
+                className={`tag-button${selectedTagId === tag.id ? ' active-tag' : ''}`}
+                onClick={() => setSelectedTagId(tag.id)}
               >
-                #{t}
+                #{tag.tagName}
               </button>
             ))}
           </div>

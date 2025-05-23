@@ -1,32 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './TipPostEdit.css'; // Tip 스타일 (작성 페이지와 통일)
-import HomeBar from '../../components/HomeBar';
-import { dummyTipPosts } from '../../data/dummyTipPosts';
+import './TipPostEdit.css';
+import HomeBar from '../../components/layout/HomeBar';
 import { toast } from 'react-toastify';
+import api from '../../api/api';
 
 function TipPostEdit() {
   const { postId } = useParams();
   const navigate = useNavigate();
 
-  const post = dummyTipPosts.find((p) => p.id === parseInt(postId, 10));
-  const [title, setTitle] = useState(post?.title || '');
-  const [content, setContent] = useState(post?.content || '');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
-  if (!post) return <div>해당 게시글을 찾을 수 없습니다.</div>;
+  useEffect(() => {
+    async function fetchPost() {
+      try {
+        const { data } = await api.get(`/api/tip-posts/${postId}`);
+        setTitle(data.title);
+        setContent(data.content);
+      } catch (err) {
+        toast.error('게시글 정보를 불러오는 데 실패했습니다.');
+        console.error(err);
+      }
+    }
+    fetchPost();
+  }, [postId]);
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
-      toast.warn('제목과 내용을 모두 입력해주세요.');
+      toast.warn('제목과 내용을 모두 입력해주세요!');
       return;
     }
 
-    post.title = title;
-    post.content = content;
-
-    toast.success('게시글이 수정되었습니다.');
-    navigate(`/tip/${postId}`);
+    try {
+      const payload = { title, content };
+      await api.put(`/api/tip-posts/${postId}`, payload);
+      toast.success('게시글이 수정되었습니다.');
+      navigate(`/tip/${postId}`);
+    } catch (err) {
+      toast.error('수정에 실패했습니다.');
+      console.error(err);
+    }
   };
 
   const handleCancel = () => {
@@ -38,7 +53,7 @@ function TipPostEdit() {
       <HomeBar />
       <div className="freepost-write-container">
         <h1 className="board-title" onClick={() => navigate('/tip')}>
-          선임자의 TIP
+          선임자의 Tip 게시판
         </h1>
 
         <form className="write-form" onSubmit={handleSave}>
@@ -63,7 +78,7 @@ function TipPostEdit() {
           <p className="write-label">내용</p>
           <textarea
             className="write-textarea"
-            placeholder="신입사원에게 도움이 될 회사 생활 팁이나 조언을 작성해 주세요."
+            placeholder="팁을 자유롭게 작성해주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />

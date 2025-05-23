@@ -1,23 +1,39 @@
 import React, { useState } from 'react';
-import HomeBar from '../../components/HomeBar';
+import HomeBar from '../../components/layout/HomeBar';
 import './EditForm.css';
+import { toast } from 'react-toastify';
+import api from '../../api/api';
 
 const EditPasswordPage = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      alert('새 비밀번호가 일치하지 않습니다.');
+      toast.warn('새 비밀번호가 일치하지 않습니다.');
       return;
     }
 
-    // TODO: API 연동
-    console.log('현재 비번:', currentPassword);
-    console.log('새 비번:', newPassword);
+    try {
+      const payload = {
+        currentPassword,
+        newPassword,
+      };
+
+      const { data } = await api.patch('/members/password', payload);
+
+      if (data.changed) {
+        toast.success(data.message);
+      } else {
+        toast.warn('비밀번호가 변경되지 않았습니다.');
+      }
+    } catch (err) {
+      toast.error('비밀번호 변경에 실패했습니다.');
+      console.error(err);
+    }
   };
 
   return (

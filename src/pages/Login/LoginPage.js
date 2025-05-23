@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
-import axios from "axios"; // ✅ axios 추가
+import api from "../../api/api";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -9,20 +9,42 @@ function LoginPage() {
   const [errorMessage, setErrorMessage] = useState(""); 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // ✅ 토큰 만료 임박 시 사용자에게 알림 (예: 3분 전)
+    const tokenExpiresIn = parseInt(localStorage.getItem("accessTokenExpiresIn"));
+    if (tokenExpiresIn) {
+      const now = Date.now();
+      const timeRemaining = tokenExpiresIn - now;
+      const threshold = 3 * 60 * 1000; // 3분
+
+      if (timeRemaining > 0 && timeRemaining <= threshold) {
+        alert("세션이 곧 만료됩니다. 자동 연장되거나 다시 로그인해 주세요.");
+      }
+
+      // ✅ 세션이 만료된 경우 자동 로그아웃 처리
+      if (timeRemaining <= 0) {
+        alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
+        handleLogout();
+      }
+    }
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    //로그인 Api 사용 (url : /auth/sign-in, Post)
     try {
-      const response = await axios.post(" https://0c7a-61-40-226-235.ngrok-free.app/auth/sign-in", {
+      const response = await api.post("/auth/sign-in", {
         email,
         password,
       });
 
-      const { accessToken, refreshToken } = response.data;
+      const { accessToken, refreshToken, accessTokenExpiresIn, grantType } = response.data;
 
-      // ✅ 토큰 저장
+      // ✅ 모든 응답 정보 저장
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("accessTokenExpiresIn", accessTokenExpiresIn);
+      localStorage.setItem("grantType", grantType);
 
       navigate("/main");
     } catch (error) {
@@ -32,6 +54,15 @@ function LoginPage() {
         setErrorMessage("로그인 중 오류가 발생했습니다.");
       }
     }
+  };
+
+  // ✅ 로그아웃 함수 (사용자 요청 시 또는 토큰 만료 시 호출)
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("accessTokenExpiresIn");
+    localStorage.removeItem("grantType");
+    navigate("/login");
   };
 
   return (
@@ -70,26 +101,29 @@ function LoginPage() {
           />
 
           {/* ✅ 에러 메시지 표시 */}
-            {errorMessage && (
-              <div className="error-message">{errorMessage}</div>
+          {errorMessage && (
+            <div className="error-message">{errorMessage}</div>
           )}
 
           <button type="submit" className="login-button english-text">
             Log in
           </button>
+
+          {/* ✅ 임시 로그인 기능 - 나중에 삭제 */}
           <button
             type="button"
             className="temp-login-button english-text"
             onClick={() => {
-              // 임시 토큰 강제로 넣기 (테스트용)
               localStorage.setItem("accessToken", "TEMP_TOKEN");
               localStorage.setItem("refreshToken", "TEMP_REFRESH_TOKEN");
+              localStorage.setItem("accessTokenExpiresIn", `${Date.now() + 3600000}`);
+              localStorage.setItem("grantType", "Bearer");
               navigate("/main");
             }}
           >
             임시 로그인
           </button>
-
+          {/* ✅ 임시 로그인 끝 */}
         </form>
         <div className="bottom-links">
           <Link to="/signup" className="help-link">회원 가입하기</Link>
