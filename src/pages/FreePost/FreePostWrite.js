@@ -77,17 +77,22 @@ function FreePostWrite() {
 
           <p className="write-label">태그 선택</p>
           <div className="tag-buttons">
-            {tagOptions.map((tag) => (
-              <button
-                key={tag.id}
-                type="button"
-                className={`tag-button ${tagIds.includes(tag.id) ? 'selected' : ''}`}
-                onClick={() => toggleTagSelection(tag.id)}
-              >
-                #{tag.tagName}
-              </button>
-            ))}
+            {Array.isArray(tagOptions) && tagOptions.length > 0 ? (
+              tagOptions.map((tag) => (
+                <button
+                  key={tag.id}
+                  type="button"
+                  className={`tag-button ${tagIds.includes(tag.id) ? 'selected' : ''}`}
+                  onClick={() => toggleTagSelection(tag.id)}
+                >
+                  #{tag.tagName}
+                </button>
+              ))
+            ) : (
+              <p style={{ color: '#aaa', fontSize: '14px' }}>불러올 수 있는 태그가 없습니다.</p>
+            )}
           </div>
+
 
           <p className="write-label">내용</p>
           <textarea

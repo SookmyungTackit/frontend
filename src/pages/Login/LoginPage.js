@@ -4,6 +4,7 @@ import "./LoginPage.css";
 import api from "../../api/api";
 
 function LoginPage() {
+    const [posts, setPosts] = useState([]); // 초기값은 배열
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); 

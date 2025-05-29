@@ -85,9 +85,10 @@ function MainPage() {
         </h3>
         <p>선배는 회사생활 팁 글 작성과 신입은 자유롭게 읽을 수 있어요!</p>
         <div className="tip-boxes">
-          {tipPosts
+        {Array.isArray(tipPosts) &&
+          tipPosts
             .slice()
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // ✅ 최신순 정렬
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .slice(0, 3)
             .map((tip) => (
               <Link

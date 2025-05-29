@@ -88,7 +88,8 @@ function FreePostEdit() {
 
           <p className="write-label">태그 선택</p>
           <div className="tag-list">
-            {tagOptions.map(tag => (
+          {Array.isArray(tagOptions) && tagOptions.length > 0 ? (
+            tagOptions.map(tag => (
               <button
                 key={tag.id}
                 type="button"
@@ -97,7 +98,11 @@ function FreePostEdit() {
               >
                 #{tag.tagName}
               </button>
-            ))}
+            ))
+          ) : (
+            <p style={{ color: '#aaa' }}>태그 목록을 불러오지 못했습니다.</p>
+          )}
+
           </div>
 
           <p className="write-label">내용</p>

@@ -32,16 +32,18 @@ function PostList({
       });
   }, [apiUrl]);
 
-  const filteredPosts = posts
-    .filter((post) => {
-      const matchesSearch =
-        post.title.includes(searchKeyword) ||
-        post.content.includes(searchKeyword) ||
-        post.writer?.includes(searchKeyword);
-      const matchesTag = selectedTag ? post.tags?.includes(selectedTag) : true;
-      return matchesSearch && matchesTag;
-    })
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const filteredPosts = Array.isArray(posts)
+  ? posts
+      .filter((post) => {
+        const matchesSearch =
+          post.title.includes(searchKeyword) ||
+          post.content.includes(searchKeyword) ||
+          post.writer?.includes(searchKeyword);
+        const matchesTag = selectedTag ? post.tags?.includes(selectedTag) : true;
+        return matchesSearch && matchesTag;
+      })
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  : [];
 
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
   const startIndex = (currentPage - 1) * postsPerPage;

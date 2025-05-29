@@ -13,10 +13,11 @@ function BoardSection({ title, description, posts, boardPath }) {
       </h3>
       <p>{description}</p>
       <ul className="post-list">
-        {posts
-          .slice() // 원본 배열 변경 방지
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // 최신 순 정렬
-          .slice(0, 5) // 최신글 5개만
+      {Array.isArray(posts) ? (
+        posts
+          .slice()
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .slice(0, 5)
           .map((post) => {
             const formattedDate = new Date(post.created_at).toLocaleString('ko-KR', {
               year: 'numeric',
@@ -50,8 +51,12 @@ function BoardSection({ title, description, posts, boardPath }) {
                 </div>
               </li>
             );
-          })}
-      </ul>
+          })
+      ) : (
+        <li>게시글이 없습니다.</li>
+      )}
+    </ul>
+
 
     </section>
   );

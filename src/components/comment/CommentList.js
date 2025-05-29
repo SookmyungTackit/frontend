@@ -6,13 +6,13 @@ import './CommentList.css';
 const dummyComments = [
   {
     id: 1,
-    writer: '메구밍',
+    writer: 'ㅇㅇ',
     content: '댓글 내용',
     createdAt: '2025-05-17T14:27:16.363248',
   },
   {
     id: 2,
-    writer: '메구밍',
+    writer: 'ㅁㅁ',
     content: '댓글 내용임다',
     createdAt: '2025-05-17T14:40:54.793352',
   },
