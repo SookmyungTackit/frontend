@@ -42,9 +42,8 @@ function MainPage() {
 
   return (
     <div>
-      <HomeBar />
-
-      {/* 배너 */}
+    <HomeBar />
+    {/* 배너 */}
       <section className="birthday-banner">
       <Slider {...sliderSettings}>
         {bannerData.map((item, index) => (

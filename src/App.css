@@ -12,6 +12,11 @@ body {
   color: #111;
 }
 
+/* HomeBar 고정 때문에 필요한 여백 */
+.main-content {
+  padding-top: 120px; /* ✅ HomeBar가 fixed로 고정되어 있으므로 */
+}
+
 /* ===== App Wrapper ===== */
 .App {
   text-align: center;
@@ -22,5 +27,5 @@ html, body, #root {
   height: 100%;
 }
 
-/* ✅ 필요한 경우만 유지, 안 쓰면 지워도 됨 */
-/* .App-header, .App-logo 등 기본 예제용은 삭제해도 무방 */
+/* ✅ 필요한 경우만 유지, 안 쓰면 지워도 무방 */
+/* .App-header, .App-logo 등 기본 예제용은 삭제 가능 */

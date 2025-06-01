@@ -1,14 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import HomeBar from '../../components/HomeBar';
-import './UserPage.css';
+import './MyPage.css';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/api'; // axios 인스턴스 (baseURL 설정됨)
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
+import { toast } from 'react-toastify'; 
+
 
 const MyPage = () => {
   const navigate = useNavigate();
   const { userInfo, loading, error } = useFetchUserInfo();
   const role = localStorage.getItem('role');
+
+  const handleWithdraw = async () => {
+    const confirmed = window.confirm(
+      '정말 탈퇴하시겠습니까?\n탈퇴 후에는 계정을 복구할 수 없습니다.'
+    );
+    if (!confirmed) return;
+  
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      toast.error('인증 정보가 없습니다. 다시 로그인해주세요.');
+      navigate('/login');
+      return;
+    }
+  
+    try {
+      const response = await api.post(
+        '/withdraw',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+  
+      toast.success(response.data.message || '탈퇴가 완료되었습니다.');
+  
+      // 로그아웃 처리
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('accessTokenExpiresIn');
+      localStorage.removeItem('grantType');
+      localStorage.removeItem('role');
+  
+      navigate('/login'); // ✅ 로그인 페이지로 이동
+    } catch (err) {
+      console.error(err);
+      toast.error('탈퇴 처리 중 오류가 발생했습니다.');
+    }
+  };
+  
 
   console.log('🔍 userInfo:', userInfo);
   console.log('🔍 userInfo.yearsOfService:', userInfo.yearsOfService);
@@ -128,14 +171,16 @@ const MyPage = () => {
               </button>
             </div>
             <div className="btn-row">
-              <button className="mypage-btn" onClick={() => navigate('/mypage/post-management')}>
+              <button className="mypage-btn" onClick={() => navigate('/admin/post-management')}>
                 게시글 관리
               </button>
             </div>
           </section>
         )}
 
-        <button className="withdraw-btn">탈퇴하기</button>
+          <button className="withdraw-btn" onClick={handleWithdraw}>
+            탈퇴하기
+          </button>
       </div>
     </>
   );

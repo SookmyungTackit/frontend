@@ -65,7 +65,6 @@ function TipPostDetail() {
 
   const handleScrapToggle = async () => {
     try {
-      // 이부분 tip게시글 찜 확인
       const res = await api.post(`/api/tip-posts/${postId}/scrap`);
       const { scrapped } = res.data;
       setIsScrapped(scrapped);

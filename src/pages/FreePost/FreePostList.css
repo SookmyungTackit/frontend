@@ -14,7 +14,7 @@ body {
     position: relative;  /* ✅ 자식 위치 기준 */
     background-color: #DBEFFF;
     text-align: center;
-    padding: 70px 20px 70px;
+    padding: 20px;
     margin-bottom: 30px;
   }
   

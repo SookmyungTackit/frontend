@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import api from "../../api/api";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState(""); 
   const navigate = useNavigate();
 
@@ -31,7 +34,6 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    //로그인 Api 사용 (url : /auth/sign-in, Post)
     try {
       const response = await api.post("/auth/sign-in", {
         email,

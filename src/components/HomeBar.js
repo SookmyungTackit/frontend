@@ -12,7 +12,7 @@ function HomeBar() {
     navigate('/login');
   };
 
-  const isActive = (path) => location.pathname === path ? { color: '#4D77FF' } : {};
+  const isActive = (path) => location.pathname.startsWith(path) ? { color: '#4D77FF' } : {};
 
   return (
     <div className="homebar">
@@ -39,7 +39,7 @@ function HomeBar() {
       </div>
 
       <div className="homebar-right desktop-menu">
-        <Link to="/userpage" style={isActive('/userpage')}>마이 페이지</Link>
+        <Link to="/mypage" style={isActive('/mypage')}>마이 페이지</Link>
         <button onClick={handleLogout} className="logout-button">로그아웃</button>
       </div>
 

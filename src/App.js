@@ -15,7 +15,7 @@ import TipPostDetail from './pages/TipPost/TipPostDetail';
 import TipPostWrite from './pages/TipPost/TipPostWrite';
 import TipPostEdit from './pages/TipPost/TipPostEdit'; 
 import MainPage from './pages/Main/MainPage'; 
-import UserPage from './pages/MyPage/UserPage';
+import MyPage from './pages/MyPage/MyPage';
 import EditPasswordPage from './pages/MyPage/EditPasswordPage';
 import EditNicknamePage from './pages/MyPage/EditNicknamePage';
 import UserManagementPage from './pages/MyPage/UserManagementPage';
@@ -53,11 +53,11 @@ function App() {
         <Route path="/tip/:postId" element={<TipPostDetail />} /> 
         <Route path="/tip/write" element={<TipPostWrite />} />
         <Route path="/tip/edit/:postId" element={<TipPostEdit />} />   
-        <Route path="/userpage" element={<UserPage />} />
+        <Route path="/mypage" element={<MyPage />} />
         <Route path="/mypage/edit-password" element={<EditPasswordPage />} />
         <Route path="/mypage/edit-nickname" element={<EditNicknamePage />} />
         <Route path="/admin/users" element={<UserManagementPage />} />
-        <Route path="/mypage/post-management" element={<PostManagementPage />} />
+        <Route path="/admin/post-management" element={<PostManagementPage />} />
         <Route path="/mypage/mypostpage" element={<MyPostList />} /> 
         <Route path="/mypage/myqnaposts" element={<MyQnaPostList />} />
         <Route path="/mypage/myfreecomments" element={<MyFreeComments />} />
@@ -83,4 +83,3 @@ function App() {
 
 
 export default App;
-
