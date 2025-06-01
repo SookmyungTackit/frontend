@@ -8,16 +8,16 @@ import { toast } from 'react-toastify';
 
 function FreePostDetail() {
   const textareaRef = useRef(null);
-  const { id } = useParams();
+  const { postId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from;
 
-  const idNumber = parseInt(id);
+  const postIdNumber = parseInt(postId);
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
-  const [CommentId, setCommentId] = useState(null);
+  const [editCommentId, setEditCommentId] = useState(null);
   const [isScrapped, setIsScrapped] = useState(false);
 
   const { userInfo } = useFetchUserInfo();
@@ -25,12 +25,12 @@ function FreePostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await api.get(`/api/free-posts/${id}`);
+        const res = await api.get(`/api/free-posts/${postId}`);
         setPost(res.data);
       } catch (err) {
         console.error('게시글 불러오기 실패:', err);
         setPost({
-          writer: '기본',
+          writer: '기본값',
           title: '본문1 제목',
           content: '내용4',
           tags: ['태그1', '태그3', '태그2'],
@@ -44,7 +44,7 @@ function FreePostDetail() {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await api.get(`/api/free-comments/${id}`);
+        const res = await api.get(`/api/free-comments/${postId}`);
         setComments(res.data);
       } catch (err) {
         console.error('댓글 불러오기 실패:', err);
@@ -55,7 +55,7 @@ function FreePostDetail() {
       }
     };
     fetchComments();
-  }, [id]);
+  }, [postId]);
 
   const handleDeleteComment = async (commentId) => {
     try {
@@ -92,8 +92,8 @@ function FreePostDetail() {
 
     try {
       if (editCommentId) {
-        const res = await api.patch(`/api/free-comments/${commentId} `, { content: comment.trim() });
-        setComments(prev => prev.map(c => (c.id === commentId ? res.data : c)));
+        const res = await api.patch(`/api/free-comments/${editCommentId}`, { content: comment.trim() });
+        setComments(prev => prev.map(c => (c.id === editCommentId ? res.data : c)));
         toast.success('댓글이 수정되었습니다.');
       } else {
         const res = await api.post('/api/free-comments', {
@@ -117,12 +117,12 @@ function FreePostDetail() {
     if (!confirmed) return;
 
     try {
-      await api.delete(`/api/free-posts/${id}`);
+      await api.delete(`/api/free-posts/${postId}`);
       toast.success('게시글이 삭제되었습니다.');
       if (from === 'my-posts') {
         navigate('/mypage/mypostpage');
       } else {
-        navigate('/free');
+        navigate('/qna');
       }
     } catch (err) {
       console.error('게시글 삭제 실패:', err);
@@ -132,7 +132,7 @@ function FreePostDetail() {
 
   const handleReportPost = async () => {
     try {
-      await api.post(`/api/free-posts/${id}/report`);
+      await api.post(`/api/free-posts/${postId}/report`);
       toast.success('게시글을 신고하였습니다.');
     } catch (err) {
       console.error('게시글 신고 실패:', err);
@@ -142,7 +142,7 @@ function FreePostDetail() {
 
   const handleScrapToggle = async () => {
     try {
-      const res = await api.post(`/api/free-posts/${id}/scrap`);
+      const res = await api.post(`/api/free-posts/${postId}/scrap`);
       const { scrapped } = res.data;
       setIsScrapped(scrapped);
   
@@ -161,7 +161,7 @@ function FreePostDetail() {
     <>
             <HomeBar />
             <div className="freepost-detail-container">
-              <h1 className="board-title" onClick={() => navigate('/free')}>질문 게시판</h1>
+              <h1 className="board-title" onClick={() => navigate('/free')}>자유 게시판</h1>
 
               <div className="freepost-box">
               {post && (
@@ -225,7 +225,7 @@ function FreePostDetail() {
               ref={textareaRef}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder={editCommentId ? '댓글을 수정하세요.' : '질문에 대한 답변을 작성해주세요.'}
+              placeholder={editCommentId ? '댓글을 수정하세요.' : '자유롭게 답변을 작성해주세요.'}
               className="floating-textarea"
             />
             <div className="button-float-layer">

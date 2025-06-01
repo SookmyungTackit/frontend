@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './TipPostWrite.css'; // ✅ 파일명도 수정해야 함
+import './TipPostWrite.css'; 
 import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
 import { toast } from 'react-toastify';

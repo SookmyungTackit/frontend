@@ -1,37 +1,102 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './FreePostEdit.css'; // 작성 페이지와 동일한 스타일
+import './FreePostEdit.css';
 import HomeBar from '../../components/HomeBar';
-import { dummyFreePosts } from '../../data/dummyFreePosts';
+import api from '../../api/api';
 import { toast } from 'react-toastify';
+
+// ✅ 태그 Fallback
+const fallbackTags = [
+  { id: 1, tagName: '태그1' },
+  { id: 2, tagName: '태그2' },
+  { id: 3, tagName: '태그3' },
+];
+
+// ✅ 게시글 Fallback
+const fallbackPost = {
+  writer: '',
+  title: '본문1 제목',
+  content: '내용4',
+  tags: ['태그1', '태그3', '태그2'],
+  createdAt: '2025-05-13T19:34:53.52603',
+};
 
 function FreePostEdit() {
   const { postId } = useParams();
   const navigate = useNavigate();
 
-  const post = dummyFreePosts.find((p) => p.id === parseInt(postId, 10));
-  const [title, setTitle] = useState(post?.title || '');
-  const [content, setContent] = useState(post?.content || '');
-  const [tag, setTag] = useState(post?.tag || 'Engineering');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [tagIds, setTagIds] = useState([]);
+  const [tagOptions, setTagOptions] = useState(fallbackTags);
 
-  const tagOptions = ['Product', 'Engineering', 'People', 'Sales'];
+  const toggleTag = (id) => {
+    setTagIds((prev) =>
+      prev.includes(id) ? prev.filter((tagId) => tagId !== id) : [...prev, id]
+    );
+  };
 
-  if (!post) return <div>해당 게시글을 찾을 수 없습니다.</div>;
+  useEffect(() => {
+    const fetchTagsAndPost = async () => {
+      let tagsData = fallbackTags;
 
-  const handleSave = (e) => {
+      try {
+        const tagResp = await api.get('/api/free_tags');
+        tagsData = tagResp.data;
+        setTagOptions(tagsData);
+      } catch (tagError) {
+        console.warn('태그 목록 로드 실패, fallback 사용');
+        setTagOptions(fallbackTags);
+      }
+
+      try {
+        const postResp = await api.get(`/api/free-posts/${postId}`);
+        const { title, content, tags: postTags } = postResp.data;
+
+        setTitle(title);
+        setContent(content);
+
+        const matchedTags = tagsData.filter((tag) =>
+          postTags.includes(tag.tagName)
+        );
+        setTagIds(matchedTags.map((tag) => tag.id));
+      } catch (postError) {
+        console.warn('게시글 불러오기 실패, fallback 사용');
+        toast.warn('게시글 정보가 서버에서 불러와지지 않아 더미 데이터를 사용합니다.');
+
+        setTitle(fallbackPost.title);
+        setContent(fallbackPost.content);
+
+        const matchedTags = tagsData.filter((tag) =>
+          fallbackPost.tags.includes(tag.tagName)
+        );
+        setTagIds(matchedTags.map((tag) => tag.id));
+      }
+    };
+
+    fetchTagsAndPost();
+  }, [postId]);
+
+  const handleSave = async (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
-      alert('제목과 내용을 모두 입력해주세요.');
+      toast.warn('제목과 내용을 모두 입력해주세요!');
       return;
     }
 
-    // ✨ TODO: 실제 API 호출로 저장 필요
-    post.title = title;
-    post.content = content;
-    post.tag = tag;
+    try {
+      await api.put(`/api/free-posts/${postId}`, {
+        title: title.trim(),
+        content: content.trim(),
+        tagIds: tagIds,
+      });
 
-    toast.success('게시글이 수정되었습니다.');
-    navigate(`/free/${postId}`);
+      toast.success('게시글이 수정되었습니다.');
+      navigate(`/free/${postId}`);
+    } catch (err) {
+      console.error('게시글 수정 실패:', err);
+      toast.error('게시글 수정에 실패했습니다.');
+    }
   };
 
   const handleCancel = () => {
@@ -48,11 +113,7 @@ function FreePostEdit() {
 
         <form className="write-form" onSubmit={handleSave}>
           <div className="button-group">
-            <button
-              type="button"
-              className="button-common button-gray"
-              onClick={handleCancel}
-            >
+            <button type="button" className="button-common button-gray" onClick={handleCancel}>
               취소
             </button>
             <button type="submit" className="button-common">
@@ -70,14 +131,14 @@ function FreePostEdit() {
           />
 
           <div className="tag-buttons">
-            {tagOptions.map((t) => (
+            {tagOptions.map((tag) => (
               <button
-                key={t}
+                key={tag.id}
                 type="button"
-                className={`tag-button ${tag === t ? 'selected' : ''}`}
-                onClick={() => setTag(t)}
+                className={`tag-button ${tagIds.includes(tag.id) ? 'selected' : ''}`}
+                onClick={() => toggleTag(tag.id)}
               >
-                #{t}
+                #{tag.tagName}
               </button>
             ))}
           </div>
@@ -85,7 +146,7 @@ function FreePostEdit() {
           <p className="write-label">내용</p>
           <textarea
             className="write-textarea"
-            placeholder="자유롭게 내용을 작성해주세요."
+            placeholder="자유롭게 의견을 남겨주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />

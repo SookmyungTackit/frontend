@@ -246,3 +246,11 @@ body {
   .detail-meta span:not(:last-child) {
     margin-right: 8px; /* 두 칸 정도 여백 (px 단위로 조절 가능) */
   }
+
+  .comment-action {
+    font-size: 13px;
+    color: #888;
+    cursor: pointer; /* ✨ 손 모양 커서로 변경 */
+    margin-left: 12px;
+  }
+  

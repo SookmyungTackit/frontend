@@ -72,8 +72,8 @@ function FreePostList() {
     const fetchPosts = async () => {
       try {
         const url = selectedTagId
-          ? `/api/free_tags/${selectedTagId}/posts?page=${currentPage}&size=10&sort=createdAt,asc`
-          : `/api/free-posts?page=${currentPage}&size=10&sort=createdAt,asc`;
+          ? `/api/free_tags/${selectedTagId}/posts?page=${currentPage}&size=5&sort=createdAt,desc`
+          : `/api/free-posts?page=${currentPage}&size=5&sort=createdAt,desc`;
 
         const res = await api.get(url);
         setPosts(res.data?.content || []);
@@ -133,7 +133,7 @@ function FreePostList() {
       <div className="freepost-container">
         <div className="freepost-subtext-wrapper">
           <div className="freepost-subtext">
-            "‘자유 게시판’은 신입과 선배 모두 자유롭게 게시글과 댓글을 작성할 수 있습니다."
+            "자유 게시판"은 신입과 선배 모두 자유롭게 게시글과 댓글을 작성할 수 있습니다.
           </div>
         </div>
 

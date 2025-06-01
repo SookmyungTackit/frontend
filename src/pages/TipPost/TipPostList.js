@@ -56,6 +56,7 @@ function TipPostList() {
     fetchPosts();
   }, [currentPage]);
 
+  // ✅ 검색
   const handleSearchChange = (e) => {
     setSearchKeyword(e.target.value);
     setCurrentPage(0);
@@ -69,6 +70,7 @@ function TipPostList() {
     return matchesKeyword;
   });
 
+  // ✅ 페이지네이션 계산
   const currentGroup = Math.floor(currentPage / pageGroupSize);
   const startPage = currentGroup * pageGroupSize;
   const endPage = Math.min(startPage + pageGroupSize, totalPages);
@@ -78,7 +80,7 @@ function TipPostList() {
   return (
     <>
       <HomeBar />
-      <div className="freepost-banner">
+      <div className="tippost-banner">
         <div className="search-box">
           <input
             type="text"
@@ -94,15 +96,15 @@ function TipPostList() {
         <p>Home &gt; 선임자의 TIP</p>
       </div>
 
-      <div className="freepost-container">
-        <div className="freepost-subtext-wrapper">
-          <div className="freepost-subtext">
+      <div className="tippost-container">
+        <div className="tippost-subtext-wrapper">
+          <div className="tippost-subtext">
             <img src="/warning.svg" alt="경고 아이콘" className="warning-icon" />
             "선임자의 TIP"은 선배 사원만 글을 작성할 수 있으며, 신입 사원은 열람만 가능합니다.
           </div>
         </div>
 
-        <div className="freepost-tags">
+        <div className="tippost-tags">
           {userInfo?.yearsOfService >= 2 && (
             <button className="write-button" onClick={() => navigate('/tip/write')}>
               글쓰기
@@ -110,7 +112,7 @@ function TipPostList() {
           )}
         </div>
 
-        <div className="freepost-list">
+        <div className="tippost-list">
           {filteredPosts.length === 0 ? (
             <div className="no-result">게시글이 없습니다.</div>
           ) : (

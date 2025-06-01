@@ -62,7 +62,7 @@ const MyPage = () => {
               <>
               {console.log('✅ 선임자용 UI 렌더링')}
               <section className="mypage-section" aria-labelledby="posts-title">
-                <h3 id="posts-title">글보기</h3>
+                <h3 id="posts-title">내 활동</h3>
                 <div className="btn-row">
                   <button className="mypage-btn" onClick={() => navigate('/mypage/mytip')}>
                     선임자의 TIP 내가 쓴 글 보기
@@ -93,7 +93,7 @@ const MyPage = () => {
               <>
               {console.log('🟡 뉴비용 UI 렌더링')}
               <section className="mypage-section" aria-labelledby="posts-title">
-                <h3 id="posts-title">글보기</h3>
+                <h3 id="posts-title">내 활동</h3>
                 <div className="btn-row">
                   <button className="mypage-btn" onClick={() => navigate('/mypage/myqnaposts')}>
                     질문게시판 내가 쓴 글 보기
