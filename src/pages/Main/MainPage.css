@@ -106,13 +106,13 @@
   flex: 1;
   background-color: #4D77FF;
   color: white;  /* ✅ 텍스트를 흰색으로 */
-  padding: 80px 40px;
+  padding: 100px 40px;
   border-radius: 16px;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 500;
   line-height: 1.4;
   text-align: center;
-  height: 80px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -181,9 +181,11 @@
 .post-tag {
   display: flex;
   align-items: center;
-  gap: 4px;
-  min-width: 110px; /* ✅ 고정 너비 부여 */
-  justify-content: flex-start;
+  gap: 6px;
+  white-space: nowrap;         /* 줄바꿈 방지 */
+  overflow: hidden;            /* 넘치면 숨기기 */
+  text-overflow: ellipsis;     /* 말줄임 (...) */
+  flex: 1 1 auto;               /* 너비 자동 조절 */
 }
 
 .icon {

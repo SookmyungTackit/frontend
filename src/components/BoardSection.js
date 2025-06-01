@@ -1,8 +1,14 @@
-// components/BoardSection.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './BoardSection.css';
 
+const formatTags = (tags) => {
+  if (!Array.isArray(tags)) return tags || '-';
+  if (tags.length > 3) {
+    return `${tags.slice(0, 3).join(', ')} +${tags.length - 3}`;
+  }
+  return tags.join(', ');
+};
 
 function BoardSection({ title, description, posts, boardPath }) {
   return (
@@ -12,56 +18,55 @@ function BoardSection({ title, description, posts, boardPath }) {
         <Link to={`/${boardPath}`} className="more-link">+ 더보기</Link>
       </h3>
       <p>{description}</p>
-      <ul className="post-list">
-      {Array.isArray(posts) ? (
-        posts
-          .slice()
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-          .slice(0, 5)
-          .map((post) => {
-            const formattedDate = new Date(post.created_at).toLocaleString('ko-KR', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false,
-            });
 
-            return (
-              <li key={post.id} className="post-item">
+      <ul className="post-list">
+        {Array.isArray(posts) && posts.length > 0 ? (
+          posts.map((post) => (
+            <li key={post.id || post.postId} className="post-item">
+              {/* ✅ Link는 li 안에서 한 번만! */}
+              <Link
+                to={`/${boardPath}/${post.id || post.postId}`}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
                 <div className="post-left">
-                  <Link to={`/${boardPath}/${post.id}`} className="post-title-link">
-                    <span className="post-title">{post.title}</span>
-                  </Link>
+                  <span className="post-title">{post.title}</span>
                 </div>
-                <div className="post-right">
+
+                <div className="post-right post-meta">
                   <span className="post-writer">
-                    <img src="/nickname.svg" alt="writer" className="icon" />
+                    <img src="/nickname.svg" alt="writer" className="post-icon" />
                     {post.writer}
                   </span>
+
                   <span className="post-date">
-                    <img src="/date.svg" alt="date" className="icon" />
-                    {formattedDate}
+                    <img src="/date.svg" alt="date" className="post-icon" />
+                    <span className="date">
+                      {new Date(post.createdAt).toLocaleString('ko-KR')}
+                    </span>
                   </span>
+
                   <span className="post-tag">
-                    <img src="/tag.svg" alt="tag" className="icon" />
-                    {post.tag}
+                    <img src="/tag.svg" alt="tag" className="post-icon" />
+                    {formatTags(post.tags)}
                   </span>
                 </div>
-              </li>
-            );
-          })
-      ) : (
-        <li>게시글이 없습니다.</li>
-      )}
-    </ul>
-
-
+              </Link>
+            </li>
+          ))
+        ) : (
+          <li>게시글이 없습니다.</li>
+        )}
+      </ul>
     </section>
   );
 }
-
-
 
 export default BoardSection;
