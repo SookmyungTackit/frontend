@@ -171,7 +171,7 @@ const MyPage = () => {
               </button>
             </div>
             <div className="btn-row">
-              <button className="mypage-btn" onClick={() => navigate('/admin/post-management')}>
+              <button className="mypage-btn" onClick={() => navigate('/admin/report/:postType')}>
                 게시글 관리
               </button>
             </div>

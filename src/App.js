@@ -58,7 +58,7 @@ function App() {
         <Route path="/mypage/edit-password" element={<EditPasswordPage />} />
         <Route path="/mypage/edit-nickname" element={<EditNicknamePage />} />
         <Route path="/admin/users" element={<UserManagementPage />} />
-        <Route path="/admin/post-management" element={<PostManagementPage />} />
+        <Route path="/admin/report/:postType" element={<PostManagementPage />} />
         <Route path="/mypage/myfreeposts" element={<MyFreePostList />} /> 
         <Route path="/mypage/myqnaposts" element={<MyQnaPostList />} />
         <Route path="/mypage/mytipposts" element={<MyTipPostList />} />

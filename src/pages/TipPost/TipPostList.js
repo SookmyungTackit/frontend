@@ -134,6 +134,7 @@ function TipPostList() {
                       <br />
                     </React.Fragment>
                   ))}
+                  {post.content.length === 100 && '...'}
                 </div>
               </div>
             ))

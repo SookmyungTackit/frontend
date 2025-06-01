@@ -1,27 +1,85 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './PostPageList.css';
+import './Bookmarked.css';
 import HomeBar from '../../components/HomeBar';
-import { dummyBookmarked } from '../../data/dummyBookmarked';
+import api from '../../api/api';
 
 function Bookmarked() {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedTag, setSelectedTag] = useState(null);
 
-  const postsPerPage = 5;
+  const [activeTab, setActiveTab] = useState('tip');
+  const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const pageGroupSize = 5;
 
-  const filteredPosts = dummyBookmarked
-    .filter((post) => {
-      const matchesTag = selectedTag ? post.tag === selectedTag : true;
-      return matchesTag;
-    })
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  // ✅ fallback 더미 데이터 정의
+  const fallbackData = {
+    tip: {
+      content: [
+        {
+          tipId: 1,
+          title: '2025/05/26',
+          contentPreview: '팁 ) 월요일 날씨 모름',
+          authorName: '영영신',
+          createdAt: '2025-05-26T16:55:22.233909',
+          type: 'Tip',
+        },
+      ],
+      totalPages: 1,
+    },
+    free: {
+      content: [
+        {
+          freeId: 2,
+          title: '2025/05/26',
+          contentPreview: '자유 ) 월요일 날씨 모름',
+          authorName: '영영신',
+          createdAt: '2025-05-27T22:27:15.846678',
+          type: 'Free',
+          tags: ['태그1', '태그2'],
+        },
+      ],
+      totalPages: 1,
+    },
+    qna: {
+      content: [
+        {
+          postId: 1,
+          title: '본문1 33제목',
+          contentPreview: '내용이이5',
+          writer: 'test1',
+          createdAt: '2025-05-27T20:24:20.359041',
+          type: 'QnA',
+          tags: ['태그1', '태그3'],
+        },
+      ],
+      totalPages: 1,
+    },
+  };
 
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const currentPosts = filteredPosts.slice(startIndex, startIndex + postsPerPage);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const pageParam = currentPage - 1;
+        let url = '';
+        if (activeTab === 'tip') url = `/api/mypage/tip-scraps?page=${pageParam}`;
+        else if (activeTab === 'free') url = `/api/mypage/free-scraps?page=${pageParam}`;
+        else url = `/api/mypage/qna-post/scrap?page=${pageParam}`;
+
+        const res = await api.get(url);
+        setPosts(res.data.content);
+        setTotalPages(res.data.totalPages);
+      } catch (err) {
+        console.error('API 연동 실패, 더미 데이터 사용:', err);
+        setPosts(fallbackData[activeTab].content);
+        setTotalPages(fallbackData[activeTab].totalPages);
+      }
+    };
+
+    fetchPosts();
+  }, [activeTab, currentPage]);
 
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
@@ -37,10 +95,15 @@ function Bookmarked() {
     if (nextGroupFirstPage <= totalPages) setCurrentPage(nextGroupFirstPage);
   };
 
-  const handleTagClick = (tag) => {
-    const plainTag = tag.replace('#', '');
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
     setCurrentPage(1);
-    setSelectedTag((prev) => (prev === plainTag ? null : plainTag));
+  };
+
+  const getBoardInfo = (post) => {
+    if (activeTab === 'tip') return { id: post.tipId, type: '선임자의 TIP', path: 'tip' };
+    if (activeTab === 'free') return { id: post.freeId, type: '자유게시판', path: 'free' };
+    return { id: post.postId, type: '질문게시판', path: 'qna' };
   };
 
   return (
@@ -52,34 +115,47 @@ function Bookmarked() {
         <p>마이페이지 &gt; 찜한 글 보기</p>
       </div>
 
-      <div className="freepost-container">
-        <div className="freepost-list">
-          {currentPosts.map((post) => {
-            const boardPath =
-              post.type === 0 ? 'free' :
-              post.type === 1 ? 'qna' :
-              'tip';
 
-            const boardName =
-              post.type === 0 ? '자유게시판' :
-              post.type === 1 ? '질문게시판' :
-              'TIP 게시판';
+
+      <div className="freepost-container">
+
+       <div className="bookmark-tabs">
+         <button onClick={() => handleTabClick('tip')} className={activeTab === 'tip' ? 'active' : ''}>TIP 게시판</button>
+         <button onClick={() => handleTabClick('free')} className={activeTab === 'free' ? 'active' : ''}>자유게시판</button>
+         <button onClick={() => handleTabClick('qna')} className={activeTab === 'qna' ? 'active' : ''}>질문게시판</button>
+        </div>
+        <div className="freepost-list">
+          {posts.map((post) => {
+            const { id, type, path } = getBoardInfo(post);
 
             return (
               <div
-                key={post.id}
+                key={id}
                 className="post-card"
-                onClick={() => navigate(`/${boardPath}/${post.id}`)}
+                onClick={() => navigate(`/${path}/${id}`)}
               >
                 <div className="post-meta">
-                  <span className="board-type">{boardName}</span>
-                  <span className="writer"> {post.writer}</span>
-                  <span className="date"> {new Date(post.created_at).toLocaleString('ko-KR')}</span>
-                  <span className="tag"> {post.tag}</span>
+                  <span className="board-type">{type}</span>
+                  <span className="writer"> {post.writer || post.authorName}</span>
+                  <span className="date"> {new Date(post.createdAt).toLocaleString('ko-KR')}</span>
+                  {post.tags && (
+                    <span className="tags">
+                      {post.tags.map((tag, i) => (
+                        <span key={i} className="tag">#{tag} </span>
+                      ))}
+                    </span>
+                  )}
                 </div>
-
                 <div className="post-title">{post.title}</div>
-                <div className="post-content-preview">{post.content}...</div>
+                <div className="post-content-preview">
+                  {post.content.split('\n').map((line, i) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                  {post.content.length === 100 && '...'}
+                </div>
               </div>
             );
           })}

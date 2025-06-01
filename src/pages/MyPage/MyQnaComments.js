@@ -100,6 +100,7 @@ function MyQnaComments() {
                     {new Date(comment.createdAt).toLocaleDateString('ko-KR')}
                   </span>
                 </div>
+                
                 <div className="comment-preview">
                   💬{" "}
                   {comment.content.split('\n').map((line, i) => (
@@ -108,6 +109,7 @@ function MyQnaComments() {
                       <br />
                     </React.Fragment>
                   ))}
+                   {comment.content.length === 100 && '...'}
                 </div>
               </div>
             ))

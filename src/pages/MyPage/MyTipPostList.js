@@ -113,14 +113,15 @@ function MyTipPostList() {
                 </span>
               </div>
               <div className="post-title">{post.title}</div>
-              <div className="post-content-preview">
-                {post.content.split('\n').map((line, i) => (
-                  <React.Fragment key={i}>
-                    {line}
-                    <br />
-                  </React.Fragment>
-                ))}
-              </div>
+                <div className="post-content-preview">
+                  {post.content.split('\n').map((line, i) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                  {post.content.length === 100 && '...'}
+                </div>
             </div>
           ))}
         </div>

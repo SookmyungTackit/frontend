@@ -2,73 +2,94 @@ import React, { useEffect, useState } from 'react';
 import HomeBar from '../../components/HomeBar';
 import './PostManagementPage.css';
 import api from '../../api/api';
-import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const POSTS_PER_PAGE = 5;
 
-function formatTime(isoDate) {
-  return new Date(isoDate).toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
-}
-
-// ✅ API 실패 시 사용할 더미 데이터
-const fallbackData = {
-  page: 0,
-  content: [
-    {
-      title: "신고예시글제목",
-      nickname: "ㅇㅇ",
-      organization: "시종설",
-      createdAt: "2025-05-28T22:08:21.369846",
-      reportCount: 3
-    }
-  ],
-  size: 5,
-  totalElements: 1,
-  totalPages: 1
-};
-
 export default function PostManagementPage() {
-  const { postType } = useParams();
+  const [activeTab, setActiveTab] = useState('Free'); // ✅ 탭 상태
   const [disabledPosts, setDisabledPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const boardNameMap = {
-    free: '자유게시판',
-    qna: '질문게시판',
-    tip: '선임자의 TIP',
+    Free: '자유게시판',
+    QnA: '질문게시판',
+    Tip: '선임자의 TIP',
   };
 
-  const boardName = boardNameMap[postType] || '알 수 없는 게시판';
+  const fallbackData = {
+    page: 0,
+    content: [],
+    size: 5,
+    totalElements: 0,
+    totalPages: 1,
+  };
+
+  const fetchDisabledPosts = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await api.get(`/api/admin/report/${activeTab}/posts`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { page: currentPage - 1, size: POSTS_PER_PAGE },
+      });
+
+      setDisabledPosts(response.data.content);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error('신고 게시글 불러오기 실패:', error);
+      setDisabledPosts(fallbackData.content);
+      setTotalPages(fallbackData.totalPages);
+    }
+  };
+
+  const handleDelete = async (postId) => {
+    const confirmed = window.confirm('정말 이 게시글을 삭제하시겠습니까?');
+    if (!confirmed) return;
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      await api.delete(`/api/admin/report/${activeTab}/posts/${postId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      toast.success('게시글이 삭제되었습니다.');
+      fetchDisabledPosts();
+    } catch (error) {
+      console.error('삭제 실패:', error);
+      toast.error('게시글 삭제에 실패했습니다.');
+    }
+  };
+
+  const handleActivate = async (postId) => {
+    const confirmed = window.confirm('이 게시글을 다시 활성화하시겠습니까?');
+    if (!confirmed) return;
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await api.patch(
+        `/api/admin/report/${activeTab}/posts/${postId}/activate`,
+        null,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success(response.data);
+      fetchDisabledPosts();
+    } catch (error) {
+      console.error('활성화 실패:', error);
+      toast.error('게시글 활성화에 실패했습니다.');
+    }
+  };
 
   useEffect(() => {
-    const fetchDisabledPosts = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        const response = await api.get(`/api/admin/report/${postType}/posts`, {
-          headers: { Authorization: `Bearer ${token}` },
-          params: { page: currentPage - 1, size: POSTS_PER_PAGE },
-        });
-
-        setDisabledPosts(response.data.content);
-        setTotalPages(response.data.totalPages);
-      } catch (error) {
-        console.error('신고 게시글 불러오기 실패:', error);
-        // ✅ API 실패 시 fallback 사용
-        setDisabledPosts(fallbackData.content);
-        setTotalPages(fallbackData.totalPages);
-      }
-    };
-
     fetchDisabledPosts();
-  }, [postType, currentPage]);
+  }, [activeTab, currentPage]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
 
   const handlePageClick = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -76,62 +97,62 @@ export default function PostManagementPage() {
     }
   };
 
+  const getPostId = (post) => {
+    if (activeTab === 'Free') return post.id;
+    if (activeTab === 'Tip') return post.tipId;
+    if (activeTab === 'QnA') return post.postId;
+    return null;
+  };
+
   return (
     <>
       <HomeBar />
       <div className="post-management-container">
         <h2>신고 3회 이상 비활성화된 게시글</h2>
+
+        <div className="bookmark-tabs">
+          <button onClick={() => handleTabClick('Tip')} className={activeTab === 'Tip' ? 'active' : ''}>선임자의 TIP</button>
+          <button onClick={() => handleTabClick('Free')} className={activeTab === 'Free' ? 'active' : ''}>자유게시판</button>
+          <button onClick={() => handleTabClick('QnA')} className={activeTab === 'QnA' ? 'active' : ''}>질문게시판</button>
+        </div>
+
         <ul className="post-management-list">
-          {disabledPosts.map((post, index) => (
-            <li key={index} className="post-management-item">
-              <div className="post-management-left">
-                <div className="post-management-icon">
-                  <img src="/search.svg" alt="돋보기 아이콘" className="search-icon" />
-                </div>
-                <div className="post-management-texts">
-                <div className="post-management-board">{boardName}</div>
-                <div className="post-management-title">
-                  {post.title}
-                </div>
-                  <div className="post-management-meta">
-                    신고 수: {post.reportCount}회 Posted {formatTime(post.createdAt)}, by @{post.nickname}
+          {disabledPosts.map((post, index) => {
+            const postId = getPostId(post);
+            const postUrl = `/${activeTab.toLowerCase()}/${postId}`;
+            const boardName = boardNameMap[activeTab];
+
+            return (
+              <li key={index} className="post-management-item">
+                <div className="post-management-left">
+                  <div className="post-management-icon">
+                    <img src="/search.svg" alt="돋보기 아이콘" className="search-icon" />
                   </div>
+
+                  <Link to={postUrl} className="post-management-texts" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <div className="post-management-board">{boardName}</div>
+                    <div className="post-management-title">{post.title}</div>
+                    <div className="post-management-meta">
+                      신고 수: {post.reportCount}회 Posted <span className="date">{new Date(post.createdAt).toLocaleString('ko-KR')}</span>, by @{post.nickname}
+                    </div>
+                  </Link>
                 </div>
-              </div>
-              <div className="post-management-actions">
-                <button className="activate-btn">활성화</button>
-                <button className="delete-btn" disabled>
-                  삭제
-                </button>
-              </div>
-            </li>
-          ))}
+
+                <div className="post-management-actions">
+                  <button className="activate-btn" onClick={() => handleActivate(postId)}>활성화</button>
+                  <button className="delete-btn" onClick={() => handleDelete(postId)}>삭제</button>
+                </div>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="pagination">
-          <button
-            className="page-button"
-            onClick={() => handlePageClick(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            ←
-          </button>
+          <button onClick={() => handlePageClick(currentPage - 1)} disabled={currentPage === 1} className="page-button">←</button>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-            <button
-              key={pageNum}
-              className={`page-button ${currentPage === pageNum ? 'active' : ''}`}
-              onClick={() => handlePageClick(pageNum)}
-            >
-              {pageNum}
-            </button>
+            <button key={pageNum} className={`page-button ${currentPage === pageNum ? 'active' : ''}`} onClick={() => handlePageClick(pageNum)}>{pageNum}</button>
           ))}
-          <button
-            className="page-button"
-            onClick={() => handlePageClick(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            →
-          </button>
+          <button onClick={() => handlePageClick(currentPage + 1)} disabled={currentPage === totalPages} className="page-button">→</button>
         </div>
       </div>
     </>
