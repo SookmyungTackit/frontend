@@ -107,12 +107,12 @@ const MyPage = () => {
               <section className="mypage-section" aria-labelledby="posts-title">
                 <h3 id="posts-title">내 활동</h3>
                 <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/mytip')}>
+                  <button className="mypage-btn" onClick={() => navigate('/mypage/mytipposts')}>
                     선임자의 TIP 내가 쓴 글 보기
                   </button>
                 </div>
                 <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/mypostpage')}>
+                  <button className="mypage-btn" onClick={() => navigate('/mypage/myfreeposts')}>
                     자유게시판 내가 쓴 글 보기
                   </button>
                 </div>
@@ -143,7 +143,7 @@ const MyPage = () => {
                   </button>
                 </div>
                 <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/mypostpage')}>
+                  <button className="mypage-btn" onClick={() => navigate('/mypage/myfreeposts')}>
                     자유게시판 내가 쓴 글 보기
                   </button>
                 </div>

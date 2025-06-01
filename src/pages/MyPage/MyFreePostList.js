@@ -4,7 +4,7 @@ import './PostPageList.css';
 import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
 
-function MyQnaPostList() {
+function MyFreePostList() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,11 +19,11 @@ function MyQnaPostList() {
     content: [
       {
         postId: 1,
-        title: "본문1 33제목",
+        title: "자유게시글1 제목",
         content: '안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.',
         createdAt: "2025-05-26T01:31:23.129942",
-        tags: ["태그3"],
-        type: "QnA",
+        tags: ["자유태그3"],
+        type: "Free",
       },
     ],
     size: 5,
@@ -37,7 +37,7 @@ function MyQnaPostList() {
       if (!token) throw new Error('No token found');
 
       const response = await api.get(
-        `/api/mypage/qna-posts?page=${currentPage - 1}&size=${postsPerPage}&sort=createdAt,${sortOrder}`,
+        `/api/mypage/free_posts?page=${currentPage - 1}&size=${postsPerPage}&sort=createdAt,${sortOrder}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -57,7 +57,7 @@ function MyQnaPostList() {
 
   useEffect(() => {
     fetchPosts();
-  }, [currentPage, sortOrder]); // 정렬 변경 시 다시 불러오기
+  }, [currentPage, sortOrder]);
 
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
@@ -75,7 +75,7 @@ function MyQnaPostList() {
 
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
-    setCurrentPage(1); // 정렬 변경 시 첫 페이지로
+    setCurrentPage(1);
   };
 
   return (
@@ -83,12 +83,11 @@ function MyQnaPostList() {
       <HomeBar />
 
       <div className="freepost-banner">
-        <h1>질문게시판 내가 쓴 글</h1>
-        <p>마이페이지 &gt; 질문게시판 내가 쓴 글 보기</p>
+        <h1>자유게시판 내가 쓴 글</h1>
+        <p>마이페이지 &gt; 자유게시판 내가 쓴 글 보기</p>
       </div>
 
       <div className="freepost-container">
-        {/* ✅ 정렬 드롭다운 */}
         <div className="sort-dropdown-container">
           <label htmlFor="sortOrder" className="sort-label"> </label>
           <select
@@ -107,7 +106,7 @@ function MyQnaPostList() {
             <div
               key={post.postId}
               className="post-card"
-              onClick={() => navigate(`/qna/${post.postId}`, { state: { from: 'my-posts' } })}
+              onClick={() => navigate(`/free/${post.postId}`, { state: { from: 'my-posts' } })}
             >
               <div className="post-meta">
                 <span className="date">
@@ -132,7 +131,6 @@ function MyQnaPostList() {
           ))}
         </div>
 
-        {/* 페이지네이션 */}
         <div className="pagination">
           <button onClick={goToPrevGroup} disabled={startPage === 1} className="page-btn">
             &laquo;
@@ -155,4 +153,4 @@ function MyQnaPostList() {
   );
 }
 
-export default MyQnaPostList;
+export default MyFreePostList;

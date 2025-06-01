@@ -170,11 +170,20 @@ function QnaPostList() {
                   <span className="nickname">{post.writer}</span>
                   <span className="date">{new Date(post.createdAt).toLocaleString('ko-KR')}</span>
                   <span className="tags">
-                    {Array.isArray(post.tags) ? post.tags.join(', ') : ''}
+                    {Array.isArray(post.tags)
+                      ? post.tags.map((tag, i) => `#${tag}`).join(' ')
+                      : ''}
                   </span>
                 </div>
                 <div className="post-title">{post.title}</div>
-                <div className="post-content-preview">{post.content}...</div>
+                <div className="post-content-preview">
+                  {post.content.split('\n').map((line, i) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </div>
               </div>
             ))
           )}

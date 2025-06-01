@@ -139,6 +139,13 @@ body {
     font-size: 14px;
     color: #555;
     line-height: 1.5;
+  
+    /* ✅ 말줄임 세트 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 최대 2줄까지 표시 */
+    -webkit-box-orient: vertical;
   }
   
   .pagination {

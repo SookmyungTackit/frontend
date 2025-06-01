@@ -127,7 +127,14 @@ function TipPostList() {
                   <span className="date">{new Date(post.createdAt).toLocaleString('ko-KR')}</span>
                 </div>
                 <div className="post-title">{post.title}</div>
-                <div className="post-content-preview">{post.content}...</div>
+                <div className="post-content-preview">
+                  {post.content.split('\n').map((line, i) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </div>
               </div>
             ))
           )}

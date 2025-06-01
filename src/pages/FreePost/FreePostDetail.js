@@ -32,7 +32,7 @@ function FreePostDetail() {
         setPost({
           writer: '기본값',
           title: '본문1 제목',
-          content: '내용4',
+          content: '안녕하세요.\n오늘은 날씨가 정말 좋네요.\n\n내일은 비가 온다고 합니다.',
           tags: ['태그1', '태그3', '태그2'],
           createdAt: '2025-05-13T19:34:53.52603',
         });
@@ -183,8 +183,14 @@ function FreePostDetail() {
                     <span>{post.writer}</span>
                     <span>{new Date(post.createdAt).toLocaleString('ko-KR')}</span>
                   </div>
-
-                  <div className="detail-content">{post.content}</div>
+                  <div className="detail-content">
+                    {post.content.split('\n').map((line, i) => (
+                      <React.Fragment key={i}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                  </div>
 
                   <button className="bookmark-button" onClick={handleScrapToggle}>
                     찜

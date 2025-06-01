@@ -4,8 +4,8 @@ import api from '../api/api';
 const useFetchUserInfo = () => {
   const [userInfo, setUserInfo] = useState({
     nickname: "기본값",
-    joinedYear: 2024,
-    yearsOfService: 2,
+    joinedYear: 2025,
+    yearsOfService: 1,
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

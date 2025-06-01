@@ -12,17 +12,18 @@ const fallbackResponse = {
     {
       postId: 2,
       writer: '기본값',
-      title: '본문1 33제목',
-      content: '내용이이이이입니다5',
-      tags: ['태그3'],
+      title: '요즘 날씨 너무 좋지 않나요?',
+      content:
+        '요즘 날씨가 정말 좋더라고요. 해가 길어지니까 퇴근하고도 밖에 나가 산책할 시간이 생겨서 기분이 좋아요. 어제는 집 근처 호수공원에 가서 커피 한 잔 마시며 걷고 왔어요. 바람도 선선하고 하늘도 맑아서 정말 힐링이었습니다. 특히 해 질 녘 노을이 너무 예뻐서 사진도 몇 장 찍었어요. 이런 날씨가 오래오래 계속됐으면 좋겠네요. 혹시 여러분은 요즘 어떻게 지내세요? 추천할 만한 산책 코스 있으시면 댓글로 알려주세요!',
+      tags: ['일상', '산책', '추천'],
       createdAt: '2025-05-26T00:49:09.773772',
     },
     {
       postId: 1,
       writer: 'test',
-      title: '본문1 34제목',
-      content: '내용이이이이입니다5',
-      tags: ['태그3'],
+      title: '프론트엔드 스터디 같이 하실 분!',
+      content:"안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.",
+      tags: ['스터디', '프론트엔드', 'React', '모집'],
       createdAt: '2025-05-26T00:47:58.054746',
     },
   ],
@@ -30,6 +31,8 @@ const fallbackResponse = {
   totalElements: 2,
   totalPages: 1,
 };
+
+
 
 function FreePostList() {
   const navigate = useNavigate();
@@ -167,11 +170,20 @@ function FreePostList() {
                   <span className="nickname">{post.writer}</span>
                   <span className="date">{new Date(post.createdAt).toLocaleString('ko-KR')}</span>
                   <span className="tags">
-                    {Array.isArray(post.tags) ? post.tags.join(', ') : ''}
+                    {Array.isArray(post.tags)
+                      ? post.tags.map((tag, i) => `#${tag}`).join(' ')
+                      : ''}
                   </span>
                 </div>
                 <div className="post-title">{post.title}</div>
-                <div className="post-content-preview">{post.content}...</div>
+                <div className="post-content-preview">
+                {post.content.split('\n').map((line, i) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))}
+              </div>
               </div>
             ))
           )}
