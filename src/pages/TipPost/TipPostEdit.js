@@ -78,7 +78,7 @@ function TipPostEdit() {
           <p className="write-label">내용</p>
           <textarea
             className="write-textarea"
-            placeholder="팁을 자유롭게 작성해주세요."
+            placeholder="신입사원에게 도움이 될 회사 생활 팁이나 조언을 작성해 주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
