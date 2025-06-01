@@ -1,4 +1,4 @@
-const usersFromApi = [
+const users = [
     {
       nickname: '테스트',
       email: 'yy@sookmyung.ac.kr',
@@ -148,5 +148,5 @@ const usersFromApi = [
 
   ];
   
-  export default usersFromApi;
+  export default users;
   

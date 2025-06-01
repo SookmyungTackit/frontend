@@ -1,81 +1,74 @@
 import React, { useEffect, useState } from 'react';
-import HomeBar from '../../components/layout/HomeBar';
+import HomeBar from '../../components/HomeBar';
 import './PostManagementPage.css';
 import api from '../../api/api';
+import { useParams } from 'react-router-dom';
 
-const POSTS_PER_PAGE = 3;
+const POSTS_PER_PAGE = 5;
 
 function formatTime(isoDate) {
-  const date = new Date(isoDate);
-  const now = new Date();
-  const diffMs = now - date;
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  return `${diffHours}h ago`;
+  return new Date(isoDate).toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
 }
 
+// ✅ API 실패 시 사용할 더미 데이터
+const fallbackData = {
+  page: 0,
+  content: [
+    {
+      title: "신고예시글제목",
+      nickname: "ㅇㅇ",
+      organization: "시종설",
+      createdAt: "2025-05-28T22:08:21.369846",
+      reportCount: 3
+    }
+  ],
+  size: 5,
+  totalElements: 1,
+  totalPages: 1
+};
+
 export default function PostManagementPage() {
-  const [stats, setStats] = useState({
-    totalCount: 0,
-    monthlyCount: 0,
-    weeklyCount: 0,
-  });
+  const { postType } = useParams();
   const [disabledPosts, setDisabledPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const totalPages = Math.ceil(disabledPosts.length / POSTS_PER_PAGE);
-  const paginatedPosts = disabledPosts.slice(
-    (currentPage - 1) * POSTS_PER_PAGE,
-    currentPage * POSTS_PER_PAGE
-  );
+  const boardNameMap = {
+    free: '자유게시판',
+    qna: '질문게시판',
+    tip: '선임자의 TIP',
+  };
 
-  // 📌 가입자 통계 불러오기
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        const response = await api.get('/api/admin/members/statistics', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setStats(response.data);
-      } catch (error) {
-        console.error('통계 정보 불러오기 실패:', error);
-      }
-    };
+  const boardName = boardNameMap[postType] || '알 수 없는 게시판';
 
-    fetchStats();
-  }, []);
-
-  // 📌 비활성화된 게시글 불러오기
   useEffect(() => {
     const fetchDisabledPosts = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const response = await api.get('/admin/free_post', {
+        const response = await api.get(`/api/admin/report/${postType}/posts`, {
           headers: { Authorization: `Bearer ${token}` },
+          params: { page: currentPage - 1, size: POSTS_PER_PAGE },
         });
-        setDisabledPosts(response.data);
+
+        setDisabledPosts(response.data.content);
+        setTotalPages(response.data.totalPages);
       } catch (error) {
-        console.error('비활성화된 게시글 불러오기 실패:', error);
+        console.error('신고 게시글 불러오기 실패:', error);
+        // ✅ API 실패 시 fallback 사용
+        setDisabledPosts(fallbackData.content);
+        setTotalPages(fallbackData.totalPages);
       }
     };
 
     fetchDisabledPosts();
-  }, []);
-
-  const handleDeletePost = async (freePostId) => {
-    try {
-      const token = localStorage.getItem('accessToken');
-      await api.delete(`/admin/free_post/${freePostId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      alert('게시글이 삭제되었습니다.');
-      window.location.reload();
-    } catch (error) {
-      console.error('게시글 삭제 실패:', error);
-      alert('삭제에 실패했습니다.');
-    }
-  };
+  }, [postType, currentPage]);
 
   const handlePageClick = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -87,79 +80,58 @@ export default function PostManagementPage() {
     <>
       <HomeBar />
       <div className="post-management-container">
-        <div className="post-management-content">
-          <h1 className="dashboard-title">Dashboard</h1>
-
-          <div className="dashboard-cards">
-            <div className="dashboard-card">
-              <p>총 가입자 수</p>
-              <h3>{stats.totalCount.toLocaleString()}</h3>
-            </div>
-            <div className="dashboard-card">
-              <p>이번 달 가입자 수</p>
-              <h3>{stats.monthlyCount.toLocaleString()}</h3>
-            </div>
-            <div className="dashboard-card">
-              <p>이번 주 가입자 수</p>
-              <h3>{stats.weeklyCount.toLocaleString()}</h3>
-            </div>
-          </div>
-
-          {/* 📌 비활성화된 게시글 리스트 */}
-          <h2>신고 3회 이상으로 비활성화된 게시글</h2>
-          <ul className="post-management-list">
-            {paginatedPosts.map((post, index) => (
-              <li key={index} className="post-management-item">
-                <div className="post-management-left">
-                  <div className="post-management-icon">
-                    <img src="/search.svg" alt="돋보기 아이콘" className="search-icon" />
-                  </div>
-                  <div className="post-management-texts">
-                    <div className="post-management-title">{post.title}</div>
-                    <div className="post-management-meta">
-                      신고 수: {post.reportCount}회 Posted {formatTime(post.createdAt)}, by @{post.nickname}
-                    </div>
+        <h2>신고 3회 이상 비활성화된 게시글</h2>
+        <ul className="post-management-list">
+          {disabledPosts.map((post, index) => (
+            <li key={index} className="post-management-item">
+              <div className="post-management-left">
+                <div className="post-management-icon">
+                  <img src="/search.svg" alt="돋보기 아이콘" className="search-icon" />
+                </div>
+                <div className="post-management-texts">
+                <div className="post-management-board">{boardName}</div>
+                <div className="post-management-title">
+                  {post.title}
+                </div>
+                  <div className="post-management-meta">
+                    신고 수: {post.reportCount}회 Posted {formatTime(post.createdAt)}, by @{post.nickname}
                   </div>
                 </div>
-                <div className="post-management-actions">
-                  <button className="activate-btn">활성화</button>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDeletePost(post.freePostId)}
-                  >
-                    삭제
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+              </div>
+              <div className="post-management-actions">
+                <button className="activate-btn">활성화</button>
+                <button className="delete-btn" disabled>
+                  삭제
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
 
-          {/* Pagination */}
-          <div className="pagination">
+        <div className="pagination">
+          <button
+            className="page-button"
+            onClick={() => handlePageClick(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            ←
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
             <button
-              className="page-button"
-              onClick={() => handlePageClick(currentPage - 1)}
-              disabled={currentPage === 1}
+              key={pageNum}
+              className={`page-button ${currentPage === pageNum ? 'active' : ''}`}
+              onClick={() => handlePageClick(pageNum)}
             >
-              ←
+              {pageNum}
             </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-              <button
-                key={pageNum}
-                className={`page-button ${currentPage === pageNum ? 'active' : ''}`}
-                onClick={() => handlePageClick(pageNum)}
-              >
-                {pageNum}
-              </button>
-            ))}
-            <button
-              className="page-button"
-              onClick={() => handlePageClick(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              →
-            </button>
-          </div>
+          ))}
+          <button
+            className="page-button"
+            onClick={() => handlePageClick(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            →
+          </button>
         </div>
       </div>
     </>

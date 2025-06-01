@@ -1,9 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './QnaPostEdit.css';
-import HomeBar from '../../components/layout/HomeBar';
-import { toast } from 'react-toastify';
+import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
+import { toast } from 'react-toastify';
+
+// ✅ 태그 Fallback
+const fallbackTags = [
+  { id: 1, tagName: '태그1' },
+  { id: 2, tagName: '태그2' },
+  { id: 3, tagName: '태그3' },
+];
+
+// ✅ 게시글 Fallback
+const fallbackPost = {
+  writer: '',
+  title: '본문1 제목',
+  content: '내용4',
+  tags: ['태그1', '태그3', '태그2'],
+  createdAt: '2025-05-13T19:34:53.52603',
+};
 
 function QnaPostEdit() {
   const { postId } = useParams();
@@ -11,26 +27,55 @@ function QnaPostEdit() {
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tagOptions, setTagOptions] = useState([]); // 전체 태그 목록
-  const [selectedTagId, setSelectedTagId] = useState(null);
+  const [tagIds, setTagIds] = useState([]); // ✅ 다중 선택용
+  const [tagOptions, setTagOptions] = useState(fallbackTags);
+
+  // ✅ 태그 선택/해제 토글 함수
+  const toggleTag = (id) => {
+    setTagIds((prev) =>
+      prev.includes(id) ? prev.filter((tagId) => tagId !== id) : [...prev, id]
+    );
+  };
 
   useEffect(() => {
-    async function fetchPost() {
-      try {
-        const { data } = await api.get(`/qna_post/${postId}`);
-        setTitle(data.title);
-        setContent(data.content);
+    const fetchTagsAndPost = async () => {
+      let tagsData = fallbackTags;
 
-        const tagsRes = await api.get('/qna_tags/list');
-        setTagOptions(tagsRes.data);
-        const matchedTag = tagsRes.data.find(tag => tag.tagName === data.tags[0]);
-        setSelectedTagId(matchedTag?.id || null);
-      } catch (err) {
-        toast.error('게시글 정보를 불러오는 데 실패했습니다.');
-        console.error(err);
+      try {
+        const tagResp = await api.get('/api/qna-tags/list');
+        tagsData = tagResp.data;
+        setTagOptions(tagsData);
+      } catch (tagError) {
+        console.warn('태그 목록 로드 실패, fallback 사용');
+        setTagOptions(fallbackTags);
       }
-    }
-    fetchPost();
+
+      try {
+        const postResp = await api.get(`/api/qna-post/${postId}`);
+        const { title, content, tags: postTags } = postResp.data;
+
+        setTitle(title);
+        setContent(content);
+
+        const matchedTags = tagsData.filter((tag) =>
+          postTags.includes(tag.tagName)
+        );
+        setTagIds(matchedTags.map((tag) => tag.id));
+      } catch (postError) {
+        console.warn('게시글 불러오기 실패, fallback 사용');
+        toast.warn('게시글 정보가 서버에서 불러와지지 않아 더미 데이터를 사용합니다.');
+
+        setTitle(fallbackPost.title);
+        setContent(fallbackPost.content);
+
+        const matchedTags = tagsData.filter((tag) =>
+          fallbackPost.tags.includes(tag.tagName)
+        );
+        setTagIds(matchedTags.map((tag) => tag.id));
+      }
+    };
+
+    fetchTagsAndPost();
   }, [postId]);
 
   const handleSave = async (e) => {
@@ -41,17 +86,17 @@ function QnaPostEdit() {
     }
 
     try {
-      const payload = {
-        title,
-        content,
-        tagIds: selectedTagId ? [selectedTagId] : [],
-      };
-      await api.put(`/qna_post/${postId}`, payload);
+      await api.put(`/api/qna-post/${postId}`, {
+        title: title.trim(),
+        content: content.trim(),
+        tagIds: tagIds, // ✅ 여러 개 전송
+      });
+
       toast.success('게시글이 수정되었습니다.');
       navigate(`/qna/${postId}`);
     } catch (err) {
-      toast.error('수정에 실패했습니다.');
-      console.error(err);
+      console.error('게시글 수정 실패:', err);
+      toast.error('게시글 수정에 실패했습니다.');
     }
   };
 
@@ -86,14 +131,13 @@ function QnaPostEdit() {
             onChange={(e) => setTitle(e.target.value)}
           />
 
-          <p className="write-label">태그 선택</p>
-          <div className="tag-list">
-            {tagOptions.map(tag => (
+          <div className="tag-buttons">
+            {tagOptions.map((tag) => (
               <button
                 key={tag.id}
                 type="button"
-                className={`tag-button${selectedTagId === tag.id ? ' active-tag' : ''}`}
-                onClick={() => setSelectedTagId(tag.id)}
+                className={`tag-button ${tagIds.includes(tag.id) ? 'selected' : ''}`}
+                onClick={() => toggleTag(tag.id)}
               >
                 #{tag.tagName}
               </button>

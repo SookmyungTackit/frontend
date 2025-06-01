@@ -1,15 +1,15 @@
 // MainPage.js
-import React, { useState, useEffect } from 'react';
-import HomeBar from '../../components/layout/HomeBar';
+import React from 'react';
+import HomeBar from '../../components/HomeBar';
 import { Link } from 'react-router-dom';
 import './MainPage.css';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick"; 
+import { dummyFreePosts } from '../../data/dummyFreePosts';
+import { dummyQnaPosts } from '../../data/dummyQnaPosts';
+import { dummyTipPosts } from '../../data/dummyTipPosts';
 import BoardSection from '../../components/BoardSection';
-import api from '../../api/api';
-
-
 
 
 const bannerData = [
@@ -29,31 +29,10 @@ const bannerData = [
 
 
 function MainPage() {
-  const [freePosts, setFreePosts] = useState([]);
-  const [qnaPosts, setQnaPosts] = useState([]);
-  const [tipPosts, setTipPosts] = useState([]);
-
-  useEffect(() => {
-    async function fetchFreePosts() {
-      try {
-        const { data } = await api.get('/api/free-posts');
-        setFreePosts(data);
-        const qnaRes = await api.get('/qna_post/list'); // ✅ 질문 게시판 데이터 호출
-        setQnaPosts(qnaRes.data);
-        const tipRes = await api.get('/api/tip/tip-posts'); // ✅ TIP 데이터
-        setTipPosts(tipRes.data);
-
-      } catch (err) {
-        console.error('자유게시판 글 불러오기 실패:', err);
-      }
-    }
-    fetchFreePosts();
-  }, []);
-
   const sliderSettings = {
     dots: true,
     infinite: true,
-    speed: 400,
+    speed: 500,
     autoplay: true,
     autoplaySpeed: 4000,
     slidesToShow: 1,
@@ -85,11 +64,10 @@ function MainPage() {
         </h3>
         <p>선배는 회사생활 팁 글 작성과 신입은 자유롭게 읽을 수 있어요!</p>
         <div className="tip-boxes">
-        {Array.isArray(tipPosts) &&
-          tipPosts
-            .slice()
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .slice(0, 3)
+          {dummyTipPosts
+            .slice() 
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // 최신 순 정렬
+            .slice(0, 3) // 최신 3개만
             .map((tip) => (
               <Link
                 key={tip.id}
@@ -105,16 +83,16 @@ function MainPage() {
 
 
         <BoardSection
-        title="자유게시판"
-        description="신입과 선배 모두 게시글, 댓글 작성이 자유롭게 가능해요!"
-        posts={freePosts}
-        boardPath="free"
-      />
+          title="자유게시판"
+          description="신입과 선배 모두 게시글, 댓글 작성이 자유롭게 가능해요!"
+          posts={dummyFreePosts}
+          boardPath="free"
+        />
 
         <BoardSection
           title="질문게시판"
           description="신입은 질문글로, 선배는 답글로 만날 수 있어요!"
-          posts={qnaPosts}
+          posts={dummyQnaPosts}
           boardPath="qna"
         />
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './TipPostEdit.css';
-import HomeBar from '../../components/layout/HomeBar';
+import HomeBar from '../../components/HomeBar';
 import { toast } from 'react-toastify';
 import api from '../../api/api';
 

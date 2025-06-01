@@ -36,6 +36,7 @@ function SignupPage() {
       setEmail('');
       setPassword('');
       setNickname('');
+      setOrganization('');
       setYearOfEmployment('');
       navigate('/login');
     } catch (error) {

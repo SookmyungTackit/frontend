@@ -1,63 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../api/api';
 import './PostPageList.css';
-import HomeBar from '../../components/layout/HomeBar';
+import HomeBar from '../../components/HomeBar';
+import api from '../../api/api'; // ✅ API 호출용 axios 인스턴스
 
-import { dummyMyQnaComments } from '../../data/dummyMyQnaComments';
-import { dummyQnaPosts } from '../../data/dummyQnaPosts';
+// ✅ fallback 더미 데이터
+const fallbackResponse = {
+  page: 0,
+  content: [
+    {
+      commentId: 2,
+      postId: 1,
+      content: "댓글 내용입니다. ",
+      createdAt: "2025-05-26T01:33:16.108661",
+      type: "QnA",
+    },
+    {
+      commentId: 1,
+      postId: 1,
+      content: "댓글 내용입니다. ",
+      createdAt: "2025-05-26T01:32:14.798548",
+      type: "QnA",
+    },
+  ],
+  size: 10,
+  totalElements: 2,
+  totalPages: 1,
+};
 
 function MyQnaComments() {
   const navigate = useNavigate();
-  const [qnaComments, setQnaComments] = useState([]);
-  const [isEligible, setIsEligible] = useState(null); // null → 확인 전 / true → 가능 / false → 불가
+  const [comments, setComments] = useState([]);
 
-  // 최신순 정렬 함수
+  // ✅ createdAt을 기준으로 최신순 정렬
   const sortByDate = (a, b) => new Date(b.createdAt) - new Date(a.createdAt);
 
+  // ✅ 댓글 목록 가져오기
   useEffect(() => {
-    const checkEligibilityAndFetchComments = async () => {
+    const fetchComments = async () => {
       try {
-        const token = localStorage.getItem('accessToken');
-        
-        // 🧩 1. 선배 여부 확인
-        const meRes = await api.get('/members/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const { yearsOfService } = meRes.data;
-        if (yearsOfService < 2) {
-          setIsEligible(false);
-          return;
-        }
-
-        setIsEligible(true);
-
-        // 🧩 2. 조건 만족 시 댓글 목록 불러오기
-        const commentRes = await api.get('/mypage/qna_comments', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setQnaComments(commentRes.data);
-      } catch (err) {
-        console.warn('API 실패, 더미 데이터로 대체', err);
-        setIsEligible(true);
-        setQnaComments(dummyMyQnaComments);
+        const response = await api.get('/api/mypage/qna-comments?page=0&size=10&sort=createdAt,asc');
+        setComments(response.data.content.sort(sortByDate));
+      } catch (error) {
+        console.error('댓글 데이터를 불러오는 데 실패했습니다. fallback 데이터를 사용합니다.', error);
+        setComments(fallbackResponse.content.sort(sortByDate));
       }
     };
 
-    checkEligibilityAndFetchComments();
+    fetchComments();
   }, []);
-
-  const mappedComments = qnaComments
-    .map((comment) => {
-      const post = dummyQnaPosts.find((p) => p.id === comment.postId);
-      return {
-        ...comment,
-        postTitle: post?.title,
-        postContent: post?.content,
-      };
-    })
-    .sort(sortByDate);
 
   return (
     <>
@@ -70,25 +61,19 @@ function MyQnaComments() {
 
       <div className="freepost-container">
         <div className="freepost-list">
-          {isEligible === null ? (
-            <p>정보를 불러오는 중입니다...</p>
-          ) : !isEligible ? (
-            <p className="unauthorized-message">
-              🛑 2년차 이상 선배만 댓글을 작성할 수 있습니다.
-            </p>
-          ) : mappedComments.length === 0 ? (
+          {comments.length === 0 ? (
             <p>작성한 댓글이 없습니다.</p>
           ) : (
-            mappedComments.map((comment) => (
+            comments.map((comment) => (
               <div
                 key={comment.commentId}
                 className="post-card"
-                onClick={() => navigate(`/qna/${comment.postId}`)}
+                onClick={() => navigate(`/free/${comment.postId}`)}
               >
                 <div className="post-meta">
-                  <span className="board-type">질문게시판</span>
+                  <span className="board-type">자유게시판</span>
                   <span className="date">
-                    {new Date(comment.createdAt).toLocaleString('ko-KR')}
+                    {new Date(comment.createdAt).toLocaleDateString('ko-KR')}
                   </span>
                 </div>
                 <div className="comment-preview">💬 {comment.content}</div>

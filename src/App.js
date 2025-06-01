@@ -21,6 +21,7 @@ import EditNicknamePage from './pages/MyPage/EditNicknamePage';
 import UserManagementPage from './pages/MyPage/UserManagementPage';
 import PostManagementPage from './pages/MyPage/PostManagementPage';
 import MyPostList from './pages/MyPage/MyPostList';
+import MyQnaPostList from './pages/MyPage/MyQnaPostList';
 import MyFreeComments from './pages/MyPage/MyFreeComments';
 import MyQnaComments from './pages/MyPage/MyQnaComments';
 import Bookmarked from './pages/MyPage/Bookmarked'; 
@@ -58,6 +59,7 @@ function App() {
         <Route path="/admin/users" element={<UserManagementPage />} />
         <Route path="/mypage/post-management" element={<PostManagementPage />} />
         <Route path="/mypage/mypostpage" element={<MyPostList />} /> 
+        <Route path="/mypage/myqnaposts" element={<MyQnaPostList />} />
         <Route path="/mypage/myfreecomments" element={<MyFreeComments />} />
         <Route path="/mypage/myqnacomments" element={<MyQnaComments />} />
         <Route path="/mypage/bookmarked" element={<Bookmarked />} /> 

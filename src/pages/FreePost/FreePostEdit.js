@@ -1,58 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './FreePostEdit.css';
-import HomeBar from '../../components/layout/HomeBar';
+import './FreePostEdit.css'; // 작성 페이지와 동일한 스타일
+import HomeBar from '../../components/HomeBar';
+import { dummyFreePosts } from '../../data/dummyFreePosts';
 import { toast } from 'react-toastify';
-import api from '../../api/api';
 
 function FreePostEdit() {
   const { postId } = useParams();
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [tagOptions, setTagOptions] = useState([]); // 전체 태그 목록
-  const [selectedTagId, setSelectedTagId] = useState(null);
+  const post = dummyFreePosts.find((p) => p.id === parseInt(postId, 10));
+  const [title, setTitle] = useState(post?.title || '');
+  const [content, setContent] = useState(post?.content || '');
+  const [tag, setTag] = useState(post?.tag || 'Engineering');
 
-  useEffect(() => {
-    async function fetchPost() {
-      try {
-        const { data } = await api.get(`/api/free-posts/${postId}`);
-        setTitle(data.title);
-        setContent(data.content);
+  const tagOptions = ['Product', 'Engineering', 'People', 'Sales'];
 
-        const tagsRes = await api.get('/qna_tags/list');
-        setTagOptions(tagsRes.data);
-        const matchedTag = tagsRes.data.find(tag => tag.tagName === data.tags[0]);
-        setSelectedTagId(matchedTag?.id || null);
-      } catch (err) {
-        toast.error('게시글 정보를 불러오는 데 실패했습니다.');
-        console.error(err);
-      }
-    }
-    fetchPost();
-  }, [postId]);
+  if (!post) return <div>해당 게시글을 찾을 수 없습니다.</div>;
 
-  const handleSave = async (e) => {
+  const handleSave = (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
-      toast.warn('제목과 내용을 모두 입력해주세요!');
+      alert('제목과 내용을 모두 입력해주세요.');
       return;
     }
 
-    try {
-      const payload = {
-        title,
-        content,
-        tagIds: selectedTagId ? [selectedTagId] : [],
-      };
-      await api.put(`/api/free-posts/${postId}`, payload);
-      toast.success('게시글이 수정되었습니다.');
-      navigate(`/free/${postId}`);
-    } catch (err) {
-      toast.error('수정에 실패했습니다.');
-      console.error(err);
-    }
+    // ✨ TODO: 실제 API 호출로 저장 필요
+    post.title = title;
+    post.content = content;
+    post.tag = tag;
+
+    toast.success('게시글이 수정되었습니다.');
+    navigate(`/free/${postId}`);
   };
 
   const handleCancel = () => {
@@ -69,7 +48,11 @@ function FreePostEdit() {
 
         <form className="write-form" onSubmit={handleSave}>
           <div className="button-group">
-            <button type="button" className="button-common button-gray" onClick={handleCancel}>
+            <button
+              type="button"
+              className="button-common button-gray"
+              onClick={handleCancel}
+            >
               취소
             </button>
             <button type="submit" className="button-common">
@@ -86,23 +69,17 @@ function FreePostEdit() {
             onChange={(e) => setTitle(e.target.value)}
           />
 
-          <p className="write-label">태그 선택</p>
-          <div className="tag-list">
-          {Array.isArray(tagOptions) && tagOptions.length > 0 ? (
-            tagOptions.map(tag => (
+          <div className="tag-buttons">
+            {tagOptions.map((t) => (
               <button
-                key={tag.id}
+                key={t}
                 type="button"
-                className={`tag-button${selectedTagId === tag.id ? ' active-tag' : ''}`}
-                onClick={() => setSelectedTagId(tag.id)}
+                className={`tag-button ${tag === t ? 'selected' : ''}`}
+                onClick={() => setTag(t)}
               >
-                #{tag.tagName}
+                #{t}
               </button>
-            ))
-          ) : (
-            <p style={{ color: '#aaa' }}>태그 목록을 불러오지 못했습니다.</p>
-          )}
-
+            ))}
           </div>
 
           <p className="write-label">내용</p>

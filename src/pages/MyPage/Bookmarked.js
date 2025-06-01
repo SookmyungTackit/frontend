@@ -1,48 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './PostPageList.css';
-import HomeBar from '../../components/layout/HomeBar';
-import api from '../../api/api'; // axios 인스턴스
+import HomeBar from '../../components/HomeBar';
+import { dummyBookmarked } from '../../data/dummyBookmarked';
 
-function Bookmarked({ boardType = 'free' }) {
+function Bookmarked() {
   const navigate = useNavigate();
-  const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTag, setSelectedTag] = useState(null);
 
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  useEffect(() => {
-    const fetchBookmarked = async () => {
-      try {
-        let url = '';
-        if (boardType === 'free') url = '/api/mypage/free-scraps';
-        else if (boardType === 'tip') url = '/api/mypage/tip-scraps';
-        else if (boardType === 'qna') url = '/qna_post/scrap';
-
-        const response = await api.get(url);
-        const data = response.data;
-
-        const normalized = data.map((post) => ({
-          id: post.freeId ?? post.postId, // 자유, 팁: freeId / 질문: postId
-          title: post.title,
-          content: post.contentPreview ?? '', // 질문글은 contentPreview 없음
-          writer: post.writer ?? post.authorName,
-          created_at: post.createdAt,
-          type: boardType === 'free' ? 0 : boardType === 'qna' ? 1 : 2,
-        }));
-
-        setBookmarkedPosts(normalized);
-      } catch (error) {
-        console.error('스크랩한 글 불러오기 실패:', error);
-      }
-    };
-
-    fetchBookmarked();
-  }, [boardType]);
-
-  const filteredPosts = bookmarkedPosts
+  const filteredPosts = dummyBookmarked
     .filter((post) => {
       const matchesTag = selectedTag ? post.tag === selectedTag : true;
       return matchesTag;
@@ -105,10 +75,11 @@ function Bookmarked({ boardType = 'free' }) {
                   <span className="board-type">{boardName}</span>
                   <span className="writer"> {post.writer}</span>
                   <span className="date"> {new Date(post.created_at).toLocaleString('ko-KR')}</span>
+                  <span className="tag"> {post.tag}</span>
                 </div>
 
                 <div className="post-title">{post.title}</div>
-                {post.content && <div className="post-content-preview">{post.content}...</div>}
+                <div className="post-content-preview">{post.content}...</div>
               </div>
             );
           })}

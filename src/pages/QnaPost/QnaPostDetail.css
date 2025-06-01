@@ -47,13 +47,21 @@ body {
     color: #333;
   }
   
-  .qnapost-actions a {
+  .qnapost-actions.post-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  
+  .qnapost-actions.post-actions button {
     font-size: 13px;
     color: #888;
     margin-left: 12px;
     cursor: pointer;
-    text-decoration: none;
+    background: none;
+    border: none;
   }
+  
   
   /* 댓글 */
   .comment-title {

@@ -4,7 +4,6 @@ import "./LoginPage.css";
 import api from "../../api/api";
 
 function LoginPage() {
-    const [posts, setPosts] = useState([]); // 초기값은 배열
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); 
@@ -39,13 +38,14 @@ function LoginPage() {
         password,
       });
 
-      const { accessToken, refreshToken, accessTokenExpiresIn, grantType } = response.data;
+      const { accessToken, refreshToken, accessTokenExpiresIn, grantType, role } = response.data;
 
       // ✅ 모든 응답 정보 저장
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("accessTokenExpiresIn", accessTokenExpiresIn);
       localStorage.setItem("grantType", grantType);
+      localStorage.setItem("role", role); // ✅ role 추가 저장
 
       navigate("/main");
     } catch (error) {
@@ -63,6 +63,7 @@ function LoginPage() {
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("accessTokenExpiresIn");
     localStorage.removeItem("grantType");
+    localStorage.removeItem("role");
     navigate("/login");
   };
 
@@ -79,16 +80,17 @@ function LoginPage() {
           <img src="/logo.png" alt="logo" className="login-logo" />
         </h2>
         <form className="login-form" onSubmit={handleLogin}>
-          <label htmlFor="email" className="label english-text">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Email"
-            className="input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+        <label htmlFor="username" className="label english-text">ID</label>
+        <input
+          type="text"
+          id="username"
+          placeholder="Username"
+          className="input"
+          value={email} // 상태명은 email이지만 실제 입력은 ID
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
 
           <label htmlFor="password" className="label english-text">Password</label>
           <input
@@ -119,6 +121,7 @@ function LoginPage() {
               localStorage.setItem("refreshToken", "TEMP_REFRESH_TOKEN");
               localStorage.setItem("accessTokenExpiresIn", `${Date.now() + 3600000}`);
               localStorage.setItem("grantType", "Bearer");
+              localStorage.setItem("role", "ADMIN"); // ✅ role 추가 저장
               navigate("/main");
             }}
           >

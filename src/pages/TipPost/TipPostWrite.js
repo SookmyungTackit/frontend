@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './TipPostWrite.css';
-import HomeBar from '../../components/layout/HomeBar';
-import { toast } from 'react-toastify';
+import './TipPostWrite.css'; // ✅ 파일명도 수정해야 함
+import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function TipPostWrite() {
   const navigate = useNavigate();
@@ -18,31 +19,28 @@ function TipPostWrite() {
     }
 
     try {
-      const payload = {
+      const res = await api.post('/api/tip-posts', {
         title,
         content,
-      };
-      const { data } = await api.post('/api/tip-posts', payload);
+      });
       toast.success('글이 작성되었습니다!');
-      navigate(`/tip/${data.postId}`);
+      console.log('작성된 글:', res.data);
+      navigate('/tip'); // ✅ 라우팅 경로도 수정
     } catch (err) {
+      console.error('글 작성 실패:', err);
       toast.error('글 작성에 실패했습니다.');
-      console.error(err);
     }
   };
 
   return (
     <>
       <HomeBar />
-
-      <div className="qnapost-write-container">
+      <div className="tippost-write-container">
         <h1 className="board-title" onClick={() => navigate('/tip')}>
-          선임자의 Tip 게시판
+          선임자의 TIP
         </h1>
         <form className="write-form" onSubmit={handleSubmit}>
-          <button type="submit" className="write-submit-button">
-            등록
-          </button>
+          <button className="write-submit-button" type="submit">등록</button>
 
           <p className="write-label">글 제목</p>
           <input
@@ -56,7 +54,7 @@ function TipPostWrite() {
           <p className="write-label">내용</p>
           <textarea
             className="write-textarea"
-            placeholder="팁을 자유롭게 작성해주세요."
+            placeholder="신입사원에게 도움이 될 회사 생활 팁이나 조언을 작성해 주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />

@@ -148,11 +148,20 @@
     flex-direction: column;
   }
   
-  .post-management-title {
+  .post-management-board {
     font-weight: bold;
     font-size: 15px;
     margin-bottom: 4px;
   }
+
+  .post-management-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #222;
+    line-height: 1.4;
+  }
+  
   
   .post-management-meta {
     font-size: 13px;
