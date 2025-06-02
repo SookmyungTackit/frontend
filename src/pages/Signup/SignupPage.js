@@ -62,35 +62,13 @@ function SignupPage() {
           setEmailCheckMessage('이미 사용 중인 이메일입니다.');
         } 
         else if (status === 409 && message === '탈퇴 이력이 있는 이메일입니다.') {
-          const wantsToRejoin = window.confirm('탈퇴 이력이 있는 이메일입니다. 재가입하시겠습니까?');
-          if (wantsToRejoin) {
-            await rejoinDeletedUser();
-          } else {
-            setEmail('');
-            setEmailCheckMessage('다른 이메일을 입력해주세요.');
-          }
+          setEmailCheckMessage('해당 이메일은 탈퇴 이력이 있어 사용할 수 없습니다. 다른 이메일을 입력해주세요.');
         } 
         else {
           setEmailCheckMessage('이메일 확인 중 오류 발생');
         }
       } else {
         setEmailCheckMessage('서버와 통신 중 오류 발생');
-      }
-    }
-  };
-
-  const rejoinDeletedUser = async () => {
-    try {
-      //탈퇴 회원 재가입을 위한 hard delete Api 사용
-      const response = await api.delete(`/auth/rejoin?email=${email}`);
-      if (response.status === 200) {
-        setEmailCheckMessage('재가입 처리가 완료되었습니다. 계속 진행해주세요.');
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        alert('삭제할 탈퇴 이력의 이메일이 없습니다.');
-      } else {
-        alert('재가입 처리 중 오류가 발생했습니다.');
       }
     }
   };
@@ -220,7 +198,6 @@ function SignupPage() {
                 })}
               </select>
             </div>
-
             <button type="submit" className="signup-submit">
               제출하기
             </button>

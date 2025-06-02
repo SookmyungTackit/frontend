@@ -2,29 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import api from "../../api/api";
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    // ✅ 토큰 만료 임박 시 사용자에게 알림 (예: 3분 전)
+    // ✅ 세션 만료 알림 및 자동 로그아웃 처리
     const tokenExpiresIn = parseInt(localStorage.getItem("accessTokenExpiresIn"));
     if (tokenExpiresIn) {
       const now = Date.now();
       const timeRemaining = tokenExpiresIn - now;
-      const threshold = 3 * 60 * 1000; // 3분
+      const threshold = 3 * 60 * 1000; // 3분 전
 
       if (timeRemaining > 0 && timeRemaining <= threshold) {
         alert("세션이 곧 만료됩니다. 자동 연장되거나 다시 로그인해 주세요.");
       }
 
-      // ✅ 세션이 만료된 경우 자동 로그아웃 처리
       if (timeRemaining <= 0) {
         alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
         handleLogout();
@@ -34,32 +32,51 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+  
     try {
-      const response = await api.post("/auth/sign-in", {
-        email,
-        password,
-      });
-
-      const { accessToken, refreshToken, accessTokenExpiresIn, grantType, role } = response.data;
-
-      // ✅ 모든 응답 정보 저장
+      // ✅ 이메일 상태 먼저 확인
+      const checkRes = await api.get(`/auth/check-email-auth?email=${email}`);
+      const checkMessage = checkRes.data;
+  
+      if (checkMessage === '탈퇴 이력이 있는 이메일입니다.') {
+        setErrorMessage("탈퇴한 이메일입니다. 다른 이메일로 회원가입해주세요.");
+        return; // 🚫 로그인 시도 중단
+      }
+    } catch (checkError) {
+      // 이메일 확인 중 에러 (네트워크 문제 등)
+      setErrorMessage("이메일 확인 중 오류가 발생했습니다.");
+      return;
+    }
+  
+    try {
+      // ✅ 로그인 요청
+      const response = await api.post("/auth/sign-in", { email, password });
+      const {
+        accessToken,
+        refreshToken,
+        accessTokenExpiresIn,
+        grantType,
+        role,
+      } = response.data;
+  
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("accessTokenExpiresIn", accessTokenExpiresIn);
       localStorage.setItem("grantType", grantType);
-      localStorage.setItem("role", role); // ✅ role 추가 저장
-
+      localStorage.setItem("role", role);
+  
       navigate("/main");
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      if (error.response?.status === 401) {
         setErrorMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
       } else {
         setErrorMessage("로그인 중 오류가 발생했습니다.");
       }
     }
   };
+  
 
-  // ✅ 로그아웃 함수 (사용자 요청 시 또는 토큰 만료 시 호출)
+  // ✅ 로그아웃 함수
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
@@ -71,6 +88,7 @@ function LoginPage() {
 
   return (
     <div className="login-container">
+      {/* 상단 회원가입 버튼 */}
       <header className="login-header">
         <Link to="/signup" className="signup-button english-text">
           sign up
@@ -81,40 +99,53 @@ function LoginPage() {
         <h2 className="login-title">
           <img src="/logo.png" alt="logo" className="login-logo" />
         </h2>
+
         <form className="login-form" onSubmit={handleLogin}>
-        <label htmlFor="username" className="label english-text">ID</label>
-        <input
-          type="text"
-          id="username"
-          placeholder="Username"
-          className="input"
-          value={email} // 상태명은 email이지만 실제 입력은 ID
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-
-          <label htmlFor="password" className="label english-text">Password</label>
+          {/* 이메일(ID) 입력 */}
+          <label htmlFor="username" className="label english-text">ID</label>
           <input
-            type="password"
-            id="password"
-            placeholder="Password"
+            type="text"
+            id="username"
+            placeholder="Email"
             className="input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
 
-          {/* ✅ 에러 메시지 표시 */}
+          {/* 비밀번호 입력 */}
+          <label htmlFor="password" className="label english-text">Password</label>
+          <div className="password-input-wrapper">
+            <input
+              type={passwordVisible ? "text" : "password"}
+              id="password"
+              placeholder="Password"
+              className="input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            {password.length > 0 && (
+              <span
+                className="toggle-password-icon"
+                onClick={() => setPasswordVisible(!passwordVisible)}
+              >
+                {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            )}
+          </div>
+
+          {/* 에러 메시지 표시 */}
           {errorMessage && (
             <div className="error-message">{errorMessage}</div>
           )}
 
+          {/* 로그인 버튼 */}
           <button type="submit" className="login-button english-text">
             Log in
           </button>
 
-          {/* ✅ 임시 로그인 기능 - 나중에 삭제 */}
+          {/* 임시 로그인 버튼 (테스트용) */}
           <button
             type="button"
             className="temp-login-button english-text"
@@ -123,16 +154,19 @@ function LoginPage() {
               localStorage.setItem("refreshToken", "TEMP_REFRESH_TOKEN");
               localStorage.setItem("accessTokenExpiresIn", `${Date.now() + 3600000}`);
               localStorage.setItem("grantType", "Bearer");
-              localStorage.setItem("role", "ADMIN"); // ✅ role 추가 저장
+              localStorage.setItem("role", "ADMIN");
               navigate("/main");
             }}
           >
             임시 로그인
           </button>
-          {/* ✅ 임시 로그인 끝 */}
         </form>
+
+        {/* 하단 회원가입 링크 */}
         <div className="bottom-links">
-          <Link to="/signup" className="help-link">회원 가입하기</Link>
+          <Link to="/signup" className="help-link">
+            회원 가입하기
+          </Link>
         </div>
       </div>
     </div>

@@ -153,3 +153,24 @@
   margin-top: 0.5rem;
   font-weight: 600;
 }
+
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+  box-sizing: border-box;
+}
+
+.toggle-password-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-75%);
+  cursor: pointer;
+  color: #888;
+  font-size: 18px;
+}

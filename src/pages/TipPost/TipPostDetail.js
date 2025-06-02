@@ -58,7 +58,7 @@ function TipPostDetail() {
     if (!confirmed) return;
   
     try {
-      await api.post(`/api/qna-post/${postId}/report`);
+      await api.post(`/api/qna-post/${id}/report`);
       toast.success('게시글을 신고하였습니다.');
     } catch (err) {
       console.error('게시글 신고 실패:', err);
@@ -74,7 +74,7 @@ function TipPostDetail() {
      if (message.includes("스크랩하였습니다")) {
              setIsScrapped(true);
              toast.success('찜 되었습니다.');
-           } else if (message.includes("스크랩을 취소하였습니다")) {
+           } else if (message.includes("취소하였습니다")) {
              setIsScrapped(false);
              toast.info('찜이 취소되었습니다.');
            } else {

@@ -157,7 +157,7 @@ function FreePostDetail() {
       if (message.includes("스크랩하였습니다")) {
         setIsScrapped(true);
         toast.success('찜 되었습니다.');
-      } else if (message.includes("스크랩을 취소하였습니다")) {
+      } else if (message.includes("취소하였습니다")) {
         setIsScrapped(false);
         toast.info('찜이 취소되었습니다.');
       } else {

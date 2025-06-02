@@ -152,7 +152,7 @@ function QnaPostDetail() {
       setIsScrapped(scrapped);
   
       if (scrapped) {
-        toast.success('찜되었습니다.');
+        toast.success('찜 되었습니다.');
       } else {
         toast.info('찜이 취소되었습니다.');
       }
