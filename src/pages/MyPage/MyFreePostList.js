@@ -18,7 +18,7 @@ function MyFreePostList() {
     page: 0,
     content: [
       {
-        postId: 1,
+        id: 1,
         title: "자유게시글1 제목",
         content: '안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.',
         createdAt: "2025-05-26T01:31:23.129942",
@@ -37,7 +37,7 @@ function MyFreePostList() {
       if (!token) throw new Error('No token found');
 
       const response = await api.get(
-        `/api/mypage/free_posts?page=${currentPage - 1}&size=${postsPerPage}&sort=createdAt,${sortOrder}`,
+        `/api/mypage/free-posts`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -104,9 +104,9 @@ function MyFreePostList() {
         <div className="freepost-list">
           {posts.map((post) => (
             <div
-              key={post.postId}
+              key={post.id} // ✅ 수정
               className="post-card"
-              onClick={() => navigate(`/free/${post.postId}`, { state: { from: 'my-posts' } })}
+              onClick={() => navigate(`/free/${post.id}`, { state: { from: 'my-posts' } })} // ✅ 수정
             >
               <div className="post-meta">
                 <span className="date">
@@ -120,17 +120,18 @@ function MyFreePostList() {
               </div>
               <div className="post-title">{post.title}</div>
               <div className="post-content-preview">
-                  {post.content.split('\n').map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-                  {post.content.length === 100 && '...'}
-                </div>
+                {post.content.split('\n').map((line, i) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))}
+                {post.content.length >= 100 && '...'}
+              </div>
             </div>
           ))}
         </div>
+
 
         <div className="pagination">
           <button onClick={goToPrevGroup} disabled={startPage === 1} className="page-btn">

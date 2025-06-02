@@ -183,7 +183,7 @@ function QnaPostList() {
                       <br />
                     </React.Fragment>
                   ))}
-                  {post.content.length === 100 && '...'}
+                  {post.content.length >= 100 && '...'}
                 </div>
               </div>
             ))

@@ -4,6 +4,7 @@ import './TipPostList.css';
 import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
+import { toast } from 'react-toastify';
 
 // ✅ fallback 데이터
 const fallbackResponse = {
@@ -36,6 +37,7 @@ function TipPostList() {
   const [totalPages, setTotalPages] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState('');
   const { userInfo } = useFetchUserInfo();
+  
 
   const postsPerPage = 5;
   const pageGroupSize = 5;
@@ -44,7 +46,8 @@ function TipPostList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await api.get("api/tip-posts");
+        const res = await api.get(`/api/tip-posts?page=${currentPage}&size=${postsPerPage}&sort=createdAt,desc`);
+
         setPosts(res.data?.content || []);
         setTotalPages(res.data?.totalPages || 0);
       } catch (err) {

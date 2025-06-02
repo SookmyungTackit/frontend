@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import api from '../../api/api';
 
 function TipPostEdit() {
-  const { postId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -15,7 +15,7 @@ function TipPostEdit() {
   useEffect(() => {
     async function fetchPost() {
       try {
-        const { data } = await api.get(`/api/tip-posts/${postId}`);
+        const { data } = await api.get(`/api/tip-posts/${id}`);
         setTitle(data.title);
         setContent(data.content);
       } catch (err) {
@@ -24,7 +24,7 @@ function TipPostEdit() {
       }
     }
     fetchPost();
-  }, [postId]);
+  }, [id]);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -35,9 +35,9 @@ function TipPostEdit() {
 
     try {
       const payload = { title, content };
-      await api.put(`/api/tip-posts/${postId}`, payload);
+      await api.put(`/api/tip-posts/${id}`, payload);
       toast.success('게시글이 수정되었습니다.');
-      navigate(`/tip/${postId}`);
+      navigate(`/tip/${id}`);
     } catch (err) {
       toast.error('수정에 실패했습니다.');
       console.error(err);
@@ -45,7 +45,7 @@ function TipPostEdit() {
   };
 
   const handleCancel = () => {
-    navigate(`/tip/${postId}`);
+    navigate(`/tip/${id}`);
   };
 
   return (

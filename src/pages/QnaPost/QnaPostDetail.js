@@ -69,14 +69,17 @@ function QnaPostDetail() {
   };
 
   const handleReportComment = async (commentId) => {
+    const confirmed = window.confirm('정말 이 댓글을 신고하시겠습니까?');
+    if (!confirmed) return;
+  
     try {
-      await api.post(`/api/qna-comment/${commentId}/report`);
+      await api.post(`/api/free-comments/${commentId}/report`);
       toast.success('댓글을 신고하였습니다.');
     } catch (err) {
       console.error('댓글 신고 실패:', err);
       toast.error('댓글 신고에 실패했습니다.');
     }
-  };
+  };  
 
   const handleEditComment = (comment) => {
     setComment(comment.content);
@@ -94,14 +97,12 @@ function QnaPostDetail() {
       if (editCommentId) {
         const res = await api.patch(`/api/qna-comment/${editCommentId}`, { content: comment.trim() });
         setComments(prev => prev.map(c => (c.id === editCommentId ? res.data : c)));
-        toast.success('댓글이 수정되었습니다.');
       } else {
         const res = await api.post('/api/qna-comment/create', {
           qnaPostId: postIdNumber,
           content: comment.trim(),
         });
         setComments(prev => [res.data, ...prev]);
-        toast.success('댓글이 등록되었습니다.');
       }
       setComment('');
       setEditCommentId(null);
@@ -131,6 +132,9 @@ function QnaPostDetail() {
   };
 
   const handleReportPost = async () => {
+    const confirmed = window.confirm('정말 이 게시글을 신고하시겠습니까?');
+    if (!confirmed) return;
+  
     try {
       await api.post(`/api/qna-post/${postId}/report`);
       toast.success('게시글을 신고하였습니다.');
@@ -139,6 +143,7 @@ function QnaPostDetail() {
       toast.error('게시글 신고에 실패했습니다.');
     }
   };
+  
 
   const handleScrapToggle = async () => {
     try {
@@ -225,22 +230,25 @@ function QnaPostDetail() {
           ))}
         </div>
 
-        <div className="comment-wrapper">
-          <div className="textarea-wrapper">
-            <textarea
-              ref={textareaRef}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder={editCommentId ? '댓글을 수정하세요.' : '질문에 대한 답변을 작성해주세요.'}
-              className="floating-textarea"
-            />
-            <div className="button-float-layer">
-              <button className="floating-button" onClick={handleCommentSubmit}>
-                {editCommentId ? '수정 완료' : '답글 등록'}
-              </button>
+        {userInfo?.yearsOfService >= 2 && (
+          <div className="comment-wrapper">
+            <div className="textarea-wrapper">
+              <textarea
+                ref={textareaRef}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder={editCommentId ? '댓글을 수정하세요.' : '질문에 대한 답변을 작성해주세요.'}
+                className="floating-textarea"
+              />
+              <div className="button-float-layer">
+                <button className="floating-button" onClick={handleCommentSubmit}>
+                  {editCommentId ? '수정 완료' : '답글 등록'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
       </div>
     </>
   );

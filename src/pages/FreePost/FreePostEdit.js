@@ -22,7 +22,7 @@ const fallbackPost = {
 };
 
 function FreePostEdit() {
-  const { postId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -50,7 +50,7 @@ function FreePostEdit() {
       }
 
       try {
-        const postResp = await api.get(`/api/free-posts/${postId}`);
+        const postResp = await api.get(`/api/free-posts/${id}`);
         const { title, content, tags: postTags } = postResp.data;
 
         setTitle(title);
@@ -75,7 +75,7 @@ function FreePostEdit() {
     };
 
     fetchTagsAndPost();
-  }, [postId]);
+  }, [id]);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -85,14 +85,14 @@ function FreePostEdit() {
     }
 
     try {
-      await api.put(`/api/free-posts/${postId}`, {
+      await api.put(`/api/free-posts/${id}`, {
         title: title.trim(),
         content: content.trim(),
         tagIds: tagIds,
       });
 
       toast.success('게시글이 수정되었습니다.');
-      navigate(`/free/${postId}`);
+      navigate(`/free/${id}`);
     } catch (err) {
       console.error('게시글 수정 실패:', err);
       toast.error('게시글 수정에 실패했습니다.');
@@ -100,7 +100,7 @@ function FreePostEdit() {
   };
 
   const handleCancel = () => {
-    navigate(`/free/${postId}`);
+    navigate(`/free/${id}`);
   };
 
   return (

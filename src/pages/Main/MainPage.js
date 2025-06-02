@@ -41,7 +41,7 @@ function MainPage() {
       });
 
     // ✅ 자유게시판 최신순 5개
-    api.get('/api/free-posts?page=0&size=10&sort=createdAt,desc')
+    api.get('/api/free-posts?page=0&size=5&sort=createdAt,desc')
       .then((res) => {
         setFreePosts(res.data.content.slice(0, 5));
       })
@@ -50,7 +50,7 @@ function MainPage() {
       });
 
     // ✅ 질문게시판 최신순 5개
-    api.get('/api/qna-post/list?page=0&size=10&sort=createdAt,desc')
+    api.get('/api/qna-post/list?page=0&size=5&sort=createdAt,desc')
       .then((res) => {
         setQnaPosts(res.data.content.slice(0, 5));
       })
@@ -119,7 +119,7 @@ function MainPage() {
         {/* ✅ 질문게시판 */}
         <BoardSection
           title="질문게시판"
-          description="신입은 질문글로, 선배는 답글로 만날 수 있어요!"
+          description="신입은 질문글만, 선배는 답글만 달 수 있어요!"
           posts={qnaPosts}
           boardPath="qna"
         />

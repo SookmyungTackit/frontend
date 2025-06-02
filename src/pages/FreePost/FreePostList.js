@@ -4,13 +4,14 @@ import './FreePostList.css';
 import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
+import { toast } from 'react-toastify';
 
 // ✅ fallback 데이터
 const fallbackResponse = {
   page: 0,
   content: [
     {
-      postId: 2,
+      id: 2, // ✅ postId → id
       writer: '기본값',
       title: '요즘 날씨 너무 좋지 않나요?',
       content:
@@ -19,10 +20,10 @@ const fallbackResponse = {
       createdAt: '2025-05-26T00:49:09.773772',
     },
     {
-      postId: 1,
+      id: 1, // ✅ postId → id
       writer: 'test',
       title: '프론트엔드 스터디 같이 하실 분!',
-      content:"안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.",
+      content: "안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.",
       tags: ['스터디', '프론트엔드', 'React', '모집'],
       createdAt: '2025-05-26T00:47:58.054746',
     },
@@ -31,8 +32,6 @@ const fallbackResponse = {
   totalElements: 2,
   totalPages: 1,
 };
-
-
 
 function FreePostList() {
   const navigate = useNavigate();
@@ -151,9 +150,9 @@ function FreePostList() {
             </button>
           ))}
 
-            <button className="write-button" onClick={() => navigate('/free/write')}>
-              글쓰기
-            </button>
+          <button className="write-button" onClick={() => navigate('/free/write')}>
+            글쓰기
+          </button>
         </div>
 
         <div className="freepost-list">
@@ -162,9 +161,15 @@ function FreePostList() {
           ) : (
             filteredPosts.map((post) => (
               <div
-                key={post.postId}
+                key={post.id} // ✅ 수정됨
                 className="post-card"
-                onClick={() => navigate(`/free/${post.postId}`)}
+                onClick={() => {
+                  if (post.id !== undefined && post.id !== null) {
+                    navigate(`/free/${post.id}`); // ✅ 수정됨
+                  } else {
+                    toast.error('잘못된 게시글 ID입니다.');
+                  }
+                }}
               >
                 <div className="post-meta">
                   <span className="nickname">{post.writer}</span>
@@ -183,7 +188,7 @@ function FreePostList() {
                       <br />
                     </React.Fragment>
                   ))}
-                  {post.content.length === 100 && '...'}
+                  {post.content.length >= 100 && '...'}
                 </div>
               </div>
             ))
@@ -209,7 +214,7 @@ function FreePostList() {
               disabled={endPage >= totalPages}
               className="page-btn"
             >
-              &raquo; 
+              &raquo;
             </button>
           </div>
         )}

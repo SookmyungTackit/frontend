@@ -148,13 +148,16 @@ function Bookmarked() {
                 </div>
                 <div className="post-title">{post.title}</div>
                 <div className="post-content-preview">
-                  {post.content.split('\n').map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-                  {post.content.length === 100 && '...'}
+                  {post.content
+                    ? post.content.split('\n').map((line, i) => (
+                        <React.Fragment key={i}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))
+                    : post.contentPreview // ✅ content가 없으면 preview 대체
+                  }
+                  {post.content && post.content.length >= 100 && '...'}
                 </div>
               </div>
             );

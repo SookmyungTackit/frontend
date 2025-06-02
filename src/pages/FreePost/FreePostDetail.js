@@ -8,12 +8,12 @@ import { toast } from 'react-toastify';
 
 function FreePostDetail() {
   const textareaRef = useRef(null);
-  const { postId } = useParams();
+  const { id } = useParams(); // ✅ postId → id
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from;
 
-  const postIdNumber = parseInt(postId);
+  const postIdNumber = parseInt(id); // ✅ postId → id
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
@@ -23,28 +23,29 @@ function FreePostDetail() {
   const { userInfo } = useFetchUserInfo();
 
   useEffect(() => {
+    if (!id || isNaN(Number(id))) {
+      toast.error('유효하지 않은 게시글 ID입니다.');
+      navigate('/free');
+      return;
+    }
+
     const fetchPost = async () => {
       try {
-        const res = await api.get(`/api/free-posts/${postId}`);
+        const res = await api.get(`/api/free-posts/${id}`);
         setPost(res.data);
       } catch (err) {
         console.error('게시글 불러오기 실패:', err);
-        setPost({
-          writer: '기본값',
-          title: '본문1 제목',
-          content: '안녕하세요.\n오늘은 날씨가 정말 좋네요.\n\n내일은 비가 온다고 합니다.',
-          tags: ['태그1', '태그3', '태그2'],
-          createdAt: '2025-05-13T19:34:53.52603',
-        });
+        toast.error('게시글을 불러오는 데 실패했습니다.');
       }
     };
+
     fetchPost();
-  }, [postId]);
+  }, [id]);
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await api.get(`/api/free-comments/${postId}`);
+        const res = await api.get(`/api/free-comments/${id}`);
         setComments(res.data);
       } catch (err) {
         console.error('댓글 불러오기 실패:', err);
@@ -55,7 +56,7 @@ function FreePostDetail() {
       }
     };
     fetchComments();
-  }, [postId]);
+  }, [id]);
 
   const handleDeleteComment = async (commentId) => {
     try {
@@ -69,6 +70,9 @@ function FreePostDetail() {
   };
 
   const handleReportComment = async (commentId) => {
+    const confirmed = window.confirm('정말 이 댓글을 신고하시겠습니까?');
+    if (!confirmed) return;
+  
     try {
       await api.post(`/api/free-comments/${commentId}/report`);
       toast.success('댓글을 신고하였습니다.');
@@ -77,6 +81,7 @@ function FreePostDetail() {
       toast.error('댓글 신고에 실패했습니다.');
     }
   };
+  
 
   const handleEditComment = (comment) => {
     setComment(comment.content);
@@ -97,7 +102,7 @@ function FreePostDetail() {
         toast.success('댓글이 수정되었습니다.');
       } else {
         const res = await api.post('/api/free-comments', {
-          qnaPostId: postIdNumber,
+          freePostId: postIdNumber,
           content: comment.trim(),
         });
         setComments(prev => [res.data, ...prev]);
@@ -117,12 +122,12 @@ function FreePostDetail() {
     if (!confirmed) return;
 
     try {
-      await api.delete(`/api/free-posts/${postId}`);
+      await api.delete(`/api/free-posts/${id}`);
       toast.success('게시글이 삭제되었습니다.');
       if (from === 'my-posts') {
         navigate('/mypage/mypostpage');
       } else {
-        navigate('/qna');
+        navigate('/free');
       }
     } catch (err) {
       console.error('게시글 삭제 실패:', err);
@@ -131,74 +136,81 @@ function FreePostDetail() {
   };
 
   const handleReportPost = async () => {
+    const confirmed = window.confirm('정말 신고하시겠습니까?');
+    if (!confirmed) return;
+  
     try {
-      await api.post(`/api/free-posts/${postId}/report`);
+      await api.post(`/api/free-posts/${id}/report`);
       toast.success('게시글을 신고하였습니다.');
     } catch (err) {
       console.error('게시글 신고 실패:', err);
       toast.error('게시글 신고에 실패했습니다.');
     }
-  };
+  };  
 
   const handleScrapToggle = async () => {
     try {
-      const res = await api.post(`/api/free-posts/${postId}/scrap`);
-      const { scrapped } = res.data;
-      setIsScrapped(scrapped);
+      const res = await api.post(`/api/free-posts/${id}/scrap`);
+      console.log('📦 서버 응답:', res.data); // 이 줄 추가
+      const { message } = res.data;
   
-      if (scrapped) {
-        toast.success('찜되었습니다.');
-      } else {
+      if (message.includes("스크랩하였습니다")) {
+        setIsScrapped(true);
+        toast.success('찜 되었습니다.');
+      } else if (message.includes("스크랩을 취소하였습니다")) {
+        setIsScrapped(false);
         toast.info('찜이 취소되었습니다.');
-      }
+      } else {
+        toast.info(message);
+      }      
     } catch (err) {
       console.error('찜 처리 실패:', err);
       toast.error('찜 처리에 실패했습니다.');
     }
   };
+  
 
   return (
     <>
-            <HomeBar />
-            <div className="freepost-detail-container">
-              <h1 className="board-title" onClick={() => navigate('/free')}>자유 게시판</h1>
+      <HomeBar />
+      <div className="freepost-detail-container">
+        <h1 className="board-title" onClick={() => navigate('/free')}>자유 게시판</h1>
 
-              <div className="freepost-box">
-              {post && (
-                <>
-                  <div className="freepost-actions post-actions">
-                    {userInfo && post.writer === userInfo.nickname ? (
-                      <>
-                        <button onClick={() => navigate(`/free/edit/${postId}`)}>수정하기</button>
-                        <button onClick={handleDeletePost}>삭제하기</button>
-                      </>
-                    ) : userInfo && (
-                      <button onClick={handleReportPost}>신고하기</button>
-                    )}
-                  </div>
+        <div className="freepost-box">
+          {post && (
+            <>
+              <div className="freepost-actions post-actions">
+                {userInfo && post.writer === userInfo.nickname ? (
+                  <>
+                    <button onClick={() => navigate(`/free/edit/${id}`)}>수정하기</button>
+                    <button onClick={handleDeletePost}>삭제하기</button>
+                  </>
+                ) : userInfo && (
+                  <button onClick={handleReportPost}>신고하기</button>
+                )}
+              </div>
 
-                  <h1 className="detail-title">{post.title}</h1>
+              <h1 className="detail-title">{post.title}</h1>
 
-                  <div className="detail-meta">
-                    <span>{post.writer}</span>
-                    <span>{new Date(post.createdAt).toLocaleString('ko-KR')}</span>
-                  </div>
-                  <div className="detail-content">
-                    {post.content.split('\n').map((line, i) => (
-                      <React.Fragment key={i}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    ))}
-                  </div>
+              <div className="detail-meta">
+                <span>{post.writer}</span>
+                <span>{new Date(post.createdAt).toLocaleString('ko-KR')}</span>
+              </div>
+              <div className="detail-content">
+                {post.content.split('\n').map((line, i) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))}
+              </div>
 
-                  <button className="bookmark-button" onClick={handleScrapToggle}>
-                    찜
-                  </button>
-                </>
-              )}
-            </div>
-
+              <button className="bookmark-button" onClick={handleScrapToggle}>
+                찜
+              </button>
+            </>
+          )}
+        </div>
 
         <div className="comment-list">
           <h3 className="comment-title">댓글 {comments.length}개</h3>

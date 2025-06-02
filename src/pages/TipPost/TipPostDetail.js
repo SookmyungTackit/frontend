@@ -7,7 +7,7 @@ import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 import { toast } from 'react-toastify';
 
 function TipPostDetail() {
-  const { postId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from;
@@ -20,7 +20,7 @@ function TipPostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await api.get(`/api/tip-posts/${postId}`);
+        const res = await api.get(`/api/tip-posts/${id}`);
         setPost(res.data);
       } catch (err) {
         console.error('게시글 불러오기 실패:', err);
@@ -33,14 +33,14 @@ function TipPostDetail() {
       }
     };
     fetchPost();
-  }, [postId]);
+  }, [id]);
 
   const handleDeletePost = async () => {
     const confirmed = window.confirm('이 글을 삭제하시겠습니까?');
     if (!confirmed) return;
 
     try {
-      await api.delete(`/api/tip-posts/${postId}`);
+      await api.delete(`/api/tip-posts/${id}`);
       toast.success('게시글이 삭제되었습니다.');
       if (from === 'my-posts') {
         navigate('/mypage/mypostpage');
@@ -54,8 +54,11 @@ function TipPostDetail() {
   };
 
   const handleReportPost = async () => {
+    const confirmed = window.confirm('정말 이 게시글을 신고하시겠습니까?');
+    if (!confirmed) return;
+  
     try {
-      await api.post(`/api/tip-posts/${postId}/report`);
+      await api.post(`/api/qna-post/${postId}/report`);
       toast.success('게시글을 신고하였습니다.');
     } catch (err) {
       console.error('게시글 신고 실패:', err);
@@ -65,20 +68,24 @@ function TipPostDetail() {
 
   const handleScrapToggle = async () => {
     try {
-      const res = await api.post(`/api/tip-posts/${postId}/scrap`);
-      const { scrapped } = res.data;
-      setIsScrapped(scrapped);
-
-      if (scrapped) {
-        toast.success('찜되었습니다.');
-      } else {
-        toast.info('찜이 취소되었습니다.');
-      }
-    } catch (err) {
-      console.error('찜 처리 실패:', err);
-      toast.error('찜 처리에 실패했습니다.');
-    }
+      const res = await api.post(`/api/tip-posts/${id}/scrap`);
+      const { message } = res.data;
+  
+     if (message.includes("스크랩하였습니다")) {
+             setIsScrapped(true);
+             toast.success('찜 되었습니다.');
+           } else if (message.includes("스크랩을 취소하였습니다")) {
+             setIsScrapped(false);
+             toast.info('찜이 취소되었습니다.');
+           } else {
+             toast.info(message);
+           }      
+         } catch (err) {
+           console.error('찜 처리 실패:', err);
+           toast.error('찜 처리에 실패했습니다.');
+         }
   };
+  
 
   return (
     <>
@@ -92,7 +99,7 @@ function TipPostDetail() {
               <div className="tippost-actions post-actions">
                 {userInfo && post.writer === userInfo.nickname ? (
                   <>
-                    <button onClick={() => navigate(`/tip/edit/${postId}`)}>수정하기</button>
+                    <button onClick={() => navigate(`/tip/edit/${id}`)}>수정하기</button>
                     <button onClick={handleDeletePost}>삭제하기</button>
                   </>
                 ) : userInfo && (

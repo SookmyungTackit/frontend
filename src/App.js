@@ -43,17 +43,17 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/main" element={<MainPage />} /> 
         <Route path="/free" element={<FreePostList />} />
-        <Route path="/free/:postId" element={<FreePostDetail />} /> 
+        <Route path="/free/:id" element={<FreePostDetail />} /> 
         <Route path="/free/write" element={<FreePostWrite />} />
-        <Route path="/free/edit/:postId" element={<FreePostEdit />} />  
+        <Route path="/free/edit/:id" element={<FreePostEdit />} />  
         <Route path="/qna" element={<QnaPostList />} />
         <Route path="/qna/:postId" element={<QnaPostDetail />} /> 
         <Route path="/qna/write" element={<QnaPostWrite />} />
         <Route path="/qna/edit/:postId" element={<QnaPostEdit />} />  
         <Route path="/tip" element={<TipPostList />} />
-        <Route path="/tip/:postId" element={<TipPostDetail />} /> 
+        <Route path="/tip/:id" element={<TipPostDetail />} /> 
         <Route path="/tip/write" element={<TipPostWrite />} />
-        <Route path="/tip/edit/:postId" element={<TipPostEdit />} />   
+        <Route path="/tip/edit/:id" element={<TipPostEdit />} />   
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/mypage/edit-password" element={<EditPasswordPage />} />
         <Route path="/mypage/edit-nickname" element={<EditNicknamePage />} />

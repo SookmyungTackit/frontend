@@ -2,7 +2,7 @@ import axios from "axios";
 
 // ✅ axios 인스턴스 생성
 const api = axios.create({
-  baseURL: "https://5bae-61-40-226-235.ngrok-free.app",
+  baseURL: "https://56cc-1-209-144-251.ngrok-free.app",
   headers: {
     'ngrok-skip-browser-warning': 'any-value', // 이 한 줄 추가
   },
@@ -37,12 +37,25 @@ const reissueAccessToken = async () => {
 
     return accessToken;
   } catch (error) {
-    console.error("❌ 토큰 재발급 실패 상태 코드:", error.response?.status);
-    console.error("❌ 토큰 재발급 실패 응답:", error.response?.data || error.message);
-    localStorage.removeItem("accessTokenExpiresIn"); // ✅ 로그인 페이지 타이밍 오류 방지
-    window.location.href = "/login";
+    const status = error.response?.status;
+    const isAuthError = status === 401 || status === 403;
+  
+    if (isAuthError) {
+      const refreshToken = localStorage.getItem("refreshToken");
+  
+      if (!refreshToken || refreshToken === "null") {
+        // 리프레시 토큰 자체가 없을 때만 로그아웃
+        window.location.href = "/login";
+      } else {
+        // 토큰은 있는데 서버 문제일 수 있음 → 알림만 표시
+        console.error("⚠️ 토큰 있음에도 재발급 실패. 서버 문제일 수 있음.");
+        alert("세션이 만료되었거나 서버에 문제가 있습니다. 다시 로그인해주세요.");
+        // window.location.href = "/login";  ← 주석 처리 가능
+      }
+    }
+  
     return null;
-  }
+  }  
 };
 
 // ✅ 요청 인터셉터 (accessToken 자동 첨부)

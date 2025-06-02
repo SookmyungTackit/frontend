@@ -18,7 +18,7 @@ function MyTipPostList() {
     page: 0,
     content: [
       {
-        postId: 1,
+        postId: 1, // ✅ 다시 postId로
         title: "2025/05/29",
         content: "팁 ) 목요일 날씨 모름",
         type: "Tip",
@@ -36,7 +36,7 @@ function MyTipPostList() {
       if (!token) throw new Error('No token found');
 
       const response = await api.get(
-        `/api/mypage/tip_posts?page=${currentPage - 1}&size=${postsPerPage}&sort=createdAt,${sortOrder}`,
+        `/api/mypage/tip-posts?page=${currentPage - 1}&size=${postsPerPage}&sort=createdAt,${sortOrder}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -103,9 +103,9 @@ function MyTipPostList() {
         <div className="freepost-list">
           {posts.map((post) => (
             <div
-              key={post.postId}
+              key={post.postId} // ✅ id → postId
               className="post-card"
-              onClick={() => navigate(`/tip/${post.postId}`, { state: { from: 'my-posts' } })}
+              onClick={() => navigate(`/tip/${post.postId}`, { state: { from: 'my-posts' } })} // ✅ id → postId
             >
               <div className="post-meta">
                 <span className="date">
@@ -113,15 +113,15 @@ function MyTipPostList() {
                 </span>
               </div>
               <div className="post-title">{post.title}</div>
-                <div className="post-content-preview">
-                  {post.content.split('\n').map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-                  {post.content.length === 100 && '...'}
-                </div>
+              <div className="post-content-preview">
+                {post.content.split('\n').map((line, i) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))}
+                {post.content.length >= 100 && '...'}
+              </div>
             </div>
           ))}
         </div>
