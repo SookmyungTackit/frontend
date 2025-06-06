@@ -46,7 +46,6 @@ function QnaPostEdit() {
         tagsData = tagResp.data;
         setTagOptions(tagsData);
       } catch (tagError) {
-        console.warn('태그 목록 로드 실패, fallback 사용');
         setTagOptions(fallbackTags);
       }
 
@@ -62,7 +61,6 @@ function QnaPostEdit() {
         );
         setTagIds(matchedTags.map((tag) => tag.id));
       } catch (postError) {
-        console.warn('게시글 불러오기 실패, fallback 사용');
         toast.warn('게시글 정보가 서버에서 불러와지지 않아 더미 데이터를 사용합니다.');
 
         setTitle(fallbackPost.title);
@@ -95,7 +93,6 @@ function QnaPostEdit() {
       toast.success('게시글이 수정되었습니다.');
       navigate(`/qna/${postId}`);
     } catch (err) {
-      console.error('게시글 수정 실패:', err);
       toast.error('게시글 수정에 실패했습니다.');
     }
   };

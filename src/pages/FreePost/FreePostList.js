@@ -59,7 +59,6 @@ function FreePostList() {
 
         setTagList(tagData);
       } catch (err) {
-        console.error('❌ 태그 목록 불러오기 실패:', err);
         setTagList([
           { id: 2, tagName: '태그2' },
           { id: 3, tagName: '태그3' },
@@ -81,7 +80,6 @@ function FreePostList() {
         setPosts(res.data?.content || []);
         setTotalPages(res.data?.totalPages || 0);
       } catch (err) {
-        console.error('❌ 게시글 불러오기 실패:', err);
         setPosts(fallbackResponse?.content || []);
         setTotalPages(fallbackResponse?.totalPages || 1);
       }

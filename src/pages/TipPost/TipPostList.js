@@ -51,7 +51,6 @@ function TipPostList() {
         setPosts(res.data?.content || []);
         setTotalPages(res.data?.totalPages || 0);
       } catch (err) {
-        console.error('❌ 게시글 불러오기 실패:', err);
         setPosts(fallbackResponse?.content || []);
         setTotalPages(fallbackResponse?.totalPages || 1);
       }

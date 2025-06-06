@@ -83,7 +83,6 @@ const EditNicknamePage = () => {
       navigate('/mypage'); 
     } catch (err) {
       toast.error('닉네임 변경에 실패했습니다.');
-      console.error(err);
     }
   };
 

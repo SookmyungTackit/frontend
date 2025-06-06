@@ -47,7 +47,6 @@ function MyTipPostList() {
       setPosts(content);
       setTotalPages(totalPages);
     } catch (error) {
-      console.warn('✅ API 실패 또는 토큰 없음, fallback 데이터 사용');
       const { content, totalPages } = fallbackResponse;
       setPosts(content);
       setTotalPages(totalPages);

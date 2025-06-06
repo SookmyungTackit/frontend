@@ -19,7 +19,6 @@ function QnaPostWrite() {
         const res = await api.get('/api/qna-tags/list');
         setTagList(res.data);
       } catch (err) {
-        console.error('태그 목록 불러오기 실패', err);
         setTagList([
           { id: 2, tagName: '태그2' },
           { id: 3, tagName: '태그3' },
@@ -49,10 +48,8 @@ function QnaPostWrite() {
         tagIds: selectedTagIds,
       });      
       toast.success('글이 작성되었습니다!');
-      console.log('작성된 글:', res.data);
       navigate('/qna');
     } catch (err) {
-      console.error('글 작성 실패:', err);
       toast.error('글 작성에 실패했습니다.');
     }
   };

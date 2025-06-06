@@ -19,7 +19,6 @@ function FreePostWrite() {
         const res = await api.get('/api/free_tags');
         setTagList(res.data);
       } catch (err) {
-        console.error('태그 목록 불러오기 실패', err);
         setTagList([
           { id: 2, tagName: '태그2' },
           { id: 3, tagName: '태그3' },
@@ -49,7 +48,6 @@ function FreePostWrite() {
         tagIds: selectedTagIds,
       });      
       toast.success('글이 작성되었습니다!');
-      console.log('작성된 글:', res.data);
       navigate('/free');
     } catch (err) {
       console.error('글 작성 실패:', err);

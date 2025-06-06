@@ -34,13 +34,9 @@ export default function PostManagementPage() {
         params: { page: currentPage - 1, size: POSTS_PER_PAGE },
       });
   
-      console.log(`📌 [${activeTab}] 응답 데이터 구조 확인:`);
-      console.table(response.data.content); // 게시판별 post 객체 구조 보기
-  
       setDisabledPosts(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.error('신고 게시글 불러오기 실패:', error);
       setDisabledPosts(fallbackData.content);
       setTotalPages(fallbackData.totalPages);
     }
@@ -60,7 +56,6 @@ export default function PostManagementPage() {
       toast.success('게시글이 삭제되었습니다.');
       fetchDisabledPosts();
     } catch (error) {
-      console.error('삭제 실패:', error);
       toast.error('게시글 삭제에 실패했습니다.');
     }
   };
@@ -80,7 +75,6 @@ export default function PostManagementPage() {
       toast.success(response.data);
       fetchDisabledPosts();
     } catch (error) {
-      console.error('활성화 실패:', error);
       toast.error('게시글 활성화에 실패했습니다.');
     }
   };

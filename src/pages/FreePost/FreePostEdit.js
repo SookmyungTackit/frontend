@@ -45,7 +45,6 @@ function FreePostEdit() {
         tagsData = tagResp.data;
         setTagOptions(tagsData);
       } catch (tagError) {
-        console.warn('태그 목록 로드 실패, fallback 사용');
         setTagOptions(fallbackTags);
       }
 
@@ -61,7 +60,6 @@ function FreePostEdit() {
         );
         setTagIds(matchedTags.map((tag) => tag.id));
       } catch (postError) {
-        console.warn('게시글 불러오기 실패, fallback 사용');
         toast.warn('게시글 정보가 서버에서 불러와지지 않아 더미 데이터를 사용합니다.');
 
         setTitle(fallbackPost.title);

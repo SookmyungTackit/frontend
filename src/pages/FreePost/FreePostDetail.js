@@ -8,12 +8,12 @@ import { toast } from 'react-toastify';
 
 function FreePostDetail() {
   const textareaRef = useRef(null);
-  const { id } = useParams(); // ✅ postId → id
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from;
 
-  const postIdNumber = parseInt(id); // ✅ postId → id
+  const postIdNumber = parseInt(id); 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
@@ -34,7 +34,6 @@ function FreePostDetail() {
         const res = await api.get(`/api/free-posts/${id}`);
         setPost(res.data);
       } catch (err) {
-        console.error('게시글 불러오기 실패:', err);
         toast.error('게시글을 불러오는 데 실패했습니다.');
       }
     };
@@ -48,7 +47,6 @@ function FreePostDetail() {
         const res = await api.get(`/api/free-comments/${id}`);
         setComments(res.data);
       } catch (err) {
-        console.error('댓글 불러오기 실패:', err);
         setComments([
           { id: 1, writer: '기본값', content: '댓글 내용입니다.', createdAt: '2025-05-12T20:06:42.621605' },
           { id: 2, writer: 'test', content: '댓글 내용입니다. 2', createdAt: '2025-05-12T20:08:11.738681' },
@@ -64,7 +62,6 @@ function FreePostDetail() {
       setComments(prev => prev.filter(c => c.id !== commentId));
       toast.success('댓글이 삭제되었습니다.');
     } catch (err) {
-      console.error('댓글 삭제 실패:', err);
       toast.error('댓글 삭제에 실패했습니다.');
     }
   };
@@ -151,8 +148,6 @@ function FreePostDetail() {
   const handleScrapToggle = async () => {
     try {
       const res = await api.post(`/api/free-posts/${id}/scrap`);
-      console.log("📦 백엔드 응답 전체:", res);         // 전체 응답 객체 출력
-      console.log("📦 백엔드 응답 데이터:", res.data);   // 실제 데이터만 출력
   
       const message = res.data; // ✅ 그냥 문자열임
   
@@ -169,12 +164,7 @@ function FreePostDetail() {
       const status = err.response?.status;
       const retryFlag = err.config?._retry;
     
-      console.error("🧨 찜 에러 전체:", err);
-      console.error("🧨 에러 응답 데이터:", err.response?.data);
-      console.error("🧨 요청에 사용된 accessToken:", localStorage.getItem("accessToken"));
-    
       if (status === 401 && retryFlag) {
-        console.warn("🔁 401 이후 재시도 실패 → 세션 만료 간주");
         toast.error("세션이 만료되어 찜 요청에 실패했습니다.");
       } else {
         toast.error("찜 처리에 실패했습니다.");

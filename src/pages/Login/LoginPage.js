@@ -47,9 +47,6 @@ function LoginPage() {
       const checkRes = await api.get(`/auth/check-email-auth?email=${email}`);
       const checkMessage = checkRes.data;
     
-      // 참고: 사용 가능한 이메일 or 이미 가입된 이메일도 여기로 올 수 있음
-      console.log("✅ 이메일 확인 응답:", checkMessage);
-    
       // 200이 오면 무조건 로그인 진행
     } catch (checkError) {
       const status = checkError.response?.status;
@@ -63,9 +60,7 @@ function LoginPage() {
       // ✅ 이미 가입된 이메일은 그냥 통과시켜서 로그인 시도
       if (status === 409 && message === "이미 가입된 이메일입니다.") {
         // 통과 → 로그인 진행
-        console.log("⚠️ 이미 가입된 이메일: 로그인 진행");
       } else {
-        console.error("❌ 이메일 확인 중 기타 오류:", checkError);
         setErrorMessage("이메일 확인 중 오류가 발생했습니다.");
         return;
       }
@@ -160,22 +155,6 @@ function LoginPage() {
           <button type="submit" className="login-button english-text">
             Log in
           </button>
-
-          {/* 임시 로그인 버튼 (테스트용) 
-          <button
-            type="button"
-            className="temp-login-button english-text"
-            onClick={() => {
-              localStorage.setItem("accessToken", "TEMP_TOKEN");
-              localStorage.setItem("refreshToken", "TEMP_REFRESH_TOKEN");
-              localStorage.setItem("accessTokenExpiresIn", `${Date.now() + 3600000}`);
-              localStorage.setItem("grantType", "Bearer");
-              localStorage.setItem("role", "ADMIN");
-              navigate("/main");
-            }}
-          >
-            임시 로그인
-          </button>*/}
         </form>
 
         {/* 하단 회원가입 링크 */}

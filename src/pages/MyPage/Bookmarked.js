@@ -75,7 +75,6 @@ function Bookmarked() {
         setPosts(res.data.content);
         setTotalPages(res.data.totalPages);
       } catch (err) {
-        console.error('API 연동 실패, 더미 데이터 사용:', err);
         setPosts(fallbackData[activeTab].content);
         setTotalPages(fallbackData[activeTab].totalPages);
       }

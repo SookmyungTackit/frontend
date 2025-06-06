@@ -40,7 +40,6 @@ function SignupPage() {
       setYearOfEmployment('');
       navigate('/login');
     } catch (error) {
-      console.error('회원가입 오류:', error);
       alert('회원가입 중 문제가 발생했습니다.');
     }
   };

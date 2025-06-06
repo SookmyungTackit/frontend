@@ -24,10 +24,8 @@ function TipPostWrite() {
         content,
       });
       toast.success('글이 작성되었습니다!');
-      console.log('작성된 글:', res.data);
       navigate('/tip'); // ✅ 라우팅 경로도 수정
     } catch (err) {
-      console.error('글 작성 실패:', err);
       toast.error('글 작성에 실패했습니다.');
     }
   };

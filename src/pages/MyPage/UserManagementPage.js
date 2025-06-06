@@ -35,7 +35,6 @@ export default function UserManagementPage() {
         });
         setUsers(response.data?.length > 0 ? response.data : usersFromApi);
       } catch (error) {
-        console.error('회원 목록 불러오기 실패:', error);
         setUsers(usersFromApi);
       } finally {
         setLoading(false);
@@ -56,7 +55,7 @@ export default function UserManagementPage() {
         });
         setStats(response.data);
       } catch (error) {
-        console.error('통계 정보 불러오기 실패:', error);
+        
       }
     };
 

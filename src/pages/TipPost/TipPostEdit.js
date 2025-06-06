@@ -20,7 +20,6 @@ function TipPostEdit() {
         setContent(data.content);
       } catch (err) {
         toast.error('게시글 정보를 불러오는 데 실패했습니다.');
-        console.error(err);
       }
     }
     fetchPost();
@@ -40,7 +39,6 @@ function TipPostEdit() {
       navigate(`/tip/${id}`);
     } catch (err) {
       toast.error('수정에 실패했습니다.');
-      console.error(err);
     }
   };
 

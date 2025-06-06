@@ -28,7 +28,6 @@ function QnaPostDetail() {
         const res = await api.get(`/api/qna-post/${postId}`);
         setPost(res.data);
       } catch (err) {
-        console.error('게시글 불러오기 실패:', err);
         setPost({
           writer: '기본',
           title: '본문1 제목',
@@ -47,7 +46,6 @@ function QnaPostDetail() {
         const res = await api.get(`/api/qna-comment/${postId}`);
         setComments(res.data);
       } catch (err) {
-        console.error('댓글 불러오기 실패:', err);
         setComments([
           { id: 1, writer: '기본값', content: '댓글 내용입니다.', createdAt: '2025-05-12T20:06:42.621605' },
           { id: 2, writer: 'test', content: '댓글 내용입니다. 2', createdAt: '2025-05-12T20:08:11.738681' },
@@ -63,7 +61,6 @@ function QnaPostDetail() {
       setComments(prev => prev.filter(c => c.id !== commentId));
       toast.success('댓글이 삭제되었습니다.');
     } catch (err) {
-      console.error('댓글 삭제 실패:', err);
       toast.error('댓글 삭제에 실패했습니다.');
     }
   };
@@ -76,7 +73,6 @@ function QnaPostDetail() {
       await api.post(`/api/qna-comments/${commentId}/report`);
       toast.success('댓글을 신고하였습니다.');
     } catch (err) {
-      console.error('댓글 신고 실패:', err);
       toast.error('댓글 신고에 실패했습니다.');
     }
   };  
@@ -108,7 +104,6 @@ function QnaPostDetail() {
       setEditCommentId(null);
       if (textareaRef.current) textareaRef.current.style.height = 'auto';
     } catch (err) {
-      console.error('댓글 등록/수정 실패:', err);
       toast.error('댓글 처리에 실패했습니다.');
     }
   };
@@ -126,7 +121,6 @@ function QnaPostDetail() {
         navigate('/qna');
       }
     } catch (err) {
-      console.error('게시글 삭제 실패:', err);
       toast.error('게시글 삭제에 실패했습니다.');
     }
   };
@@ -139,7 +133,6 @@ function QnaPostDetail() {
       await api.post(`/api/qna-post/${postId}/report`);
       toast.success('게시글을 신고하였습니다.');
     } catch (err) {
-      console.error('게시글 신고 실패:', err);
       toast.error('게시글 신고에 실패했습니다.');
     }
   };
@@ -157,7 +150,6 @@ function QnaPostDetail() {
         toast.info('찜이 취소되었습니다.');
       }
     } catch (err) {
-      console.error('찜 처리 실패:', err);
       toast.error('찜 처리에 실패했습니다.');
     }
   };

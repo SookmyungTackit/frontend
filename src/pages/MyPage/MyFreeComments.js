@@ -44,7 +44,6 @@ function MyFreeComments() {
       setComments(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.error('API 실패, fallback 사용', error);
       const sortedFallback = [...fallbackResponse.content].sort((a, b) =>
         sortOrder === 'desc'
           ? new Date(b.createdAt) - new Date(a.createdAt)

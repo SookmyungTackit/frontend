@@ -23,7 +23,6 @@ function TipPostDetail() {
         const res = await api.get(`/api/tip-posts/${id}`);
         setPost(res.data);
       } catch (err) {
-        console.error('게시글 불러오기 실패:', err);
         setPost({
           writer: '기본',
           title: '본문1 제목',
@@ -48,7 +47,6 @@ function TipPostDetail() {
         navigate('/tip');
       }
     } catch (err) {
-      console.error('게시글 삭제 실패:', err);
       toast.error('게시글 삭제에 실패했습니다.');
     }
   };
@@ -59,10 +57,8 @@ function TipPostDetail() {
   
     try {
       const res = await api.post(`/api/tip-posts/${id}/report`);
-      console.log('📌 Tip 게시글 신고 응답:', res.data); // ✅ 콘솔 로그 추가
       toast.success('게시글을 신고하였습니다.');
     } catch (err) {
-      console.error('게시글 신고 실패:', err); // 실패 콘솔
       toast.error('게시글 신고에 실패했습니다.');
     }
   };  
@@ -83,11 +79,9 @@ function TipPostDetail() {
           toast.info(message);
         }
       } else {
-        console.warn('⚠️ 예외 응답 형식:', res.data);
         toast.error('예상하지 못한 응답입니다.');
       }
     } catch (err) {
-      console.error('찜 처리 실패:', err);
       toast.error('찜 처리에 실패했습니다.');
     }
   };

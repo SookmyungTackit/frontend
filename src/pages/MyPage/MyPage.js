@@ -47,15 +47,10 @@ const MyPage = () => {
   
       navigate('/login'); // ✅ 로그인 페이지로 이동
     } catch (err) {
-      console.error(err);
       toast.error('탈퇴 처리 중 오류가 발생했습니다.');
     }
   };
   
-
-  console.log('🔍 userInfo:', userInfo);
-  console.log('🔍 userInfo.yearsOfService:', userInfo.yearsOfService);
-  console.log('🔍 type of yearsOfService:', typeof userInfo.yearsOfService);
 
   if (loading) return <p>로딩 중...</p>;
 
@@ -105,7 +100,6 @@ const MyPage = () => {
           <>
             {userInfo.yearsOfService >= 2 ? (
               <>
-                {console.log('✅ 선임자용 UI 렌더링')}
                 <section className="mypage-section" aria-labelledby="posts-title">
                   <h3 id="posts-title">내 활동</h3>
                   <div className="btn-row">
@@ -135,7 +129,7 @@ const MyPage = () => {
               </>
             ) : (
               <>
-                {console.log('🟡 뉴비용 UI 렌더링')}
+               
                 <section className="mypage-section" aria-labelledby="posts-title">
                   <h3 id="posts-title">내 활동</h3>
                   <div className="btn-row">
