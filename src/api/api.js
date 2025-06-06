@@ -13,7 +13,6 @@ const api = axios.create({
 const reissueAccessToken = async () => {
   try {
     const refreshToken = localStorage.getItem("refreshToken");
-    console.log("📦 기존 refreshToken:", refreshToken);
 
     const response = await axios.post(
       'http://54.180.118.228:8080/auth/reissue',
@@ -24,13 +23,8 @@ const reissueAccessToken = async () => {
         }
       }
     );
-    console.log("✅ 새 accessToken:", response.data.accessToken);
 
     const { accessToken, refreshToken: newRefreshToken } = response.data;
-
-
-    console.log("✅ 새 accessToken:", accessToken);
-    console.log("✅ 새 refreshToken:", newRefreshToken);
 
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", newRefreshToken);
@@ -48,7 +42,6 @@ const reissueAccessToken = async () => {
         window.location.href = "/login";
       } else {
         // 토큰은 있는데 서버 문제일 수 있음 → 알림만 표시
-        console.error("⚠️ 토큰 있음에도 재발급 실패. 서버 문제일 수 있음.");
         alert("세션이 만료되었거나 서버에 문제가 있습니다. 다시 로그인해주세요.");
         // window.location.href = "/login";  ← 주석 처리 가능
       }

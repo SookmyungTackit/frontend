@@ -15,8 +15,6 @@ const useFetchUserInfo = () => {
       try {
         const token = localStorage.getItem('accessToken');
 
-        console.log('token:', token);
-
         // ✅ 토큰 없으면 요청 중단
         if (!token) {
           setError(new Error('토큰 없음'));
@@ -29,10 +27,8 @@ const useFetchUserInfo = () => {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log('✅ 백엔드 응답:', response.data); // 👈 여기가 핵심!
           setUserInfo(response.data);          
       } catch (err) {
-        console.error('사용자 정보 불러오기 실패:', err);
         setError(err);
       } finally {
         setLoading(false);
