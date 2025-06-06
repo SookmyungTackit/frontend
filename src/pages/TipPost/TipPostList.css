@@ -4,13 +4,13 @@ body {
     background-color: #ffffff;
   }
   
-  .freepost-container {
+  .tippost-container {
     max-width: 900px;
     margin: 0 auto;
     padding: 0 20px 40px; /* 위쪽 padding 제거 */
   }
   
-  .freepost-banner {
+  .tippost-banner {
     position: relative;  /* ✅ 자식 위치 기준 */
     background-color: #DBEFFF;
     text-align: center;
@@ -41,18 +41,18 @@ body {
     margin-bottom: 10px;
   }
   
-  .freepost-banner p {
+  .tippost-banner p {
     color: #333;
     font-size: 14px;
     margin-bottom: 0.5rem;
   }
 
-  .freepost-subtext-wrapper {
+  .tippost-subtext-wrapper {
     text-align: center; /* ✅ 가운데 정렬을 위한 설정 */
     margin-bottom: 40px;  
   }  
   
-  .freepost-subtext {
+  .tippost-subtext {
     
     background-color: #f1f6fb;
     padding: 12px 24px;           /* 좌우에 여유 공간 추가 */
@@ -64,7 +64,7 @@ body {
   }
   
   
-  .freepost-tags {
+  .tippost-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -101,19 +101,19 @@ body {
     font-size: 18px;
   }
   
-  .freepost-list {
+  .tippost-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
   
-  .post-card {
+  .tippost-card {
     border-bottom: 1px solid #ddd;
     padding-bottom: 20px;
     cursor: pointer;
   }
   
-  .post-meta {
+  .tippost-meta {
     display: flex;
     gap: 10px;
     color: #666;
@@ -121,14 +121,14 @@ body {
     margin-bottom: 6px;
   }
   
-  .post-title {
+  .tippost-title {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 4px;
     color: #000;
   }
   
-  .post-content-preview {
+  .tippost-content-preview {
     font-size: 14px;
     color: #555;
     line-height: 1.5;
@@ -170,4 +170,10 @@ body {
     font-weight: 500;
     cursor: pointer;
     margin-left: auto;
+  }
+
+  .post-content-preview {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
   }

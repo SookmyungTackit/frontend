@@ -1,40 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FreePostWrite.css';
 import HomeBar from '../../components/HomeBar';
-
+import api from '../../api/api';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function FreePostWrite() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [tag, setTag] = useState('Engineering');
   const [content, setContent] = useState('');
+  const [selectedTagIds, setSelectedTagIds] = useState([]);
+  const [tagList, setTagList] = useState([]);
 
-  const tagOptions = ['Product', 'Engineering', 'People', 'Sales'];
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const res = await api.get('/api/free_tags');
+        setTagList(res.data);
+      } catch (err) {
+        console.error('태그 목록 불러오기 실패', err);
+        setTagList([
+          { id: 2, tagName: '태그2' },
+          { id: 3, tagName: '태그3' },
+        ]);
+      }
+    };
+    fetchTags();
+  }, []);
 
-  const handleSubmit = (e) => {
+  const handleTagToggle = (id) => {
+    setSelectedTagIds((prev) =>
+      prev.includes(id) ? prev.filter((tagId) => tagId !== id) : [...prev, id]
+    );
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
-      alert('제목과 내용을 모두 입력해주세요.');
+      toast.warn('제목과 내용을 모두 입력해주세요.');
       return;
     }
 
-    console.log('작성된 글:', { title, tag, content });
-    alert('글이 작성되었습니다!');
-    navigate('/freeboard');
+    try {
+      const res = await api.post('/api/free-posts', {
+        title,
+        content,
+        tagIds: selectedTagIds,
+      });      
+      toast.success('글이 작성되었습니다!');
+      console.log('작성된 글:', res.data);
+      navigate('/free');
+    } catch (err) {
+      console.error('글 작성 실패:', err);
+      toast.error('글 작성에 실패했습니다.');
+    }
   };
 
   return (
     <>
       <HomeBar />
-      
       <div className="freepost-write-container">
-        <h1 className="board-title" onClick={() => navigate('/freeboard')}>
-            자유 게시판
+        <h1 className="board-title" onClick={() => navigate('/free')}>
+          자유 게시판
         </h1>
         <form className="write-form" onSubmit={handleSubmit}>
-         
-          <button className="write-submit-button" onClick={handleSubmit}>등록</button>
+          <button className="write-submit-button" type="submit">등록</button>
           <p className="write-label">글 제목</p>
           <input
             type="text"
@@ -45,17 +76,18 @@ function FreePostWrite() {
           />
 
           <div className="tag-buttons">
-            {tagOptions.map((t) => (
+            {tagList.map((tag) => (
               <button
-                key={t}
+                key={tag.id}
                 type="button"
-                className={`tag-button ${tag === t ? 'selected' : ''}`}
-                onClick={() => setTag(t)}
+                className={`tag-button ${selectedTagIds.includes(tag.id) ? 'selected' : ''}`}
+                onClick={() => handleTagToggle(tag.id)}
               >
-                #{t}
+                #{tag.tagName}
               </button>
             ))}
           </div>
+
           <p className="write-label">내용</p>
           <textarea
             className="write-textarea"

@@ -1,49 +1,138 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import './TipPostDetail.css';
 import HomeBar from '../../components/HomeBar';
-import { dummyTipPosts } from '../../data/dummyTipPosts';
+import api from '../../api/api';
+import useFetchUserInfo from '../../hooks/useFetchUserInfo';
+import { toast } from 'react-toastify';
 
 function TipPostDetail() {
-  const { postId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from;
 
-  const post = dummyTipPosts.find((p) => p.id === parseInt(postId, 10));
+  const [post, setPost] = useState(null);
+  const [isScrapped, setIsScrapped] = useState(false);
 
-  if (!post) return <div>해당 게시글을 찾을 수 없습니다.</div>;
+  const { userInfo } = useFetchUserInfo();
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await api.get(`/api/tip-posts/${id}`);
+        setPost(res.data);
+      } catch (err) {
+        console.error('게시글 불러오기 실패:', err);
+        setPost({
+          writer: '기본',
+          title: '본문1 제목',
+          content: '내용4',
+          createdAt: '2025-05-13T19:34:53.52603',
+        });
+      }
+    };
+    fetchPost();
+  }, [id]);
+
+  const handleDeletePost = async () => {
+    const confirmed = window.confirm('이 글을 삭제하시겠습니까?');
+    if (!confirmed) return;
+
+    try {
+      await api.delete(`/api/tip-posts/${id}`);
+      toast.success('게시글이 삭제되었습니다.');
+      if (from === 'my-posts') {
+        navigate('/mypage/mypostpage');
+      } else {
+        navigate('/tip');
+      }
+    } catch (err) {
+      console.error('게시글 삭제 실패:', err);
+      toast.error('게시글 삭제에 실패했습니다.');
+    }
+  };
+
+  const handleReportPost = async () => {
+    const confirmed = window.confirm('정말 이 게시글을 신고하시겠습니까?');
+    if (!confirmed) return;
+  
+    try {
+      const res = await api.post(`/api/tip-posts/${id}/report`);
+      console.log('📌 Tip 게시글 신고 응답:', res.data); // ✅ 콘솔 로그 추가
+      toast.success('게시글을 신고하였습니다.');
+    } catch (err) {
+      console.error('게시글 신고 실패:', err); // 실패 콘솔
+      toast.error('게시글 신고에 실패했습니다.');
+    }
+  };  
+
+  const handleScrapToggle = async () => {
+    try {
+      const res = await api.post(`/api/tip-posts/${id}/scrap`);
+      const message = res.data; // ✅ 그냥 문자열임
+  
+      if (typeof message === 'string') {
+        if (message.includes("스크랩하였습니다")) {
+          setIsScrapped(true);
+          toast.success('찜 되었습니다.');
+        } else if (message.includes("취소하였습니다")) {
+          setIsScrapped(false);
+          toast.info('찜이 취소되었습니다.');
+        } else {
+          toast.info(message);
+        }
+      } else {
+        console.warn('⚠️ 예외 응답 형식:', res.data);
+        toast.error('예상하지 못한 응답입니다.');
+      }
+    } catch (err) {
+      console.error('찜 처리 실패:', err);
+      toast.error('찜 처리에 실패했습니다.');
+    }
+  };
+  
+  
 
   return (
     <>
       <HomeBar />
-      <div className="freepost-detail-container">
-        <h1 className="board-title" onClick={() => navigate('/tip')}>
-          선임자의 TIP
-        </h1>
+      <div className="tippost-detail-container">
+        <h1 className="board-title" onClick={() => navigate('/tip')}>선임자의 TIP</h1>
 
-        <div className="post-box">
-          <div className="post-header">
-            <div className="post-tags">
-              <span className="tag">#{post.tag.toLowerCase()}</span>
-            </div>
-            <div className="post-actions">
-              <button onClick={() => alert('수정 기능 구현 예정')}>수정하기</button>
-              <button onClick={() => alert('삭제 기능 구현 예정')}>삭제하기</button>
-            </div>
-          </div>
+        <div className="tippost-box">
+          {post && (
+            <>
+              <div className="tippost-actions post-actions">
+                {userInfo && post.writer === userInfo.nickname ? (
+                  <>
+                    <button onClick={() => navigate(`/tip/edit/${id}`)}>수정하기</button>
+                    <button onClick={handleDeletePost}>삭제하기</button>
+                  </>
+                ) : userInfo && (
+                  <button onClick={handleReportPost}>신고하기</button>
+                )}
+              </div>
 
-          <h1 className="detail-title">{post.title}</h1>
-          <div className="detail-meta">
-            <span>{post.nickname}</span> · <span>{new Date(post.created_at).toLocaleString('ko-KR')}</span>
-          </div>
+              <h1 className="detail-title">{post.title}</h1>
 
-          <div className="detail-content">{post.content}</div>
-
-          <button
-            className="bookmark-button"
-            onClick={() => alert('찜 되었습니다.')}
-          >
-            찜
-          </button>
+              <div className="detail-meta">
+                <span>{post.writer}</span>
+                <span>{new Date(post.createdAt).toLocaleString('ko-KR')}</span>
+              </div>
+              <div className="detail-content">
+                {post.content.split('\n').map((line, i) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))}
+              </div>
+              <button className="bookmark-button" onClick={handleScrapToggle}>
+                찜
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>

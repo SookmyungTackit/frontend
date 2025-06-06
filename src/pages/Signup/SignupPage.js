@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './SignupPage.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../../api/api';
+import { toast } from 'react-toastify';
 
 function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
+  const [organization, setOrganization] = useState('');
   const [yearOfEmployment, setYearOfEmployment] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -24,14 +26,17 @@ function SignupPage() {
       password,
       nickname,
       joinedYear: yearOfEmployment,
+      organization,
     };
 
     try {
-      const response = await axios.post('https://7b90-211-37-42-167.ngrok-free.app/auth/sign-up', formData);
-      alert('회원가입이 완료되었습니다. 로그인해 주세요.');
+      //회원가입 Api 사용
+      const response = await api.post("/auth/sign-up", formData);
+      toast.success('회원가입이 완료되었습니다. 로그인해 주세요.');
       setEmail('');
       setPassword('');
       setNickname('');
+      setOrganization('');
       setYearOfEmployment('');
       navigate('/login');
     } catch (error) {
@@ -42,20 +47,36 @@ function SignupPage() {
 
   const checkEmailDuplicate = async () => {
     try {
-      await axios.get(`https://7b90-211-37-42-167.ngrok-free.app/auth/check-email?email=${email}`);
-      setEmailCheckMessage('사용 가능한 이메일입니다.');
+      //탈퇴 회원 재가입을 위한 이메일 중복 확인 Api 사용
+      const response = await api.get(`/auth/check-email-auth?email=${email}`);
+
+      if (response.status === 200) {
+        setEmailCheckMessage('사용 가능한 이메일입니다.');
+      }
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        setEmailCheckMessage('이미 사용 중인 이메일입니다.');
+      if (error.response) {
+        const status = error.response.status;
+        const message = error.response.data;
+
+        if (status === 409 && message === '이미 가입된 이메일입니다.') {
+          setEmailCheckMessage('이미 사용 중인 이메일입니다.');
+        } 
+        else if (status === 409 && message === '탈퇴 이력이 있는 이메일입니다.') {
+          setEmailCheckMessage('해당 이메일은 탈퇴 이력이 있어 사용할 수 없습니다. 다른 이메일을 입력해주세요.');
+        } 
+        else {
+          setEmailCheckMessage('이메일 확인 중 오류 발생');
+        }
       } else {
-        setEmailCheckMessage('이메일 확인 중 오류 발생');
+        setEmailCheckMessage('서버와 통신 중 오류 발생');
       }
     }
   };
 
   const checkNicknameDuplicate = async () => {
     try {
-      await axios.get(`https://7b90-211-37-42-167.ngrok-free.app/auth/check-nickname?nickname=${nickname}`);
+      //닉네임 중복 확인 Api 사용
+      await api.get(`/auth/check-nickname?nickname=${nickname}`);
       setNicknameCheckMessage('사용 가능한 닉네임입니다.');
     } catch (error) {
       if (error.response && error.response.status === 409) {
@@ -146,6 +167,18 @@ function SignupPage() {
             </div>
 
             <div className="form-group">
+              <label htmlFor="organization">소속</label>
+              <input
+                type="text"
+                id="organization"
+                value={organization}
+                placeholder="Organization"
+                onChange={(e) => setOrganization(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group">
               <label htmlFor="yearOfEmployment">입사년도</label>
               <select
                 id="yearOfEmployment"
@@ -165,7 +198,6 @@ function SignupPage() {
                 })}
               </select>
             </div>
-
             <button type="submit" className="signup-submit">
               제출하기
             </button>

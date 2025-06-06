@@ -4,13 +4,13 @@ body {
     background-color: #ffffff;
   }
   
-  .freepost-container {
+  .qnapost-container {
     max-width: 900px;
     margin: 0 auto;
     padding: 0 20px 40px; /* 위쪽 padding 제거 */
   }
   
-  .freepost-banner {
+  .qnapost-banner {
     position: relative;  /* ✅ 자식 위치 기준 */
     background-color: #DBEFFF;
     text-align: center;
@@ -36,23 +36,23 @@ body {
   }
   
   
-  .freepost-banner h1 {
+  .qnapost-banner h1 {
     font-size: 32px;
     margin-bottom: 10px;
   }
   
-  .freepost-banner p {
+  .qnapost-banner p {
     color: #333;
     font-size: 14px;
     margin-bottom: 0.5rem;
   }
 
-  .freepost-subtext-wrapper {
+  .qnapost-subtext-wrapper {
     text-align: center; /* ✅ 가운데 정렬을 위한 설정 */
     margin-bottom: 40px;  
   }  
   
-  .freepost-subtext {
+  .qnapost-subtext {
     
     background-color: #f1f6fb;
     padding: 12px 24px;           /* 좌우에 여유 공간 추가 */
@@ -64,7 +64,7 @@ body {
   }
   
   
-  .freepost-tags {
+  .qnapost-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -108,7 +108,7 @@ body {
     font-size: 18px;
   }
   
-  .freepost-list {
+  .qnapost-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -178,3 +178,9 @@ body {
     cursor: pointer;
     margin-left: auto;
   }
+
+  
+  .tag.active-tag {
+    color: #4D77FF;
+  }
+  

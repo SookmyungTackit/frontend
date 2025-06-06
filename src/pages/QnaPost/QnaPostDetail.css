@@ -4,7 +4,7 @@ body {
     background-color: #f9f9f9;
   }
   
-  .freepost-detail-container {
+  .qnapost-detail-container {
     max-width: 800px;
     margin: 60px auto;
     padding: 0 20px;
@@ -12,7 +12,7 @@ body {
   }
 
   
-  .post-box {
+  .qnapost-box {
     position: relative;
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
@@ -22,7 +22,7 @@ body {
     margin-bottom: 40px;
   }
   
-  .post-tags {
+  .qnapost-tags {
     font-size: 13px;
     color: #4D77FF;
     margin-bottom: 12px;
@@ -47,13 +47,21 @@ body {
     color: #333;
   }
   
-  .post-actions a {
+  .qnapost-actions.post-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  
+  .qnapost-actions.post-actions button {
     font-size: 13px;
     color: #888;
     margin-left: 12px;
     cursor: pointer;
-    text-decoration: none;
+    background: none;
+    border: none;
   }
+  
   
   /* 댓글 */
   .comment-title {
@@ -125,7 +133,7 @@ body {
   
   
   /* 🔥 tag + 수정/삭제를 한 줄에 정렬하기 위한 flex */
-.post-header {
+.qnapost-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -133,12 +141,12 @@ body {
   }
   
   /* 수정 / 삭제 버튼 스타일 업데이트 */
-  .post-actions {
+  .qnapost-actions {
     display: flex;
     gap: 10px;
   }
   
-  .post-actions button {
+  .qnapost-actions button {
     background: none;
     border: none;
     color: #888;
@@ -233,5 +241,16 @@ body {
     outline: none;
     border: none;
     box-shadow: none;
+  }
+  
+  .detail-meta span:not(:last-child) {
+    margin-right: 8px; /* 두 칸 정도 여백 (px 단위로 조절 가능) */
+  }
+
+  .comment-action {
+    font-size: 13px;
+    color: #888;
+    cursor: pointer; /* ✨ 손 모양 커서로 변경 */
+    margin-left: 12px;
   }
   
