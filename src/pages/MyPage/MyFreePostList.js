@@ -35,15 +35,16 @@ function MyFreePostList() {
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) throw new Error('No token found');
-
+  
       const response = await api.get(
-        `/api/mypage/free-posts`,
+        `/api/mypage/free-posts?page=${currentPage - 1}&size=${postsPerPage}&sort=createdAt,${sortOrder}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+  
       const { content, totalPages } = response.data;
       setPosts(content);
       setTotalPages(totalPages);
@@ -54,6 +55,7 @@ function MyFreePostList() {
       setTotalPages(totalPages);
     }
   };
+  
 
   useEffect(() => {
     fetchPosts();

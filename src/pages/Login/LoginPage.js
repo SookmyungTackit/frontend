@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import api from "../../api/api";
@@ -11,13 +11,23 @@ function LoginPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
+    // ✅ 로그아웃 함수
+    const handleLogout = useCallback(() => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("accessTokenExpiresIn");
+      localStorage.removeItem("grantType");
+      localStorage.removeItem("role");
+      navigate("/login");
+    }, [navigate]); 
+
+  // ✅ useEffect에서 handleLogout 사용 + 의존성 배열에 포함
   useEffect(() => {
-    // ✅ 세션 만료 알림 및 자동 로그아웃 처리
     const tokenExpiresIn = parseInt(localStorage.getItem("accessTokenExpiresIn"));
     if (tokenExpiresIn) {
       const now = Date.now();
       const timeRemaining = tokenExpiresIn - now;
-      const threshold = 3 * 60 * 1000; // 3분 전
+      const threshold = 3 * 60 * 1000;
 
       if (timeRemaining > 0 && timeRemaining <= threshold) {
         alert("세션이 곧 만료됩니다. 자동 연장되거나 다시 로그인해 주세요.");
@@ -25,28 +35,42 @@ function LoginPage() {
 
       if (timeRemaining <= 0) {
         alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
-        handleLogout();
+        handleLogout(); // ✅ 안전하게 호출
       }
     }
-  }, []);
+  }, [handleLogout]); // ✅ 의존성 추가로 ESLint 경고 해결
 
   const handleLogin = async (e) => {
     e.preventDefault();
   
     try {
-      // ✅ 이메일 상태 먼저 확인
       const checkRes = await api.get(`/auth/check-email-auth?email=${email}`);
       const checkMessage = checkRes.data;
-  
-      if (checkMessage === '탈퇴 이력이 있는 이메일입니다.') {
-        setErrorMessage("탈퇴한 이메일입니다. 다른 이메일로 회원가입해주세요.");
-        return; // 🚫 로그인 시도 중단
-      }
+    
+      // 참고: 사용 가능한 이메일 or 이미 가입된 이메일도 여기로 올 수 있음
+      console.log("✅ 이메일 확인 응답:", checkMessage);
+    
+      // 200이 오면 무조건 로그인 진행
     } catch (checkError) {
-      // 이메일 확인 중 에러 (네트워크 문제 등)
-      setErrorMessage("이메일 확인 중 오류가 발생했습니다.");
-      return;
+      const status = checkError.response?.status;
+      const message = checkError.response?.data;
+    
+      if (status === 409 && message === "탈퇴 이력이 있는 이메일입니다.") {
+        setErrorMessage("탈퇴한 이메일입니다. 다른 이메일로 회원가입해주세요.");
+        return; // 🚫 로그인 중단
+      }
+    
+      // ✅ 이미 가입된 이메일은 그냥 통과시켜서 로그인 시도
+      if (status === 409 && message === "이미 가입된 이메일입니다.") {
+        // 통과 → 로그인 진행
+        console.log("⚠️ 이미 가입된 이메일: 로그인 진행");
+      } else {
+        console.error("❌ 이메일 확인 중 기타 오류:", checkError);
+        setErrorMessage("이메일 확인 중 오류가 발생했습니다.");
+        return;
+      }
     }
+    
   
     try {
       // ✅ 로그인 요청
@@ -76,15 +100,7 @@ function LoginPage() {
   };
   
 
-  // ✅ 로그아웃 함수
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("accessTokenExpiresIn");
-    localStorage.removeItem("grantType");
-    localStorage.removeItem("role");
-    navigate("/login");
-  };
+
 
   return (
     <div className="login-container">
@@ -145,7 +161,7 @@ function LoginPage() {
             Log in
           </button>
 
-          {/* 임시 로그인 버튼 (테스트용) */}
+          {/* 임시 로그인 버튼 (테스트용) 
           <button
             type="button"
             className="temp-login-button english-text"
@@ -159,7 +175,7 @@ function LoginPage() {
             }}
           >
             임시 로그인
-          </button>
+          </button>*/}
         </form>
 
         {/* 하단 회원가입 링크 */}

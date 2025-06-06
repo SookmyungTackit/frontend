@@ -2,7 +2,7 @@ import axios from "axios";
 
 // ✅ axios 인스턴스 생성
 const api = axios.create({
-  baseURL: "https://56cc-1-209-144-251.ngrok-free.app",
+  baseURL: "http://54.180.118.228:8080/",
   headers: {
     'ngrok-skip-browser-warning': 'any-value', // 이 한 줄 추가
   },
@@ -16,7 +16,7 @@ const reissueAccessToken = async () => {
     console.log("📦 기존 refreshToken:", refreshToken);
 
     const response = await axios.post(
-      'https://b9c3-61-40-226-235.ngrok-free.app/auth/reissue',
+      'http://54.180.118.228:8080/auth/reissue',
       null,
       {
         headers: {
@@ -82,28 +82,30 @@ api.interceptors.request.use(
 
 // ✅ 응답 인터셉터 (401 → 토큰 재발급 & 요청 재시도)
 api.interceptors.response.use(
-  (response) => response, // 정상 응답은 그대로
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // 401 에러 && 재발급 시도가 아직 안 된 요청만 처리
     if (
       error.response &&
       error.response.status === 401 &&
       !originalRequest._retry
     ) {
-      originalRequest._retry = true; // 재시도 중임을 표시
+      originalRequest._retry = true;
 
       const newAccessToken = await reissueAccessToken();
 
       if (newAccessToken) {
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(originalRequest); // 재요청
+        // ✅ 이 한 줄 추가! 새 토큰을 인스턴스에 반영
+        api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+        return api(originalRequest);
       }
     }
 
-    return Promise.reject(error); // 다른 에러는 그대로
+    return Promise.reject(error);
   }
 );
+
 
 export default api;

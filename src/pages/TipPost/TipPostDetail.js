@@ -58,33 +58,40 @@ function TipPostDetail() {
     if (!confirmed) return;
   
     try {
-      await api.post(`/api/qna-post/${id}/report`);
+      const res = await api.post(`/api/tip-posts/${id}/report`);
+      console.log('📌 Tip 게시글 신고 응답:', res.data); // ✅ 콘솔 로그 추가
       toast.success('게시글을 신고하였습니다.');
     } catch (err) {
-      console.error('게시글 신고 실패:', err);
+      console.error('게시글 신고 실패:', err); // 실패 콘솔
       toast.error('게시글 신고에 실패했습니다.');
     }
-  };
+  };  
 
   const handleScrapToggle = async () => {
     try {
       const res = await api.post(`/api/tip-posts/${id}/scrap`);
-      const { message } = res.data;
+      const message = res.data; // ✅ 그냥 문자열임
   
-     if (message.includes("스크랩하였습니다")) {
-             setIsScrapped(true);
-             toast.success('찜 되었습니다.');
-           } else if (message.includes("취소하였습니다")) {
-             setIsScrapped(false);
-             toast.info('찜이 취소되었습니다.');
-           } else {
-             toast.info(message);
-           }      
-         } catch (err) {
-           console.error('찜 처리 실패:', err);
-           toast.error('찜 처리에 실패했습니다.');
-         }
+      if (typeof message === 'string') {
+        if (message.includes("스크랩하였습니다")) {
+          setIsScrapped(true);
+          toast.success('찜 되었습니다.');
+        } else if (message.includes("취소하였습니다")) {
+          setIsScrapped(false);
+          toast.info('찜이 취소되었습니다.');
+        } else {
+          toast.info(message);
+        }
+      } else {
+        console.warn('⚠️ 예외 응답 형식:', res.data);
+        toast.error('예상하지 못한 응답입니다.');
+      }
+    } catch (err) {
+      console.error('찜 처리 실패:', err);
+      toast.error('찜 처리에 실패했습니다.');
+    }
   };
+  
   
 
   return (

@@ -101,65 +101,69 @@ const MyPage = () => {
         </section>
 
         {/* 글보기 */}
+        {role !== 'ADMIN' && (
+          <>
             {userInfo.yearsOfService >= 2 ? (
               <>
-              {console.log('✅ 선임자용 UI 렌더링')}
-              <section className="mypage-section" aria-labelledby="posts-title">
-                <h3 id="posts-title">내 활동</h3>
-                <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/mytipposts')}>
-                    선임자의 TIP 내가 쓴 글 보기
-                  </button>
-                </div>
-                <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/myfreeposts')}>
-                    자유게시판 내가 쓴 글 보기
-                  </button>
-                </div>
-                <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/myfreecomments')}>
-                    자유게시판 내가 쓴 댓글 보기
-                  </button>
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/myqnacomments')}>
-                    질문게시판 내가 쓴 댓글 보기
-                  </button>
-                </div>
-                <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/bookmarked')}>
-                    찜한 글 보기
-                  </button>
-                </div>
-              </section>
-
-            </>
+                {console.log('✅ 선임자용 UI 렌더링')}
+                <section className="mypage-section" aria-labelledby="posts-title">
+                  <h3 id="posts-title">내 활동</h3>
+                  <div className="btn-row">
+                    <button className="mypage-btn" onClick={() => navigate('/mypage/mytipposts')}>
+                      선임자의 TIP 내가 쓴 글 보기
+                    </button>
+                  </div>
+                  <div className="btn-row">
+                    <button className="mypage-btn" onClick={() => navigate('/mypage/myfreeposts')}>
+                      자유게시판 내가 쓴 글 보기
+                    </button>
+                  </div>
+                  <div className="btn-row">
+                    <button className="mypage-btn" onClick={() => navigate('/mypage/myfreecomments')}>
+                      자유게시판 내가 쓴 댓글 보기
+                    </button>
+                    <button className="mypage-btn" onClick={() => navigate('/mypage/myqnacomments')}>
+                      질문게시판 내가 쓴 댓글 보기
+                    </button>
+                  </div>
+                  <div className="btn-row">
+                    <button className="mypage-btn" onClick={() => navigate('/mypage/bookmarked')}>
+                      찜한 글 보기
+                    </button>
+                  </div>
+                </section>
+              </>
             ) : (
               <>
-              {console.log('🟡 뉴비용 UI 렌더링')}
-              <section className="mypage-section" aria-labelledby="posts-title">
-                <h3 id="posts-title">내 활동</h3>
-                <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/myqnaposts')}>
-                    질문게시판 내가 쓴 글 보기
-                  </button>
-                </div>
-                <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/myfreeposts')}>
-                    자유게시판 내가 쓴 글 보기
-                  </button>
-                </div>
-                <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/myfreecomments')}>
-                    자유게시판 내가 쓴 댓글 보기
-                  </button>
-                </div>
-                <div className="btn-row">
-                  <button className="mypage-btn" onClick={() => navigate('/mypage/bookmarked')}>
-                    찜한 글 보기
-                  </button>
-                </div>
-              </section>
+                {console.log('🟡 뉴비용 UI 렌더링')}
+                <section className="mypage-section" aria-labelledby="posts-title">
+                  <h3 id="posts-title">내 활동</h3>
+                  <div className="btn-row">
+                    <button className="mypage-btn" onClick={() => navigate('/mypage/myqnaposts')}>
+                      질문게시판 내가 쓴 글 보기
+                    </button>
+                  </div>
+                  <div className="btn-row">
+                    <button className="mypage-btn" onClick={() => navigate('/mypage/myfreeposts')}>
+                      자유게시판 내가 쓴 글 보기
+                    </button>
+                  </div>
+                  <div className="btn-row">
+                    <button className="mypage-btn" onClick={() => navigate('/mypage/myfreecomments')}>
+                      자유게시판 내가 쓴 댓글 보기
+                    </button>
+                  </div>
+                  <div className="btn-row">
+                    <button className="mypage-btn" onClick={() => navigate('/mypage/bookmarked')}>
+                      찜한 글 보기
+                    </button>
+                  </div>
+                </section>
               </>
             )}
+          </>
+        )}
+
 
         {/* 관리자 기능 - role이 'admin'일 때만 보임 */}
         {role === 'ADMIN' && (

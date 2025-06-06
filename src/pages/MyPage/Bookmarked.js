@@ -64,10 +64,13 @@ function Bookmarked() {
       try {
         const pageParam = currentPage - 1;
         let url = '';
-        if (activeTab === 'tip') url = `/api/mypage/tip-scraps?page=${pageParam}`;
-        else if (activeTab === 'free') url = `/api/mypage/free-scraps?page=${pageParam}`;
-        else url = `/api/mypage/qna-post/scrap?page=${pageParam}`;
-
+        if (activeTab === 'tip') {
+          url = `/api/mypage/tip-scraps?page=${pageParam}`;
+        } else if (activeTab === 'free') {
+          url = `/api/mypage/free-scraps?page=${pageParam}`;
+        } else if (activeTab === 'qna') {
+          url = `/api/qna-post/scrap?page=${pageParam}`;
+        }
         const res = await api.get(url);
         setPosts(res.data.content);
         setTotalPages(res.data.totalPages);
@@ -101,10 +104,30 @@ function Bookmarked() {
   };
 
   const getBoardInfo = (post) => {
-    if (activeTab === 'tip') return { id: post.tipId, type: '선임자의 TIP', path: 'tip' };
-    if (activeTab === 'free') return { id: post.freeId, type: '자유게시판', path: 'free' };
-    return { id: post.postId, type: '질문게시판', path: 'qna' };
+    if (activeTab === 'tip') {
+      return {
+        id: post.tipId,
+        type: '선임자의 TIP',
+        path: 'tip',
+        writer: post.authorName,
+      };
+    } else if (activeTab === 'free') {
+      return {
+        id: post.freeId,
+        type: '자유게시판',
+        path: 'free',
+        writer: post.authorName,
+      };
+    } else if (activeTab === 'qna') {
+      return {
+        id: post.postId,
+        type: '질문게시판',
+        path: 'qna',
+        writer: post.writer,
+      };
+    }
   };
+  
 
   return (
     <>
@@ -136,7 +159,7 @@ function Bookmarked() {
               >
                 <div className="post-meta">
                   <span className="board-type">{type}</span>
-                  <span className="writer"> {post.writer || post.authorName}</span>
+                  <span className="writer"> {getBoardInfo(post).writer}</span>
                   <span className="date"> {new Date(post.createdAt).toLocaleString('ko-KR')}</span>
                   {post.tags && (
                     <span className="tags">

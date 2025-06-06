@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './PostPageList.css';
 import HomeBar from '../../components/HomeBar';
@@ -35,7 +35,7 @@ function MyQnaComments() {
   const [totalPages, setTotalPages] = useState(1);
   const size = 5; // 고정된 페이지당 항목 수
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const response = await api.get(
         `/api/mypage/qna-comments?page=${currentPage - 1}&size=${size}&sort=createdAt,${sortOrder}`
@@ -52,11 +52,11 @@ function MyQnaComments() {
       setComments(sortedFallback.slice((currentPage - 1) * size, currentPage * size));
       setTotalPages(Math.ceil(fallbackResponse.totalElements / size));
     }
-  };
+  }, [currentPage, sortOrder, size]);
 
   useEffect(() => {
     fetchComments();
-  }, [sortOrder, currentPage]);
+  }, [fetchComments]);
 
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
@@ -97,7 +97,7 @@ function MyQnaComments() {
               >
                 <div className="post-meta">
                   <span className="date">
-                    {new Date(comment.createdAt).toLocaleDateString('ko-KR')}
+                    {new Date(comment.createdAt).toLocaleString('ko-KR')}
                   </span>
                 </div>
                 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import HomeBar from '../../components/HomeBar';
 import './PostManagementPage.css';
 import api from '../../api/api';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const POSTS_PER_PAGE = 5;
@@ -34,7 +33,10 @@ export default function PostManagementPage() {
         headers: { Authorization: `Bearer ${token}` },
         params: { page: currentPage - 1, size: POSTS_PER_PAGE },
       });
-
+  
+      console.log(`📌 [${activeTab}] 응답 데이터 구조 확인:`);
+      console.table(response.data.content); // 게시판별 post 객체 구조 보기
+  
       setDisabledPosts(response.data.content);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -43,6 +45,7 @@ export default function PostManagementPage() {
       setTotalPages(fallbackData.totalPages);
     }
   };
+  
 
   const handleDelete = async (postId) => {
     const confirmed = window.confirm('정말 이 게시글을 삭제하시겠습니까?');
@@ -97,12 +100,8 @@ export default function PostManagementPage() {
     }
   };
 
-  const getPostId = (post) => {
-    if (activeTab === 'Free') return post.id;
-    if (activeTab === 'Tip') return post.tipId;
-    if (activeTab === 'QnA') return post.postId;
-    return null;
-  };
+  const getPostId = (post) => post.id;
+
 
   return (
     <>
@@ -129,13 +128,13 @@ export default function PostManagementPage() {
                     <img src="/search.svg" alt="돋보기 아이콘" className="search-icon" />
                   </div>
 
-                  <Link to={postUrl} className="post-management-texts" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <div className="post-management-texts" style={{ textDecoration: 'none', color: 'inherit', cursor: 'default' }}>
                     <div className="post-management-board">{boardName}</div>
                     <div className="post-management-title">{post.title}</div>
                     <div className="post-management-meta">
                       신고 수: {post.reportCount}회 Posted <span className="date">{new Date(post.createdAt).toLocaleString('ko-KR')}</span>, by @{post.nickname}
                     </div>
-                  </Link>
+                  </div>
                 </div>
 
                 <div className="post-management-actions">

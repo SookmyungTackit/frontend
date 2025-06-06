@@ -73,7 +73,7 @@ function QnaPostDetail() {
     if (!confirmed) return;
   
     try {
-      await api.post(`/api/free-comments/${commentId}/report`);
+      await api.post(`/api/qna-comments/${commentId}/report`);
       toast.success('댓글을 신고하였습니다.');
     } catch (err) {
       console.error('댓글 신고 실패:', err);

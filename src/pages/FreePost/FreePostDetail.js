@@ -151,22 +151,36 @@ function FreePostDetail() {
   const handleScrapToggle = async () => {
     try {
       const res = await api.post(`/api/free-posts/${id}/scrap`);
-      console.log('📦 서버 응답:', res.data); // 이 줄 추가
-      const { message } = res.data;
+      console.log("📦 백엔드 응답 전체:", res);         // 전체 응답 객체 출력
+      console.log("📦 백엔드 응답 데이터:", res.data);   // 실제 데이터만 출력
   
-      if (message.includes("스크랩하였습니다")) {
+      const message = res.data; // ✅ 그냥 문자열임
+  
+      if (message === "게시글을 스크랩하였습니다.") {
         setIsScrapped(true);
-        toast.success('찜 되었습니다.');
-      } else if (message.includes("취소하였습니다")) {
+        toast.success("찜 되었습니다.");
+      } else if (message === "게시글 스크랩을 취소하였습니다.") {
         setIsScrapped(false);
-        toast.info('찜이 취소되었습니다.');
+        toast.info("찜이 취소되었습니다.");
       } else {
         toast.info(message);
-      }      
+      }
     } catch (err) {
-      console.error('찜 처리 실패:', err);
-      toast.error('찜 처리에 실패했습니다.');
+      const status = err.response?.status;
+      const retryFlag = err.config?._retry;
+    
+      console.error("🧨 찜 에러 전체:", err);
+      console.error("🧨 에러 응답 데이터:", err.response?.data);
+      console.error("🧨 요청에 사용된 accessToken:", localStorage.getItem("accessToken"));
+    
+      if (status === 401 && retryFlag) {
+        console.warn("🔁 401 이후 재시도 실패 → 세션 만료 간주");
+        toast.error("세션이 만료되어 찜 요청에 실패했습니다.");
+      } else {
+        toast.error("찜 처리에 실패했습니다.");
+      }
     }
+    
   };
   
 
