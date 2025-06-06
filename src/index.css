@@ -1,0 +1,25 @@
+/* ===== Global Reset & Font ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans KR', 'Montserrat', sans-serif;
+  background-color: #ffffff;
+  line-height: 1.5;
+  color: #111;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+html, body, #root {
+  background-color: #ffffff;
+  height: 100%;
+}

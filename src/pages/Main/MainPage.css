@@ -1,0 +1,196 @@
+/* ---------------- 전체 Layout ---------------- */
+.main-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+  padding-bottom: 40px; 
+}
+
+/* ---------------- 배너 전체 영역 ---------------- */
+.birthday-banner {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  margin-bottom: 32px;
+  overflow: visible; /* ← 이거 추가! */
+}
+
+/* ---------------- 슬라이드 하나 ---------------- */
+.banner-slide {
+  background: #DBEFFF;
+  height: 300px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;   /* 👈 왼쪽 정렬이 더 자연스러움 */
+  padding-left: 30px;        /* 👈 왼쪽 마진 대신 padding으로 처리 */
+}
+
+/* 슬라이드 제목 텍스트 */
+.banner-slide h2 {
+  font-size: 48px;
+  color: #2D4595;
+  margin: 20px 0 6px 0;
+}
+
+/* 슬라이드 부제 텍스트 */
+.banner-slide p {
+  font-size: 24px;
+  color: #2D4195;
+  margin: 0;
+}
+/* 항상 화살표 보이게 하고 위치 조정 */
+.slick-prev,
+.slick-next {
+  display: block !important;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  position: absolute;  /* ✅ 꼭 필요! */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.slick-prev {
+  left: 10px;
+}
+
+.slick-next {
+  right: 10px;
+}
+
+/* 화살표 모양 스타일링 */
+.slick-prev:before,
+.slick-next:before {
+  font-size: 30px;
+  color: #4D77FF;
+  opacity: 1;
+}
+
+/* 점(dot) 색상과 위치 */
+.slick-dots {
+  position: absolute;
+  bottom: 12px;
+  width: 100%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.slick-dots li button:before {
+  color: #4D77FF;
+  font-size: 10px;
+}
+
+.slick-slider {
+  position: relative;
+}
+
+
+/* TIP 영역 */
+.tip-section {
+  margin-bottom: 40px;
+}
+
+.tip-boxes {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+
+
+}
+
+.tip-box {
+  flex: 1;
+  background-color: #4D77FF;
+  color: white;  /* ✅ 텍스트를 흰색으로 */
+  padding: 100px 40px;
+  border-radius: 16px;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+}
+
+.tip-section p,
+.board-section p {
+  color: #4F7396; 
+  margin-bottom: 10px;
+}
+
+/* 게시판 공통 */
+.board-section {
+  margin-bottom: 40px;
+}
+
+.board-section h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tip-section h3,
+.board-section h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.more-link {
+  font-size: 14px;
+  color: black;
+}
+
+
+.post-left {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.post-title-link {
+  text-decoration: none;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-title-link:hover .post-title {
+  color: #4D77FF;
+}
+
+.post-right {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #555;
+  flex-shrink: 0;
+}
+
+.post-writer,
+.post-date,
+.post-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;         /* 줄바꿈 방지 */
+  overflow: hidden;            /* 넘치면 숨기기 */
+  text-overflow: ellipsis;     /* 말줄임 (...) */
+  flex: 1 1 auto;               /* 너비 자동 조절 */
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
