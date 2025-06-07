@@ -14,7 +14,7 @@ function Bookmarked() {
 
   const pageGroupSize = 5;
 
-  // ✅ fallback 더미 데이터 정의
+  // fallback 더미 데이터 정의
   const fallbackData = {
     tip: {
       content: [
@@ -177,7 +177,7 @@ function Bookmarked() {
                           <br />
                         </React.Fragment>
                       ))
-                    : post.contentPreview // ✅ content가 없으면 preview 대체
+                    : post.contentPreview // content가 없으면 preview 대체
                   }
                   {post.content && post.content.length >= 100 && '...'}
                 </div>

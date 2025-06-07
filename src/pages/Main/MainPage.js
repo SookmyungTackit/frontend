@@ -25,7 +25,7 @@ function MainPage() {
   const [qnaPosts, setQnaPosts] = useState([]);
 
   useEffect(() => {
-    // ✅ TIP 게시글 3개
+    // TIP 게시글 3개
     api.get('/api/tip-posts')
       .then((res) => {
         const sorted = res.data.content
@@ -40,7 +40,7 @@ function MainPage() {
         setTipPosts(fallback);
       });
 
-    // ✅ 자유게시판 최신순 5개
+    // 자유게시판 최신순 5개
     api.get('/api/free-posts?page=0&size=5&sort=createdAt,desc')
       .then((res) => {
         setFreePosts(res.data.content.slice(0, 5));
@@ -49,7 +49,7 @@ function MainPage() {
         setFreePosts(fallbackFreePosts.content.slice(0, 5));
       });
 
-    // ✅ 질문게시판 최신순 5개
+    // 질문게시판 최신순 5개
     api.get('/api/qna-post/list?page=0&size=5&sort=createdAt,desc')
       .then((res) => {
         setQnaPosts(res.data.content.slice(0, 5));
@@ -74,7 +74,7 @@ function MainPage() {
     <div>
       <HomeBar />
 
-      {/* ✅ 슬라이드 배너 */}
+      {/* 슬라이드 배너 */}
       <section className="birthday-banner">
         <Slider {...sliderSettings}>
           {bannerData.map((item, index) => (
@@ -87,7 +87,7 @@ function MainPage() {
       </section>
 
       <div className="main-container">
-        {/* ✅ TIP 게시판 (제목만) */}
+        {/* TIP 게시판 (제목만) */}
         <section className="tip-section">
           <h3>
             <span>선임자의 TIP</span>
@@ -108,7 +108,7 @@ function MainPage() {
           </div>
         </section>
 
-        {/* ✅ 자유게시판 */}
+        {/* 자유게시판 */}
         <BoardSection
           title="자유게시판"
           description="신입과 선배 모두 게시글, 댓글 작성이 자유롭게 가능해요!"
@@ -116,7 +116,7 @@ function MainPage() {
           boardPath="free"
         />
 
-        {/* ✅ 질문게시판 */}
+        {/* 질문게시판 */}
         <BoardSection
           title="질문게시판"
           description="신입은 질문글만, 선배는 답글만 달 수 있어요!"

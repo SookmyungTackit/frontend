@@ -5,7 +5,7 @@ import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 
-// ✅ fallback 데이터
+// fallback 데이터
 const fallbackResponse = {
   page: 0,
   content: [
@@ -44,7 +44,7 @@ function QnaPostList() {
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  // ✅ 태그 불러오기
+  // 태그 불러오기
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -66,7 +66,7 @@ function QnaPostList() {
     fetchTags();
   }, []);
 
-  // ✅ 게시글 불러오기 (전체 또는 태그별)
+  // 게시글 불러오기 (전체 또는 태그별)
   useEffect(() => {
     const fetchPosts = async () => {
       try {

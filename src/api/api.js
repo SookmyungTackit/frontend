@@ -1,15 +1,15 @@
 import axios from "axios";
 
-// ✅ axios 인스턴스 생성
+// axios 인스턴스 생성
 const api = axios.create({
   baseURL: "http://54.180.118.228:8080/",
   headers: {
-    'ngrok-skip-browser-warning': 'any-value', // 이 한 줄 추가
+    'ngrok-skip-browser-warning': 'any-value', 
   },
 });
 
 
-// ✅ 토큰 재발급 함수
+// 토큰 재발급 함수
 const reissueAccessToken = async () => {
   try {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -39,11 +39,11 @@ const reissueAccessToken = async () => {
   
       if (!refreshToken || refreshToken === "null") {
         // 리프레시 토큰 자체가 없을 때만 로그아웃
+        localStorage.clear();
         window.location.href = "/login";
       } else {
         // 토큰은 있는데 서버 문제일 수 있음 → 알림만 표시
         alert("세션이 만료되었거나 서버에 문제가 있습니다. 다시 로그인해주세요.");
-        // window.location.href = "/login";  ← 주석 처리 가능
       }
     }
   
@@ -51,7 +51,7 @@ const reissueAccessToken = async () => {
   }  
 };
 
-// ✅ 요청 인터셉터 (accessToken 자동 첨부)
+// 요청 인터셉터 (accessToken 자동 첨부)
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
@@ -73,7 +73,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ✅ 응답 인터셉터 (401 → 토큰 재발급 & 요청 재시도)
+// 응답 인터셉터 (401 → 토큰 재발급 & 요청 재시도)
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -90,7 +90,7 @@ api.interceptors.response.use(
 
       if (newAccessToken) {
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        // ✅ 이 한 줄 추가! 새 토큰을 인스턴스에 반영
+        // 새 토큰을 인스턴스에 반영
         api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       }

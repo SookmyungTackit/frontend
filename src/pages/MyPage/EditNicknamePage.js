@@ -11,7 +11,7 @@ const EditNicknamePage = () => {
   const [checkMessage, setCheckMessage] = useState('');
   const navigate = useNavigate();
 
-  // ✅ 닉네임이 바뀔 때마다 자동으로 중복 확인
+  // 닉네임이 바뀔 때마다 자동으로 중복 확인
   useEffect(() => {
     const checkNickname = async () => {
       if (!nickname.trim()) {
@@ -39,16 +39,14 @@ const EditNicknamePage = () => {
       }
     };
 
-    // ✅ 300ms 디바운싱: 입력 후 일정 시간 대기하고 요청
     const delayCheck = setTimeout(() => {
       checkNickname();
     }, 300);
 
-    // 입력이 바뀔 때마다 이전 요청 취소
     return () => clearTimeout(delayCheck);
   }, [nickname]);
 
-  // ✅ 닉네임 변경 PATCH 요청
+  // 닉네임 변경 PATCH 요청
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -72,8 +70,8 @@ const EditNicknamePage = () => {
         { nickname },               
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`, // ✅ 인증 토큰
-            'Content-Type': 'application/json',     // ✅ JSON 타입 명시
+            Authorization: `Bearer ${accessToken}`, 
+            'Content-Type': 'application/json',    
           },
         }
       );
@@ -103,12 +101,12 @@ const EditNicknamePage = () => {
             className="edit-input"
           />
 
-          {/* ✅ 중복 확인 결과 메시지 출력 */}
+          {/* 중복 확인 결과 메시지 출력 */}
           <div className={`nickname-message ${isAvailable === false ? 'error' : 'success'}`}>
             {checkMessage}
           </div>
 
-          {/* ✅ 중복 확인 결과가 true일 때만 버튼 활성화 */}
+          {/* 중복 확인 결과가 true일 때만 버튼 활성화 */}
           <button
             type="submit"
             className="edit-submit-btn"

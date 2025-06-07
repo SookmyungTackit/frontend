@@ -66,7 +66,7 @@ function TipPostDetail() {
   const handleScrapToggle = async () => {
     try {
       const res = await api.post(`/api/tip-posts/${id}/scrap`);
-      const message = res.data; // ✅ 그냥 문자열임
+      const message = res.data; 
   
       if (typeof message === 'string') {
         if (message.includes("스크랩하였습니다")) {

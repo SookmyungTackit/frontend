@@ -6,12 +6,12 @@ import api from '../../api/api';
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 import { toast } from 'react-toastify';
 
-// ✅ fallback 데이터
+// fallback 데이터
 const fallbackResponse = {
   page: 0,
   content: [
     {
-      id: 2, // ✅ postId → id
+      id: 2, 
       writer: '기본값',
       title: '요즘 날씨 너무 좋지 않나요?',
       content:
@@ -20,7 +20,7 @@ const fallbackResponse = {
       createdAt: '2025-05-26T00:49:09.773772',
     },
     {
-      id: 1, // ✅ postId → id
+      id: 1, 
       writer: 'test',
       title: '프론트엔드 스터디 같이 하실 분!',
       content: "안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.",
@@ -46,7 +46,7 @@ function FreePostList() {
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  // ✅ 태그 불러오기
+  // 태그 불러오기
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -68,7 +68,7 @@ function FreePostList() {
     fetchTags();
   }, []);
 
-  // ✅ 게시글 불러오기 (전체 또는 태그별)
+  // 게시글 불러오기 (전체 또는 태그별)
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -159,11 +159,11 @@ function FreePostList() {
           ) : (
             filteredPosts.map((post) => (
               <div
-                key={post.id} // ✅ 수정됨
+                key={post.id} 
                 className="post-card"
                 onClick={() => {
                   if (post.id !== undefined && post.id !== null) {
-                    navigate(`/free/${post.id}`); // ✅ 수정됨
+                    navigate(`/free/${post.id}`); 
                   } else {
                     toast.error('잘못된 게시글 ID입니다.');
                   }

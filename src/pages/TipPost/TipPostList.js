@@ -6,7 +6,7 @@ import api from '../../api/api';
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 import { toast } from 'react-toastify';
 
-// ✅ fallback 데이터
+// fallback 데이터
 const fallbackResponse = {
   page: 0,
   content: [
@@ -42,7 +42,7 @@ function TipPostList() {
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  // ✅ 게시글 불러오기
+  // 게시글 불러오기
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -58,7 +58,7 @@ function TipPostList() {
     fetchPosts();
   }, [currentPage]);
 
-  // ✅ 검색
+  // 검색
   const handleSearchChange = (e) => {
     setSearchKeyword(e.target.value);
     setCurrentPage(0);
@@ -72,7 +72,7 @@ function TipPostList() {
     return matchesKeyword;
   });
 
-  // ✅ 페이지네이션 계산
+  // 페이지네이션 계산
   const currentGroup = Math.floor(currentPage / pageGroupSize);
   const startPage = currentGroup * pageGroupSize;
   const endPage = Math.min(startPage + pageGroupSize, totalPages);

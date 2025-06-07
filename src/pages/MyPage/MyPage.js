@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import HomeBar from '../../components/HomeBar';
 import './MyPage.css';
 import { useNavigate } from 'react-router-dom';
-import api from '../../api/api'; // axios 인스턴스 (baseURL 설정됨)
+import api from '../../api/api'; 
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 import { toast } from 'react-toastify'; 
 
@@ -45,7 +45,7 @@ const MyPage = () => {
       localStorage.removeItem('grantType');
       localStorage.removeItem('role');
   
-      navigate('/login'); // ✅ 로그인 페이지로 이동
+      navigate('/login'); // 로그인 페이지로 이동
     } catch (err) {
       toast.error('탈퇴 처리 중 오류가 발생했습니다.');
     }

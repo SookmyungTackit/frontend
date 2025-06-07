@@ -149,7 +149,7 @@ function FreePostDetail() {
     try {
       const res = await api.post(`/api/free-posts/${id}/scrap`);
   
-      const message = res.data; // ✅ 그냥 문자열임
+      const message = res.data; 
   
       if (message === "게시글을 스크랩하였습니다.") {
         setIsScrapped(true);

@@ -5,14 +5,14 @@ import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
 import { toast } from 'react-toastify';
 
-// ✅ 태그 Fallback
+// 태그 Fallback
 const fallbackTags = [
   { id: 1, tagName: '태그1' },
   { id: 2, tagName: '태그2' },
   { id: 3, tagName: '태그3' },
 ];
 
-// ✅ 게시글 Fallback
+// 게시글 Fallback
 const fallbackPost = {
   writer: '',
   title: '본문1 제목',
@@ -27,10 +27,9 @@ function QnaPostEdit() {
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tagIds, setTagIds] = useState([]); // ✅ 다중 선택용
+  const [tagIds, setTagIds] = useState([]); 
   const [tagOptions, setTagOptions] = useState(fallbackTags);
 
-  // ✅ 태그 선택/해제 토글 함수
   const toggleTag = (id) => {
     setTagIds((prev) =>
       prev.includes(id) ? prev.filter((tagId) => tagId !== id) : [...prev, id]
@@ -87,7 +86,7 @@ function QnaPostEdit() {
       await api.put(`/api/qna-post/${postId}`, {
         title: title.trim(),
         content: content.trim(),
-        tagIds: tagIds, // ✅ 여러 개 전송
+        tagIds: tagIds, 
       });
 
       toast.success('게시글이 수정되었습니다.');

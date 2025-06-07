@@ -47,7 +47,7 @@ const EditPasswordPage = () => {
       if (data.changed) {
         setSubmitError('');
         toast.success(data.message);
-        navigate('/mypage'); // ✅ 이동
+        navigate('/mypage'); 
       } else {
         setSubmitError('비밀번호가 변경되지 않았습니다.');
       }

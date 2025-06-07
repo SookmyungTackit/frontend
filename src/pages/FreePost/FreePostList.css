@@ -11,7 +11,7 @@ body {
   }
   
   .freepost-banner {
-    position: relative;  /* ✅ 자식 위치 기준 */
+    position: relative;  /*  자식 위치 기준 */
     background-color: #DBEFFF;
     text-align: center;
     padding: 20px;
@@ -48,7 +48,7 @@ body {
   }
 
   .freepost-subtext-wrapper {
-    text-align: center; /* ✅ 가운데 정렬을 위한 설정 */
+    text-align: center; /* 가운데 정렬을 위한 설정 */
     margin-bottom: 40px;  
   }  
   
@@ -83,7 +83,7 @@ body {
     cursor: pointer;
   }
   
-  /* ✅ 선택된 태그 버튼 스타일 */
+  /* 선택된 태그 버튼 스타일 */
   .tag-button.active-tag {
     background-color: #4D77FF;
     color: #fff;

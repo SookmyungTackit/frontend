@@ -87,7 +87,7 @@ function MyQnaPostList() {
       </div>
 
       <div className="freepost-container">
-        {/* ✅ 정렬 드롭다운 */}
+        {/* 정렬 드롭다운 */}
         <div className="sort-dropdown-container">
           <label htmlFor="sortOrder" className="sort-label"> </label>
           <select

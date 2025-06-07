@@ -15,7 +15,7 @@ const useFetchUserInfo = () => {
       try {
         const token = localStorage.getItem('accessToken');
 
-        // ✅ 토큰 없으면 요청 중단
+        // 토큰 없으면 요청 중단
         if (!token) {
           setError(new Error('토큰 없음'));
           setLoading(false);

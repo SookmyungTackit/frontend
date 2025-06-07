@@ -18,7 +18,7 @@ function MyTipPostList() {
     page: 0,
     content: [
       {
-        postId: 1, // ✅ 다시 postId로
+        postId: 1, 
         title: "2025/05/29",
         content: "팁 ) 목요일 날씨 모름",
         type: "Tip",
@@ -102,7 +102,7 @@ function MyTipPostList() {
         <div className="freepost-list">
           {posts.map((post) => (
             <div
-              key={post.postId} // ✅ id → postId
+              key={post.postId} // id → postId
               className="post-card"
               onClick={() => navigate(`/tip/${post.postId}`, { state: { from: 'my-posts' } })} // ✅ id → postId
             >

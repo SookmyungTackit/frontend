@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 const POSTS_PER_PAGE = 5;
 
 export default function PostManagementPage() {
-  const [activeTab, setActiveTab] = useState('Free'); // ✅ 탭 상태
+  const [activeTab, setActiveTab] = useState('Free'); 
   const [disabledPosts, setDisabledPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);

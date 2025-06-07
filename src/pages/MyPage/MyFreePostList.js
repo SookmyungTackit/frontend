@@ -105,7 +105,7 @@ function MyFreePostList() {
         <div className="freepost-list">
           {posts.map((post) => (
             <div
-              key={post.id} // ✅ 수정
+              key={post.id} 
               className="post-card"
               onClick={() => navigate(`/free/${post.id}`, { state: { from: 'my-posts' } })} // ✅ 수정
             >

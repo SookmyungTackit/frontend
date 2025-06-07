@@ -24,8 +24,8 @@
     cursor: pointer;
     padding: 8px 16px;
 
-    align-self: flex-end;   /* 🔥 오른쪽 끝으로 정렬 */
-    width: auto;            /* ✅ 내용만큼만 너비 */
+    align-self: flex-end;   
+    width: auto;            
   }
   
   
@@ -33,7 +33,7 @@
   .write-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;  /* 👉 적당한 여백으로 줄이기 */
+    gap: 12px;  
   }
   
   
@@ -92,9 +92,9 @@
 
   .write-label {
     margin: 0;
-    margin-bottom: 0px;  /* 아래 여백 줄이기 */
-    margin-top: 0;       /* 위 여백도 없애고 싶다면 */
-    font-size: 14px;     /* (선택) 글씨 크기 조절 */
-    font-weight: 500;    /* (선택) 강조 */
+    margin-bottom: 0px;  
+    margin-top: 0;      
+    font-size: 14px;     
+    font-weight: 500;  
   }
   

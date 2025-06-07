@@ -5,14 +5,14 @@ import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
 import { toast } from 'react-toastify';
 
-// ✅ 태그 Fallback
+// 태그 Fallback
 const fallbackTags = [
   { id: 1, tagName: '태그1' },
   { id: 2, tagName: '태그2' },
   { id: 3, tagName: '태그3' },
 ];
 
-// ✅ 게시글 Fallback
+// 게시글 Fallback
 const fallbackPost = {
   writer: '',
   title: '본문1 제목',

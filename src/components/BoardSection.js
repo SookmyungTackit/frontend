@@ -23,7 +23,6 @@ function BoardSection({ title, description, posts, boardPath }) {
         {Array.isArray(posts) && posts.length > 0 ? (
           posts.map((post) => (
             <li key={post.id || post.postId} className="post-item">
-              {/* ✅ Link는 li 안에서 한 번만! */}
               <Link
                 to={`/${boardPath}/${post.id || post.postId}`}
                 style={{

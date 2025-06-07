@@ -4,7 +4,7 @@ import './PostPageList.css';
 import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
 
-// ✅ fallback 더미 데이터
+// fallback 더미 데이터
 const fallbackResponse = {
   page: 0,
   content: [

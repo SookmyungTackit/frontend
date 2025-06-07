@@ -33,7 +33,7 @@ function MyQnaComments() {
   const [sortOrder, setSortOrder] = useState('desc');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const size = 5; // 고정된 페이지당 항목 수
+  const size = 5; 
 
   const fetchComments = useCallback(async () => {
     try {
@@ -59,7 +59,7 @@ function MyQnaComments() {
 
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
-    setCurrentPage(1); // 정렬 바꾸면 첫 페이지로
+    setCurrentPage(1); 
   };
 
   return (
@@ -115,7 +115,7 @@ function MyQnaComments() {
           )}
         </div>
 
-        {/* ✅ 페이징 */}
+        {/* 페이징 */}
         <div className="pagination">
           <button onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))} disabled={currentPage === 1} className="page-btn">
             &laquo;

@@ -18,7 +18,7 @@ body {
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     padding: 30px;
-    padding-bottom: 80px;  /* ❤️ 아래 버튼 겹침 방지 */
+    padding-bottom: 80px; 
     margin-bottom: 40px;
   }
   
@@ -132,7 +132,7 @@ body {
   }
   
   
-  /* 🔥 tag + 수정/삭제를 한 줄에 정렬하기 위한 flex */
+
 .qnapost-header {
     display: flex;
     justify-content: space-between;
@@ -140,7 +140,7 @@ body {
     margin-bottom: 12px;
   }
   
-  /* 수정 / 삭제 버튼 스타일 업데이트 */
+
   .qnapost-actions {
     display: flex;
     gap: 10px;
@@ -165,7 +165,7 @@ body {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    width: 80px;             /* ✅ 너비 고정 */
+    width: 80px;           
     height: 36px;  
     padding: 8px 14px;
     background-color: #4D77FF;
@@ -197,7 +197,7 @@ body {
     max-height: 200px;
     overflow-y: auto;
     resize: none;
-    font-size: 15px;           /* ✅ .detail-content 와 맞춤 */
+    font-size: 15px;          
     line-height: 1.7; 
     padding: 12px 40px 12px 12px;  /* 버튼 공간 확보 */
     border: 1px solid  #F0F2F5;
@@ -208,17 +208,17 @@ body {
     min-height: 80px;
   }
   
-  /* 버튼을 textarea 위에 겹치도록 */
+
   .button-float-layer {
     position: absolute;
     bottom: 12px;
     right: 12px;
-    pointer-events: none; /* 버튼 안 겹치게 하기 위해 부모는 클릭 비활성화 */
+    pointer-events: none; 
   }
   
   /* 실제 버튼 */
   .floating-button {
-    pointer-events: auto;  /* 버튼은 클릭 가능하게 */
+    pointer-events: auto; 
     height: 36px;
     width: 80px;
     font-size: 14px;
@@ -244,13 +244,13 @@ body {
   }
   
   .detail-meta span:not(:last-child) {
-    margin-right: 8px; /* 두 칸 정도 여백 (px 단위로 조절 가능) */
+    margin-right: 8px; 
   }
 
   .comment-action {
     font-size: 13px;
     color: #888;
-    cursor: pointer; /* ✨ 손 모양 커서로 변경 */
+    cursor: pointer; 
     margin-left: 12px;
   }
   

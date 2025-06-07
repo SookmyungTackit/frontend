@@ -11,7 +11,7 @@ function LoginPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-    // ✅ 로그아웃 함수
+    // 로그아웃 함수
     const handleLogout = useCallback(() => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
@@ -21,7 +21,7 @@ function LoginPage() {
       navigate("/login");
     }, [navigate]); 
 
-  // ✅ useEffect에서 handleLogout 사용 + 의존성 배열에 포함
+  // useEffect에서 handleLogout 사용 + 의존성 배열에 포함
   useEffect(() => {
     const tokenExpiresIn = parseInt(localStorage.getItem("accessTokenExpiresIn"));
     if (tokenExpiresIn) {
@@ -35,10 +35,10 @@ function LoginPage() {
 
       if (timeRemaining <= 0) {
         alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
-        handleLogout(); // ✅ 안전하게 호출
+        handleLogout(); // 안전하게 호출
       }
     }
-  }, [handleLogout]); // ✅ 의존성 추가로 ESLint 경고 해결
+  }, [handleLogout]); // 의존성 추가로 ESLint 경고 해결
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -57,7 +57,7 @@ function LoginPage() {
         return; // 🚫 로그인 중단
       }
     
-      // ✅ 이미 가입된 이메일은 그냥 통과시켜서 로그인 시도
+      // 이미 가입된 이메일은 그냥 통과시켜서 로그인 시도
       if (status === 409 && message === "이미 가입된 이메일입니다.") {
         // 통과 → 로그인 진행
       } else {
@@ -68,7 +68,7 @@ function LoginPage() {
     
   
     try {
-      // ✅ 로그인 요청
+      // 로그인 요청
       const response = await api.post("/auth/sign-in", { email, password });
       const {
         accessToken,
