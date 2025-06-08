@@ -88,7 +88,7 @@
       border-top: 1px solid #eee;
       padding: 20px 0;
       z-index: 999;
-      align-items: flex-start; /* 왼쪽 정렬 */
+      align-items: flex-start;
   }
 
   .mobile-menu.active {

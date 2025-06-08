@@ -32,13 +32,12 @@
     font-weight: 500;
     margin-bottom: 4px;
   
-    /* ✅ 말줄임 처리 */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   
-    display: block;       /* inline이면 text-overflow 안 먹힘 */
-    max-width: 100%;      /* 너비 기준 설정 */
+    display: block;      
+    max-width: 100%;    
   }
 
   .post-texts {
@@ -71,6 +70,6 @@
   }
   
   .post-item:hover .post-icon {
-    background-color: #cfd6e2; /* 또는 hover 배경색과 어울리는 색으로 */
+    background-color: #cfd6e2; 
     transition: background-color 0.2s ease;
   }

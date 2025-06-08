@@ -30,8 +30,7 @@ function SignupPage() {
     };
 
     try {
-      //회원가입 Api 사용
-      const response = await api.post("/auth/sign-up", formData);
+      await api.post("/auth/sign-up", formData);
       toast.success('회원가입이 완료되었습니다. 로그인해 주세요.');
       setEmail('');
       setPassword('');
@@ -46,7 +45,7 @@ function SignupPage() {
 
   const checkEmailDuplicate = async () => {
     try {
-      //탈퇴 회원 재가입을 위한 이메일 중복 확인 Api 사용
+
       const response = await api.get(`/auth/check-email-auth?email=${email}`);
 
       if (response.status === 200) {
