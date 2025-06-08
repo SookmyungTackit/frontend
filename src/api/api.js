@@ -38,8 +38,11 @@ const reissueAccessToken = async () => {
       const refreshToken = localStorage.getItem("refreshToken");
   
       if (!refreshToken || refreshToken === "null") {
+        // 리프레시 토큰 자체가 없을 때만 로그아웃
+        localStorage.clear();
         window.location.href = "/login";
       } else {
+        // 토큰은 있는데 서버 문제일 수 있음 → 알림만 표시
         alert("세션이 만료되었거나 서버에 문제가 있습니다. 다시 로그인해주세요.");
       }
     }

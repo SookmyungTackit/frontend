@@ -128,6 +128,7 @@ body {
   }
   
   
+  /* 🔥 tag + 수정/삭제를 한 줄에 정렬하기 위한 flex */
 .freepost-header {
     display: flex;
     justify-content: space-between;
@@ -159,7 +160,7 @@ body {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    width: 80px;             
+    width: 80px;             /* ✅ 너비 고정 */
     height: 36px;  
     padding: 8px 14px;
     background-color: #4D77FF;
@@ -191,7 +192,7 @@ body {
     max-height: 200px;
     overflow-y: auto;
     resize: none;
-    font-size: 15px;          
+    font-size: 15px;           /* ✅ .detail-content 와 맞춤 */
     line-height: 1.7; 
     padding: 12px 40px 12px 12px; 
     border: 1px solid  #F0F2F5;
@@ -240,7 +241,7 @@ body {
   .comment-action {
     font-size: 13px;
     color: #888;
-    cursor: pointer; 
+    cursor: pointer; /* ✨ 손 모양 커서로 변경 */
     margin-left: 12px;
   }
   .modal-overlay {

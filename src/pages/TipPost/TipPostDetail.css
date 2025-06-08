@@ -200,7 +200,7 @@ body {
     resize: none;
     font-size: 15px;          
     line-height: 1.7; 
-    padding: 12px 40px 12px 12px;  /* 버튼 공간 확보 */
+    padding: 12px 40px 12px 12px;  
     border: 1px solid  #F0F2F5;
     border-radius: 8px;
     background-color: #F0F2F5;
@@ -214,12 +214,12 @@ body {
     position: absolute;
     bottom: 12px;
     right: 12px;
-    pointer-events: none; /* 버튼 안 겹치게 하기 위해 부모는 클릭 비활성화 */
+    pointer-events: none; 
   }
   
   /* 실제 버튼 */
   .floating-button {
-    pointer-events: auto;  /* 버튼은 클릭 가능하게 */
+    pointer-events: auto;  
     height: 36px;
     width: 80px;
     font-size: 14px;

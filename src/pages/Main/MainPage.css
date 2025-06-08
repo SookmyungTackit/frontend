@@ -1,4 +1,3 @@
-/* ---------------- 전체 Layout ---------------- */
 .main-container {
   max-width: 1440px;
   margin: 0 auto;
@@ -6,17 +5,17 @@
   padding-bottom: 40px; 
 }
 
-/* ---------------- 배너 전체 영역 ---------------- */
+
 .birthday-banner {
   width: 100vw;
   position: relative;
   left: 50%;
   margin-left: -50vw;
   margin-bottom: 32px;
-  overflow: visible; /* ← 이거 추가! */
+  overflow: visible; 
 }
 
-/* ---------------- 슬라이드 하나 ---------------- */
+
 .banner-slide {
   background: #DBEFFF;
   height: 300px;
@@ -28,7 +27,7 @@
   padding-left: 30px;        
 }
 
-/* 슬라이드 제목 텍스트 */
+
 .banner-slide h2 {
   font-size: 48px;
   color: #2D4595;
@@ -61,7 +60,7 @@
   right: 10px;
 }
 
-/* 화살표 모양 스타일링 */
+
 .slick-prev:before,
 .slick-next:before {
   font-size: 30px;
@@ -69,7 +68,7 @@
   opacity: 1;
 }
 
-/* 점(dot) 색상과 위치 */
+
 .slick-dots {
   position: absolute;
   bottom: 12px;
