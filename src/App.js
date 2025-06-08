@@ -18,14 +18,13 @@ import MainPage from './pages/Main/MainPage';
 import MyPage from './pages/MyPage/MyPage';
 import EditPasswordPage from './pages/MyPage/EditPasswordPage';
 import EditNicknamePage from './pages/MyPage/EditNicknamePage';
-import UserManagementPage from './pages/MyPage/UserManagementPage';
-import PostManagementPage from './pages/MyPage/PostManagementPage';
 import MyFreePostList from './pages/MyPage/MyFreePostList';
 import MyQnaPostList from './pages/MyPage/MyQnaPostList';
 import MyTipPostList from './pages/MyPage/MyTipPostList';
 import MyFreeComments from './pages/MyPage/MyFreeComments';
 import MyQnaComments from './pages/MyPage/MyQnaComments';
 import Bookmarked from './pages/MyPage/Bookmarked'; 
+import AdminDashboardPage from './pages/AdminPage/AdminDashboardPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -57,15 +56,13 @@ function App() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/mypage/edit-password" element={<EditPasswordPage />} />
         <Route path="/mypage/edit-nickname" element={<EditNicknamePage />} />
-        <Route path="/admin/users" element={<UserManagementPage />} />
-        <Route path="/admin/report/:postType" element={<PostManagementPage />} />
         <Route path="/mypage/myfreeposts" element={<MyFreePostList />} /> 
         <Route path="/mypage/myqnaposts" element={<MyQnaPostList />} />
         <Route path="/mypage/mytipposts" element={<MyTipPostList />} />
         <Route path="/mypage/myfreecomments" element={<MyFreeComments />} />
         <Route path="/mypage/myqnacomments" element={<MyQnaComments />} />
         <Route path="/mypage/bookmarked" element={<Bookmarked />} /> 
-  
+        <Route path="/admin" element={<AdminDashboardPage />} />
 
 
         
@@ -73,7 +70,7 @@ function App() {
 
       <ToastContainer
         position="top-center"
-        autoClose={1500}  // 1.5초 뒤 자동으로 닫힘
+        autoClose={1500} 
         hideProgressBar
         closeOnClick
         pauseOnHover={false}

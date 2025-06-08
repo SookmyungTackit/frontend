@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
 import HomeBar from '../../components/HomeBar';
 import './MyPage.css';
 import { useNavigate } from 'react-router-dom';
-import api from '../../api/api'; // axios 인스턴스 (baseURL 설정됨)
+import api from '../../api/api'; 
 import useFetchUserInfo from '../../hooks/useFetchUserInfo';
 import { toast } from 'react-toastify'; 
 
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const { userInfo, loading, error } = useFetchUserInfo();
+  const { userInfo, loading } = useFetchUserInfo();
   const role = localStorage.getItem('role');
 
   const handleWithdraw = async () => {
@@ -45,7 +44,7 @@ const MyPage = () => {
       localStorage.removeItem('grantType');
       localStorage.removeItem('role');
   
-      navigate('/login'); // ✅ 로그인 페이지로 이동
+      navigate('/login'); 
     } catch (err) {
       toast.error('탈퇴 처리 중 오류가 발생했습니다.');
     }
@@ -60,7 +59,6 @@ const MyPage = () => {
       <div className="mypage-container">
         <h2>마이페이지</h2>
 
-        {/* 내 정보 */}
         <section className="mypage-section" aria-labelledby="info-title">
           <h3 id="info-title">내 정보</h3>
 
@@ -80,7 +78,6 @@ const MyPage = () => {
           </div>
         </section>
 
-        {/* 정보 수정 */}
         <section className="mypage-section" aria-labelledby="edit-title">
           <h3 id="edit-title">정보 수정</h3>
           <div className="btn-row">
@@ -95,7 +92,6 @@ const MyPage = () => {
           </div>
         </section>
 
-        {/* 글보기 */}
         {role !== 'ADMIN' && (
           <>
             {userInfo.yearsOfService >= 2 ? (
@@ -157,25 +153,6 @@ const MyPage = () => {
             )}
           </>
         )}
-
-
-        {/* 관리자 기능 - role이 'admin'일 때만 보임 */}
-        {role === 'ADMIN' && (
-          <section className="mypage-section" aria-labelledby="admin-title">
-            <h3 id="admin-title">관리자</h3>
-            <div className="btn-row">
-              <button className="mypage-btn" onClick={() => navigate('/admin/users')}>
-                회원 관리
-              </button>
-            </div>
-            <div className="btn-row">
-              <button className="mypage-btn" onClick={() => navigate('/admin/report/:postType')}>
-                게시글 관리
-              </button>
-            </div>
-          </section>
-        )}
-
           <button className="withdraw-btn" onClick={handleWithdraw}>
             탈퇴하기
           </button>

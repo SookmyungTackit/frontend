@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './PostPageList.css';
 import HomeBar from '../../components/HomeBar';
@@ -9,29 +9,29 @@ function MyFreePostList() {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [sortOrder, setSortOrder] = useState('desc'); // 기본 정렬: 최신순
+  const [sortOrder, setSortOrder] = useState('desc'); 
 
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  const fallbackResponse = {
-    page: 0,
-    content: [
-      {
-        id: 1,
-        title: "자유게시글1 제목",
-        content: '안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.',
-        createdAt: "2025-05-26T01:31:23.129942",
-        tags: ["자유태그3"],
-        type: "Free",
-      },
-    ],
-    size: 5,
-    totalElements: 1,
-    totalPages: 1,
-  };
+  const fetchPosts = useCallback(async () => {
+    const fallbackResponse = {
+      page: 0,
+      content: [
+        {
+          id: 1,
+          title: "자유게시글1 제목",
+          content: '안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.',
+          createdAt: "2025-05-26T01:31:23.129942",
+          tags: ["자유태그3"],
+          type: "Free",
+        },
+      ],
+      size: 5,
+      totalElements: 1,
+      totalPages: 1,
+    };
 
-  const fetchPosts = async () => {
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) throw new Error('No token found');
@@ -53,12 +53,11 @@ function MyFreePostList() {
       setPosts(content);
       setTotalPages(totalPages);
     }
-  };
+  }, [currentPage, sortOrder]);
   
-
   useEffect(() => {
     fetchPosts();
-  }, [currentPage, sortOrder]);
+  }, [fetchPosts]);
 
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
@@ -105,7 +104,7 @@ function MyFreePostList() {
         <div className="freepost-list">
           {posts.map((post) => (
             <div
-              key={post.id} // ✅ 수정
+              key={post.id} 
               className="post-card"
               onClick={() => navigate(`/free/${post.id}`, { state: { from: 'my-posts' } })} // ✅ 수정
             >
