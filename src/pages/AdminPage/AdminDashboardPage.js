@@ -5,7 +5,6 @@ import usersFromApi from '../../data/users';
 import { toast } from 'react-toastify';
 import AdminHeader from './AdminHeader';
 
-
 const USERS_PER_PAGE = 5;
 const PAGE_GROUP_SIZE = 5;
 const POSTS_PER_PAGE = 5;
@@ -115,10 +114,6 @@ export default function AdminDashboardPage() {
     if (!window.confirm('정말 이 게시글을 삭제하시겠습니까?')) return;
     try {
       const token = localStorage.getItem('accessToken');
-      console.log("🧪 삭제 요청 시 activeTab:", activeTab);
-      console.log("🧪 삭제 요청 시 postId:", postId);
-      console.log("🧪 요청 URL:", `/api/admin/report/${activeTab}/posts/${postId}`);
-      console.log("🧪 Authorization 헤더:", `Bearer ${token}`);
       
       await api.delete(`/api/admin/report/${activeTab}/posts/${postId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -126,7 +121,6 @@ export default function AdminDashboardPage() {
       toast.success('게시글이 삭제되었습니다.');
       fetchDisabledPosts();
     } catch (error) {
-        console.error('❌ 삭제 요청 에러:', error.response?.status, error.response?.data);
         toast.error('게시글 삭제에 실패했습니다. 다시 시도해 주세요.');
       }
   };

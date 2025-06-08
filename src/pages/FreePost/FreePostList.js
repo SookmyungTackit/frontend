@@ -5,7 +5,6 @@ import HomeBar from '../../components/HomeBar';
 import api from '../../api/api';
 import { toast } from 'react-toastify';
 
-// fallback 데이터
 const fallbackResponse = {
   page: 0,
   content: [

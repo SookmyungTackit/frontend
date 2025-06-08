@@ -10,7 +10,7 @@ h2 {
   margin-bottom: 30px;
 }
 
-/* 섹션 박스 */
+
 .mypage-section {
   background-color: white;
   padding: 20px;
@@ -19,7 +19,7 @@ h2 {
   border: 1px solid #D1DBE8;
 }
 
-/* 섹션 제목 */
+
 .mypage-section h3 {
   margin-bottom: 15px;
   font-size: 17px;
@@ -27,7 +27,7 @@ h2 {
   color: #222;
 }
 
-/* 라벨 텍스트 (닉네임, 입사년도 등) */
+
 .mypage-section label {
   font-size: 15px;
   font-weight: 500;
@@ -36,14 +36,13 @@ h2 {
   display: block;
 }
 
-/* 내 정보 내부 들여쓰기 */
+
 .mypage-section .info-row {
   padding-left: 16px;  
   padding-right: 16px;
 }
 
 
-/* 정보 박스 (입력된 값처럼 보여주는 칸) */
 .info-box {
   background-color: #F0F2F5;
   border: 1px solid #F0F2F5;
@@ -54,7 +53,6 @@ h2 {
   color: #333;
 }
 
-/* 일반 버튼 (정보 수정, 글보기 등) */
 .mypage-btn {
   display: block;
   width: 100%;

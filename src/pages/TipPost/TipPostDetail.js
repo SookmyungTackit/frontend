@@ -69,7 +69,7 @@ function TipPostDetail() {
       } else if (message === '이미 신고한 게시글입니다.') {
         toast.info('이미 신고한 게시글입니다.');
       } else {
-        toast.info(message); // 예상치 못한 메시지 대응
+        toast.info(message); 
       }
     } catch (err) {
       console.error('게시글 신고 실패:', err);

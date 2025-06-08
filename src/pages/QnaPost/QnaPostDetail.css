@@ -18,7 +18,7 @@ body {
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     padding: 30px;
-    padding-bottom: 80px;  
+    padding-bottom: 80px; 
     margin-bottom: 40px;
   }
   
@@ -132,7 +132,6 @@ body {
   }
   
   
-  /* 🔥 tag + 수정/삭제를 한 줄에 정렬하기 위한 flex */
 .qnapost-header {
     display: flex;
     justify-content: space-between;
@@ -140,7 +139,6 @@ body {
     margin-bottom: 12px;
   }
   
-  /* 수정 / 삭제 버튼 스타일 업데이트 */
   .qnapost-actions {
     display: flex;
     gap: 10px;
@@ -165,7 +163,7 @@ body {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    width: 80px;             /* ✅ 너비 고정 */
+    width: 80px;            
     height: 36px;  
     padding: 8px 14px;
     background-color: #4D77FF;
@@ -196,7 +194,7 @@ body {
     max-height: 200px;
     overflow-y: auto;
     resize: none;
-    font-size: 15px;           /* ✅ .detail-content 와 맞춤 */
+    font-size: 15px;         
     line-height: 1.7; 
     padding: 12px 40px 12px 12px;  
     border: 1px solid  #F0F2F5;
@@ -207,7 +205,6 @@ body {
     min-height: 80px;
   }
   
-  /* 버튼을 textarea 위에 겹치도록 */
   .button-float-layer {
     position: absolute;
     bottom: 12px;
@@ -216,7 +213,7 @@ body {
   }
   
   .floating-button {
-    pointer-events: auto;  /* 버튼은 클릭 가능하게 */
+    pointer-events: auto;  
     height: 36px;
     width: 80px;
     font-size: 14px;
