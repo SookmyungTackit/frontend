@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Bookmarked.css';
 import HomeBar from '../../components/HomeBar';
@@ -11,11 +11,12 @@ function Bookmarked() {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  
+
 
   const pageGroupSize = 5;
 
-  // fallback 더미 데이터 정의
-  const fallbackData = {
+  const fallbackData = useMemo(() => ({
     tip: {
       content: [
         {
@@ -57,7 +58,7 @@ function Bookmarked() {
       ],
       totalPages: 1,
     },
-  };
+  }), []);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -81,7 +82,8 @@ function Bookmarked() {
     };
 
     fetchPosts();
-  }, [activeTab, currentPage]);
+  }, [activeTab, currentPage, fallbackData]);
+
 
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
@@ -148,7 +150,7 @@ function Bookmarked() {
         </div>
         <div className="freepost-list">
           {posts.map((post) => {
-            const { id, type, path } = getBoardInfo(post);
+            const { id, type, path, writer } = getBoardInfo(post);
 
             return (
               <div
@@ -158,7 +160,7 @@ function Bookmarked() {
               >
                 <div className="post-meta">
                   <span className="board-type">{type}</span>
-                  <span className="writer"> {getBoardInfo(post).writer}</span>
+                  <span className="writer">{writer || '(알 수 없음)'}</span>
                   <span className="date"> {new Date(post.createdAt).toLocaleString('ko-KR')}</span>
                   {post.tags && (
                     <span className="tags">
@@ -177,7 +179,7 @@ function Bookmarked() {
                           <br />
                         </React.Fragment>
                       ))
-                    : post.contentPreview // content가 없으면 preview 대체
+                    : post.contentPreview 
                   }
                   {post.content && post.content.length >= 100 && '...'}
                 </div>

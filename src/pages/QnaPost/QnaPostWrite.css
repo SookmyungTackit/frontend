@@ -33,7 +33,7 @@
   .write-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;  
+    gap: 12px; 
   }
   
   
@@ -92,9 +92,9 @@
 
   .write-label {
     margin: 0;
-    margin-bottom: 0px;  
+    margin-bottom: 0px; 
     margin-top: 0;      
-    font-size: 14px;     
-    font-weight: 500;  
+    font-size: 14px;    
+    font-weight: 500;   
   }
   

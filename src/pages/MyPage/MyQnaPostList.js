@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './PostPageList.css';
 import HomeBar from '../../components/HomeBar';
@@ -9,29 +9,29 @@ function MyQnaPostList() {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [sortOrder, setSortOrder] = useState('desc'); // 기본 정렬: 최신순
+  const [sortOrder, setSortOrder] = useState('desc'); 
 
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  const fallbackResponse = {
-    page: 0,
-    content: [
-      {
-        postId: 1,
-        title: "본문1 33제목",
-        content: '안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.',
-        createdAt: "2025-05-26T01:31:23.129942",
-        tags: ["태그3"],
-        type: "QnA",
-      },
-    ],
-    size: 5,
-    totalElements: 1,
-    totalPages: 1,
-  };
+  const fetchPosts = useCallback(async () => {
+    const fallbackResponse = {
+      page: 0,
+      content: [
+        {
+          postId: 1,
+          title: "본문1 33제목",
+          content: '안녕하세요.\n오늘은 날씨가 정말 좋네요!\n\n내일은 비가 온다고 합니다.',
+          createdAt: "2025-05-26T01:31:23.129942",
+          tags: ["태그3"],
+          type: "QnA",
+        },
+      ],
+      size: 5,
+      totalElements: 1,
+      totalPages: 1,
+    };
 
-  const fetchPosts = async () => {
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) throw new Error('No token found');
@@ -52,11 +52,11 @@ function MyQnaPostList() {
       setPosts(content);
       setTotalPages(totalPages);
     }
-  };
+  }, [currentPage, sortOrder]);
 
   useEffect(() => {
-    fetchPosts();
-  }, [currentPage, sortOrder]); // 정렬 변경 시 다시 불러오기
+  fetchPosts();
+}, [fetchPosts]);
 
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
@@ -74,7 +74,7 @@ function MyQnaPostList() {
 
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
-    setCurrentPage(1); // 정렬 변경 시 첫 페이지로
+    setCurrentPage(1); 
   };
 
   return (
@@ -87,7 +87,6 @@ function MyQnaPostList() {
       </div>
 
       <div className="freepost-container">
-        {/* 정렬 드롭다운 */}
         <div className="sort-dropdown-container">
           <label htmlFor="sortOrder" className="sort-label"> </label>
           <select
@@ -132,7 +131,6 @@ function MyQnaPostList() {
           ))}
         </div>
 
-        {/* 페이지네이션 */}
         <div className="pagination">
           <button onClick={goToPrevGroup} disabled={startPage === 1} className="page-btn">
             &laquo;

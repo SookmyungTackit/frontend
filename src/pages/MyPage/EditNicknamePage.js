@@ -11,7 +11,6 @@ const EditNicknamePage = () => {
   const [checkMessage, setCheckMessage] = useState('');
   const navigate = useNavigate();
 
-  // 닉네임이 바뀔 때마다 자동으로 중복 확인
   useEffect(() => {
     const checkNickname = async () => {
       if (!nickname.trim()) {
@@ -21,17 +20,15 @@ const EditNicknamePage = () => {
       }
 
       try {
-        const response = await api.get(`/auth/check-nickname?nickname=${nickname}`);
-        // 서버가 200 OK 응답 시 → 사용 가능한 닉네임
+        await api.get(`/auth/check-nickname?nickname=${nickname}`);
         setIsAvailable(true);
         setCheckMessage('사용 가능한 닉네임입니다.');
       } catch (err) {
-        // 서버가 409 Conflict 응답 시 → 중복된 닉네임
+        
         if (err.response?.status === 409) {
           setIsAvailable(false);
           setCheckMessage('이미 사용 중인 닉네임입니다.');
         } else {
-          // 예기치 못한 오류
           setIsAvailable(false);
           setCheckMessage('중복 확인 중 오류가 발생했습니다.');
           console.error(err);
@@ -39,14 +36,15 @@ const EditNicknamePage = () => {
       }
     };
 
+  
     const delayCheck = setTimeout(() => {
       checkNickname();
     }, 300);
 
+
     return () => clearTimeout(delayCheck);
   }, [nickname]);
 
-  // 닉네임 변경 PATCH 요청
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -61,22 +59,20 @@ const EditNicknamePage = () => {
     }
 
     try {
-      // accessToken 가져오기 (인증 필요)
       const accessToken = localStorage.getItem('accessToken');
 
-      // 닉네임 변경 PATCH 요청
-      const response = await api.patch(
+      await api.patch(
         '/api/members/nickname',       
         { nickname },               
         {
           headers: {
             Authorization: `Bearer ${accessToken}`, 
-            'Content-Type': 'application/json',    
+            'Content-Type': 'application/json',     
           },
         }
       );
 
-      // 성공 시 변경 완료 메시지 출력
+
       toast.success('닉네임이 변경되었습니다.');
       navigate('/mypage'); 
     } catch (err) {
@@ -101,12 +97,10 @@ const EditNicknamePage = () => {
             className="edit-input"
           />
 
-          {/* 중복 확인 결과 메시지 출력 */}
           <div className={`nickname-message ${isAvailable === false ? 'error' : 'success'}`}>
             {checkMessage}
           </div>
 
-          {/* 중복 확인 결과가 true일 때만 버튼 활성화 */}
           <button
             type="submit"
             className="edit-submit-btn"

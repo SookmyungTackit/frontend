@@ -7,11 +7,11 @@ body {
   .freepost-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 20px 40px; /* 위쪽 padding 제거 */
+    padding: 0 20px 40px; 
   }
   
   .freepost-banner {
-    position: relative;  /* 자식 위치 기준 */
+    position: relative;  
     background-color: #DBEFFF;
     text-align: center;
     padding: 70px 20px 70px;
@@ -31,13 +31,13 @@ body {
   }
   
   .freepost-subtext-wrapper {
-    text-align: center; /* 가운데 정렬을 위한 설정 */
+    text-align: center;
     margin-bottom: 40px;  
   }  
   
   .freepost-subtext {
     background-color: #f1f6fb;
-    padding: 12px 24px;           /* 좌우에 여유 공간 추가 */
+    padding: 12px 24px;          
     border-radius: 8px;
     font-size: 14px;
     margin: 16px auto 0;
@@ -64,7 +64,6 @@ body {
     cursor: pointer;
   }
   
-  /* 선택된 태그 버튼 스타일 */
   .tag-button.active-tag {
     background-color: #4D77FF;
     color: #fff;

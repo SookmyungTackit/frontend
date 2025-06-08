@@ -19,7 +19,7 @@ function TipPostWrite() {
     }
 
     try {
-      const res = await api.post('/api/tip-posts', {
+      await api.post('/api/tip-posts', {
         title,
         content,
       });

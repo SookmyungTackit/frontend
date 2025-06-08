@@ -115,7 +115,6 @@ function MyQnaComments() {
           )}
         </div>
 
-        {/* 페이징 */}
         <div className="pagination">
           <button onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))} disabled={currentPage === 1} className="page-btn">
             &laquo;

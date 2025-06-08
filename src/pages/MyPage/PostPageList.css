@@ -37,7 +37,7 @@ body {
   
   .freepost-subtext {
     background-color: #f1f6fb;
-    padding: 12px 24px;           
+    padding: 12px 24px;         
     border-radius: 8px;
     font-size: 14px;
     margin: 16px auto 0;
@@ -64,7 +64,6 @@ body {
     cursor: pointer;
   }
   
-  /* 선택된 태그 버튼 스타일 */
   .tag-button.active-tag {
     background-color: #4D77FF;
     color: #fff;

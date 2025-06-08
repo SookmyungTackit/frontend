@@ -42,7 +42,7 @@ function FreePostWrite() {
     }
 
     try {
-      const res = await api.post('/api/free-posts', {
+      await api.post('/api/free-posts', {
         title,
         content,
         tagIds: selectedTagIds,

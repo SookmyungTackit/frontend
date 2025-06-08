@@ -1,10 +1,12 @@
 import axios from "axios";
 
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 // axios 인스턴스 생성
 const api = axios.create({
-  baseURL: "http://54.180.118.228:8080",
+  baseURL: BASE_URL,
   headers: {
-    'ngrok-skip-browser-warning': 'any-value', 
+    'ngrok-skip-browser-warning': 'any-value',
   },
 });
 
@@ -13,9 +15,8 @@ const api = axios.create({
 const reissueAccessToken = async () => {
   try {
     const refreshToken = localStorage.getItem("refreshToken");
-
     const response = await axios.post(
-      'http://54.180.118.228:8080/auth/reissue',
+      `${BASE_URL}/auth/reissue`,
       null,
       {
         headers: {
@@ -23,7 +24,6 @@ const reissueAccessToken = async () => {
         }
       }
     );
-
     const { accessToken, refreshToken: newRefreshToken } = response.data;
 
     localStorage.setItem("accessToken", accessToken);
@@ -90,7 +90,6 @@ api.interceptors.response.use(
 
       if (newAccessToken) {
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        // 새 토큰을 인스턴스에 반영
         api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       }

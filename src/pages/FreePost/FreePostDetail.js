@@ -19,7 +19,8 @@ function FreePostDetail() {
   const [comment, setComment] = useState('');
   const [editCommentId, setEditCommentId] = useState(null);
   const [isScrapped, setIsScrapped] = useState(false);
-
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState('');
   const { userInfo } = useFetchUserInfo();
 
   useEffect(() => {
@@ -28,7 +29,7 @@ function FreePostDetail() {
       navigate('/free');
       return;
     }
-
+  
     const fetchPost = async () => {
       try {
         const res = await api.get(`/api/free-posts/${id}`);
@@ -37,9 +38,10 @@ function FreePostDetail() {
         toast.error('게시글을 불러오는 데 실패했습니다.');
       }
     };
-
+  
     fetchPost();
-  }, [id]);
+  }, [id, navigate]); 
+
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -56,6 +58,7 @@ function FreePostDetail() {
     fetchComments();
   }, [id]);
 
+  // 댓글 삭제
   const handleDeleteComment = async (commentId) => {
     try {
       await api.delete(`/api/free-comments/${commentId}`);
@@ -75,10 +78,9 @@ function FreePostDetail() {
       toast.success('댓글을 신고하였습니다.');
     } catch (err) {
       console.error('댓글 신고 실패:', err);
-      toast.error('댓글 신고에 실패했습니다.');
+      toast.error('이미 삭제된 댓글입니다.');
     }
   };
-  
 
   const handleEditComment = (comment) => {
     setComment(comment.content);
@@ -109,7 +111,6 @@ function FreePostDetail() {
       setEditCommentId(null);
       if (textareaRef.current) textareaRef.current.style.height = 'auto';
     } catch (err) {
-      console.error('댓글 등록/수정 실패:', err);
       toast.error('댓글 처리에 실패했습니다.');
     }
   };
@@ -127,23 +128,32 @@ function FreePostDetail() {
         navigate('/free');
       }
     } catch (err) {
-      console.error('게시글 삭제 실패:', err);
       toast.error('게시글 삭제에 실패했습니다.');
     }
   };
 
   const handleReportPost = async () => {
-    const confirmed = window.confirm('정말 신고하시겠습니까?');
-    if (!confirmed) return;
-  
-    try {
-      await api.post(`/api/free-posts/${id}/report`);
-      toast.success('게시글을 신고하였습니다.');
-    } catch (err) {
-      console.error('게시글 신고 실패:', err);
-      toast.error('게시글 신고에 실패했습니다.');
+    if (!reportReason) {
+      alert('신고 사유를 선택해주세요.');
+      return;
     }
-  };  
+    try {
+      const res = await api.post(`/api/free-posts/${id}/report`);
+      const message = res.data;
+
+      if (message === '게시글을 신고하였습니다.') {
+        toast.success('게시글이 신고되었습니다.');
+        setShowReportModal(false);
+        setReportReason('');
+      } else if (message === '이미 신고한 게시글입니다.') {
+        toast.info('이미 신고한 게시글입니다.');
+      } else {
+        toast.info(message); // 예상치 못한 메시지 대응
+      }
+    } catch (err) {
+      toast.error('신고 처리에 실패했습니다.');
+    }
+  };
 
   const handleScrapToggle = async () => {
     try {
@@ -190,15 +200,20 @@ function FreePostDetail() {
                     <button onClick={handleDeletePost}>삭제하기</button>
                   </>
                 ) : userInfo && (
-                  <button onClick={handleReportPost}>신고하기</button>
+                  <button onClick={() => setShowReportModal(true)}>신고하기</button>
                 )}
               </div>
 
               <h1 className="detail-title">{post.title}</h1>
 
               <div className="detail-meta">
-                <span>{post.writer}</span>
+              <span className="nickname">{post.writer}</span>
                 <span>{new Date(post.createdAt).toLocaleString('ko-KR')}</span>
+                <span className="tags">
+                  {Array.isArray(post.tags)
+                    ? post.tags.map((tag, i) => `#${tag}`).join(' ')
+                    : ''}
+                </span>
               </div>
               <div className="detail-content">
                 {post.content.split('\n').map((line, i) => (
@@ -258,6 +273,31 @@ function FreePostDetail() {
           </div>
         </div>
       </div>
+
+      {showReportModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>신고 사유를 선택해주세요</h3>
+            <select
+              value={reportReason}
+              onChange={(e) => setReportReason(e.target.value)}
+            >
+              <option value="">신고 사유를 선택해주세요.</option>
+              <option value="광고/홍보">광고 및 홍보성 게시물</option>
+              <option value="도배/중복">중복 또는 도배성 게시물</option>
+              <option value="허위정보">허위 정보 또는 사실 왜곡</option>
+              <option value="게시판 부적절">게시판 주제와 관련 없는 내용</option>
+              <option value="기타">기타</option>
+            </select>
+
+            <div className="modal-buttons">
+              <button onClick={handleReportPost}>확인</button>
+              <button onClick={() => setShowReportModal(false)}>취소</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </>
   );
 }

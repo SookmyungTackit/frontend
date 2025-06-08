@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import './BoardSection.css';
 
 const formatTags = (tags) => {
-  if (!Array.isArray(tags)) return tags || '-';
-  if (tags.length > 3) {
-    return `${tags.slice(0, 3).join(', ')} +${tags.length - 3}`;
+  if (!Array.isArray(tags) || tags.length === 0 || !tags[0]) return '';
+  if (tags.length > 1) {
+    return `#${tags[0]} +${tags.length - 1}`;
   }
-  return tags.join(', ');
+  return `#${tags[0]}`;
 };
 
 function BoardSection({ title, description, posts, boardPath }) {
@@ -40,10 +40,6 @@ function BoardSection({ title, description, posts, boardPath }) {
                 </div>
 
                 <div className="post-right post-meta">
-                  <span className="post-writer">
-                    <img src="/nickname.svg" alt="writer" className="post-icon" />
-                    {post.writer}
-                  </span>
 
                   <span className="post-date">
                     <img src="/date.svg" alt="date" className="post-icon" />

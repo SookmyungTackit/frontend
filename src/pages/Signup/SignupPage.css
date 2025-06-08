@@ -78,13 +78,13 @@
     padding: 10px;
     box-sizing: border-box;
     font-size: 14px;
-    background-color: #F0F2F5; 
+    background-color: #F0F2F5;  
     color: #3D4D5C;
 
-    border: 1px solid #F0F2F5;      
+    border: 1px solid #F0F2F5;       
     border-radius: 8px;
-    box-shadow: none;             
-    outline: none;               
+    box-shadow: none;           
+    outline: none;                
     appearance: none;             
     -webkit-appearance: none;  
   }
@@ -97,8 +97,8 @@
     background-color: #F0F2F5; 
     color: #3D4D5C;
   
-    border: 1px solid #F0F2F5;
-    border-radius: 8px;      
+    border: 1px solid #F0F2F5; 
+    border-radius: 8px;       
     box-shadow: none;
     outline: none;
     
@@ -114,10 +114,9 @@
   
   
   .form-group input::placeholder {
-    color: #3D4D5C;  
+    color: #3D4D5C; 
   }
   
-  /* 제출하기 버튼 스타일 */
   .signup-submit {
     width: 100%;
     padding: 12px 0;

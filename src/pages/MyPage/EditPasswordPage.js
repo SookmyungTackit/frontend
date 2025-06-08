@@ -52,7 +52,7 @@ const EditPasswordPage = () => {
         setSubmitError('비밀번호가 변경되지 않았습니다.');
       }
     } catch (err) {
-      setSubmitError('비밀번호 변경에 실패했습니다.');
+      setSubmitError('현재 비밀번호와 일치하지 않습니다.');
       console.error(err);
     }
   };

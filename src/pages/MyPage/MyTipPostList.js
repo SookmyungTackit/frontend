@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './PostPageList.css';
 import HomeBar from '../../components/HomeBar';
@@ -14,23 +14,23 @@ function MyTipPostList() {
   const postsPerPage = 5;
   const pageGroupSize = 5;
 
-  const fallbackResponse = {
-    page: 0,
-    content: [
-      {
-        postId: 1, 
-        title: "2025/05/29",
-        content: "팁 ) 목요일 날씨 모름",
-        type: "Tip",
-        createdAt: "2025-05-29T00:06:18.536322"
-      }
-    ],
-    size: 5,
-    totalElements: 1,
-    totalPages: 1
-  };
+  const fetchPosts = useCallback(async () => {
+    const fallbackResponse = {
+      page: 0,
+      content: [
+        {
+          postId: 1, 
+          title: "2025/05/29",
+          content: "팁 ) 목요일 날씨 모름",
+          type: "Tip",
+          createdAt: "2025-05-29T00:06:18.536322"
+        }
+      ],
+      size: 5,
+      totalElements: 1,
+      totalPages: 1
+    };
 
-  const fetchPosts = async () => {
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) throw new Error('No token found');
@@ -51,11 +51,11 @@ function MyTipPostList() {
       setPosts(content);
       setTotalPages(totalPages);
     }
-  };
+  }, [currentPage, sortOrder]);
 
   useEffect(() => {
     fetchPosts();
-  }, [currentPage, sortOrder]);
+  }, [fetchPosts]);
 
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
@@ -102,7 +102,7 @@ function MyTipPostList() {
         <div className="freepost-list">
           {posts.map((post) => (
             <div
-              key={post.postId} // id → postId
+              key={post.postId} 
               className="post-card"
               onClick={() => navigate(`/tip/${post.postId}`, { state: { from: 'my-posts' } })} // ✅ id → postId
             >
