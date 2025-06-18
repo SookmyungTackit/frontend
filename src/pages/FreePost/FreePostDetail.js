@@ -89,31 +89,41 @@ function FreePostDetail() {
   };
 
   const handleCommentSubmit = async () => {
-    if (!comment.trim()) {
+    const trimmed = comment.trim();
+
+    if (!trimmed) {
       alert('댓글을 입력해주세요.');
       return;
     }
-
+  
+    if (trimmed.length > 251) {
+      alert('댓글은 최대 250자까지 작성할 수 있어요.');
+      return;
+    }
+  
     try {
       if (editCommentId) {
-        const res = await api.patch(`/api/free-comments/${editCommentId}`, { content: comment.trim() });
+        const res = await api.patch(`/api/free-comments/${editCommentId}`, { content: trimmed });
         setComments(prev => prev.map(c => (c.id === editCommentId ? res.data : c)));
         toast.success('댓글이 수정되었습니다.');
       } else {
         const res = await api.post('/api/free-comments', {
           freePostId: postIdNumber,
-          content: comment.trim(),
+          content: trimmed,
         });
         setComments(prev => [res.data, ...prev]);
         toast.success('댓글이 등록되었습니다.');
       }
+  
       setComment('');
       setEditCommentId(null);
       if (textareaRef.current) textareaRef.current.style.height = 'auto';
+  
     } catch (err) {
       toast.error('댓글 처리에 실패했습니다.');
     }
   };
+  
 
   const handleDeletePost = async () => {
     const confirmed = window.confirm('이 글을 삭제하시겠습니까?');
@@ -123,7 +133,7 @@ function FreePostDetail() {
       await api.delete(`/api/free-posts/${id}`);
       toast.success('게시글이 삭제되었습니다.');
       if (from === 'my-posts') {
-        navigate('/mypage/mypostpage');
+        navigate('/free');
       } else {
         navigate('/free');
       }

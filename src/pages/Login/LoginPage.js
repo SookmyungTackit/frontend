@@ -112,7 +112,7 @@ function LoginPage() {
 
         <form className="login-form" onSubmit={handleLogin}>
           {/* 이메일(ID) 입력 */}
-          <label htmlFor="username" className="label english-text">ID</label>
+          <label htmlFor="username" className="label english-text">Email</label>
           <input
             type="text"
             id="username"
