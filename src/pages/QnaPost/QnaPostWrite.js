@@ -36,11 +36,17 @@ function QnaPostWrite() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     if (!title.trim() || !content.trim()) {
       toast.warn('제목과 내용을 모두 입력해주세요.');
       return;
     }
-
+  
+    if (title.trim().length > 250 || content.trim().length > 250) {
+      toast.warn('제목과 내용은 최대 250자까지 작성할 수 있어요.');
+      return;
+    }
+  
     try {
       const res = await api.post('/api/qna-post/create', {
         title,
@@ -52,7 +58,7 @@ function QnaPostWrite() {
     } catch (err) {
       toast.error('글 작성에 실패했습니다.');
     }
-  };
+  };  
 
   return (
     <>
@@ -70,6 +76,7 @@ function QnaPostWrite() {
             placeholder="글 제목은 내용을 대표할 수 있도록 간결하게 작성해 주세요."
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            maxLength={250}
           />
 
           <div className="tag-buttons">
@@ -91,6 +98,7 @@ function QnaPostWrite() {
             placeholder="궁금한 내용을 작성해주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            maxLength={250}
           />
         </form>
       </div>

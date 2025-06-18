@@ -88,25 +88,34 @@ function QnaPostDetail() {
   };
 
   const handleCommentSubmit = async () => {
-    if (!comment.trim()) {
+    const trimmed = comment.trim();
+  
+    if (!trimmed) {
       alert('댓글을 입력해주세요.');
       return;
     }
-
+  
+    if (trimmed.length > 251) {
+      alert('댓글은 최대 250자까지 작성할 수 있어요.');
+      return;
+    }
+  
     try {
       if (editCommentId) {
-        const res = await api.patch(`/api/qna-comment/${editCommentId}`, { content: comment.trim() });
+        const res = await api.patch(`/api/qna-comment/${editCommentId}`, { content: trimmed });
         setComments(prev => prev.map(c => (c.id === editCommentId ? res.data : c)));
       } else {
         const res = await api.post('/api/qna-comment/create', {
           qnaPostId: postIdNumber,
-          content: comment.trim(),
+          content: trimmed,
         });
         setComments(prev => [res.data, ...prev]);
       }
+  
       setComment('');
       setEditCommentId(null);
       if (textareaRef.current) textareaRef.current.style.height = 'auto';
+  
     } catch (err) {
       toast.error('댓글 처리에 실패했습니다.');
     }
@@ -120,7 +129,7 @@ function QnaPostDetail() {
       await api.delete(`/api/qna-post/${postId}`);
       toast.success('게시글이 삭제되었습니다.');
       if (from === 'my-posts') {
-        navigate('/mypage/mypostpage');
+        navigate('/qna');
       } else {
         navigate('/qna');
       }

@@ -44,7 +44,7 @@ function TipPostDetail() {
       await api.delete(`/api/tip-posts/${id}`);
       toast.success('게시글이 삭제되었습니다.');
       if (from === 'my-posts') {
-        navigate('/mypage/mypostpage');
+        navigate('/tip');
       } else {
         navigate('/tip');
       }

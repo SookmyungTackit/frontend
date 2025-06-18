@@ -108,7 +108,6 @@ function MyQnaComments() {
                       <br />
                     </React.Fragment>
                   ))}
-                   {comment.content.length >= 100 && '...'}
                 </div>
               </div>
             ))

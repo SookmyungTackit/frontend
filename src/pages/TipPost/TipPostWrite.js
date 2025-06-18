@@ -13,15 +13,24 @@ function TipPostWrite() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim() || !content.trim()) {
+  
+    const trimmedTitle = title.trim();
+    const trimmedContent = content.trim();
+  
+    if (!trimmedTitle || !trimmedContent) {
       toast.warn('제목과 내용을 모두 입력해주세요.');
       return;
     }
-
+  
+    if (trimmedTitle.length > 250 || trimmedContent.length > 250) {
+      toast.warn('제목과 내용은 최대 250자까지 작성할 수 있어요.');
+      return;
+    }
+  
     try {
       await api.post('/api/tip-posts', {
-        title,
-        content,
+        title: trimmedTitle,
+        content: trimmedContent,
       });
       toast.success('글이 작성되었습니다!');
       navigate('/tip'); 
@@ -29,6 +38,7 @@ function TipPostWrite() {
       toast.error('글 작성에 실패했습니다.');
     }
   };
+  
 
   return (
     <>
@@ -47,6 +57,7 @@ function TipPostWrite() {
             placeholder="글 제목은 내용을 대표할 수 있도록 간결하게 작성해 주세요."
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            maxLength={250}
           />
 
           <p className="write-label">내용</p>
@@ -55,6 +66,7 @@ function TipPostWrite() {
             placeholder="신입사원에게 도움이 될 회사 생활 팁이나 조언을 작성해 주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            maxLength={250}
           />
         </form>
       </div>
