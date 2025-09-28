@@ -300,7 +300,7 @@ function SignupPage() {
                 variant="primary"
                 size="m"
                 className="w-full mt-4"
-                disabled={!isFormValid} // 값 채워지면 활성(파랑), 아니면 비활성(회색)
+                disabled={!isFormValid} 
               >
                 완료
               </Button>
