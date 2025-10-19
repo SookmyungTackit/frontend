@@ -11,7 +11,7 @@ import { Button } from '../../components/ui/Button'
 const ROUTES = {
   posts: '/mypage/posts',
   comments: '/mypage/comments',
-  scraps: '/mypage/scraps',
+  scraps: '/mypage/bookmarked',
 }
 
 export default function MyPageHome() {
@@ -87,7 +87,12 @@ export default function MyPageHome() {
                   <div className="w-full rounded-[12px] border border-line-normal">
                     <div className="flex items-center justify-between p-[24px]">
                       <div className="flex items-center">
-                        <div className="h-[80px] w-[80px] rounded-full bg-[#D9D9D9]" />
+                        <img
+                          src="/icons/profile.svg"
+                          alt="프로필 아이콘"
+                          className="h-[80px] w-[80px] cursor-pointer hover:opacity-80 transition"
+                          onClick={() => navigate('/mypage/edit-info')}
+                        />
                         <div className="ml-[24px]">
                           <div className="text-title-2b text-label-normal">
                             {loading ? (
