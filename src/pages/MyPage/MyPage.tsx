@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import Modal from '../../components/modals/Modal'
 import api from '../../api/api'
 import { toastSuccess, toastError } from '../../utils/toast'
+import { Button } from '../../components/ui/Button'
 
 const ROUTES = {
   posts: '/mypage/posts',
@@ -26,7 +27,6 @@ export default function MyPageHome() {
     localStorage.removeItem('accessTokenExpiresIn')
     localStorage.removeItem('grantType')
     localStorage.removeItem('role')
-    toastSuccess('로그아웃 되었습니다.')
     navigate('/login')
   }
 
@@ -52,7 +52,6 @@ export default function MyPageHome() {
 
       toastSuccess(response.data.message || '탈퇴가 완료되었습니다.')
 
-      // ✅ 토큰 삭제 및 로그아웃 처리
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
       localStorage.removeItem('accessTokenExpiresIn')
@@ -101,17 +100,13 @@ export default function MyPageHome() {
                       </div>
 
                       {/* 로그아웃 버튼 */}
-                      <button
-                        type="button"
-                        className={clsx(
-                          'h-[48px] w-[165px] rounded-[12px]',
-                          'text-body-1sb text-label-normal',
-                          'border border-line-normal hover:bg-background-neutral active:bg-background-active'
-                        )}
+                      <Button
+                        variant="outlined"
+                        size="outlinedM"
                         onClick={() => setLogoutOpen(true)}
                       >
                         로그아웃
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </section>
