@@ -7,7 +7,6 @@ import AuthLayout from '../../components/layouts/AuthLayout'
 import { AuthCard } from '../../components/ui/AuthCard'
 import { Button } from '../../components/ui/Button'
 
-
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
