@@ -19,8 +19,6 @@ export default function MyPageHome() {
   const navigate = useNavigate()
   const [logoutOpen, setLogoutOpen] = React.useState(false)
   const [withdrawOpen, setWithdrawOpen] = React.useState(false)
-
-  /** ✅ 로그아웃 */
   const handleConfirmLogout = () => {
     setLogoutOpen(false)
 
