@@ -23,17 +23,18 @@ export default function SignupPage() {
       (_, i) => endYear - i
     )
   }, [])
-
   const [joinedYear, setJoinedYear] = useState<number | ''>('')
   const joinedYearInvalid =
     joinedYear === '' || !yearOptions.includes(Number(joinedYear))
-  const joinedYearMessage = joinedYearInvalid
+  const [joinedYearTouched, setJoinedYearTouched] = useState(false)
+  const [triedSubmit, setTriedSubmit] = useState(false)
+  const showJoinedYearError =
+    (joinedYearTouched || triedSubmit) && joinedYearInvalid
+  const joinedYearMessage = showJoinedYearError
     ? '입사연도를 선택해 주세요.'
     : undefined
 
-  // 폼 상태/유효성/중복확인 로직은 훅으로 통합
   const {
-    // 상태
     email,
     password,
     confirmPassword,
@@ -68,6 +69,7 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setTriedSubmit(true)
 
     if (!role) {
       toastWarn('역할을 선택해 주세요.')
@@ -195,7 +197,6 @@ export default function SignupPage() {
                 message={orgInvalid ? '소속을 입력해 주세요.' : undefined}
               />
 
-              {/* ✅ 입사년도: 오른쪽 SVG 아이콘 클릭 시 드롭 다운 */}
               <TextField
                 id="joinedYear"
                 label="입사년도"
@@ -208,8 +209,9 @@ export default function SignupPage() {
                 }}
                 rightIconSrc="/icons/calendar.svg" // public/icons/calendar.svg 사용
                 dropdownOptions={yearOptions} // [올해, 올해-1, ...]
-                invalid={joinedYearInvalid}
+                invalid={showJoinedYearError}
                 message={joinedYearMessage}
+                onBlur={() => setJoinedYearTouched(true)}
               />
 
               {/* 역할 */}
