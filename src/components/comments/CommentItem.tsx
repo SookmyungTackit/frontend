@@ -1,6 +1,5 @@
-// src/components/comments/CommentItem.tsx
 import React, { useEffect, useState } from 'react'
-import PostAuthorMeta from '../posts/PostAuthorMeta'
+import PostAuthorMeta, { type Role } from '../posts/PostAuthorMeta'
 import DOMPurify from 'dompurify'
 import CommentEditor from './CommentEditor'
 
@@ -9,6 +8,9 @@ export type CommentModel = {
   writer: string
   content: string
   createdAt: string
+  profileImageUrl?: string | null
+  role?: Role
+  joinedYear?: number
 }
 
 type CommentItemProps = {
@@ -66,6 +68,10 @@ function CommentItemBase({
           writer={c.writer || '(알 수 없음)'}
           createdAt={c.createdAt}
           className="justify-start"
+          variant="compact"
+          role={c.role}
+          joinedYear={c.joinedYear}
+          profileImageUrl={c.profileImageUrl}
         />
 
         <div className="flex items-center text-body-2 text-label-neutral">
