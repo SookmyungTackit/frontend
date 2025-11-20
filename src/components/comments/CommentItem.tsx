@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PostAuthorMeta, { type Role } from '../posts/PostAuthorMeta'
-import DOMPurify from 'dompurify'
+import { sanitizeHtml } from '../../utils/sanitize'
 import CommentEditor from './CommentEditor'
 
 export type CommentModel = {
@@ -118,9 +118,9 @@ function CommentItemBase({
         </div>
       ) : (
         <div
-          className="mt-3 whitespace-pre-line text-body-1 reading-regular text-label-normal"
+          className="mt-3 text-body-1 reading-regular text-label-normal comment-content detail-content"
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(String(c.content ?? '')),
+            __html: sanitizeHtml(String(c.content ?? '')),
           }}
         />
       )}

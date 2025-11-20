@@ -67,7 +67,7 @@ export default function PostHeader({
         <PostAuthorMeta
           writer={writer}
           createdAt={createdAt}
-          profileImageUrl={profileImageUrl ?? undefined} // ⭐ 추가
+          profileImageUrl={profileImageUrl}
           variant="default"
         />
       </div>
