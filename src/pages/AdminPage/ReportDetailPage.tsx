@@ -131,7 +131,11 @@ const fallbackDetailById: Record<number, DetailResp> = Object.fromEntries(
 )
 
 export default function ReportReasonDetailPage() {
-  const { targetId } = useParams<{ targetId: string }>()
+  // ✅ 라우트: /admin/reports/:targetType/:targetId 에 맞게 파라미터 2개 받기
+  const { targetId, targetType } = useParams<{
+    targetId: string
+    targetType: string
+  }>()
   const navigate = useNavigate()
 
   const [loading, setLoading] = React.useState(true)
@@ -142,13 +146,30 @@ export default function ReportReasonDetailPage() {
 
   React.useEffect(() => {
     let mounted = true
+
+    // 🔐 targetId 또는 targetType이 없으면 바로 에러 처리
+    if (!targetId || !targetType) {
+      setError('잘못된 접근입니다. (필수 파라미터 누락)')
+      setLoading(false)
+      return
+    }
+
     ;(async () => {
       try {
         setLoading(true)
         setError(null)
+
+        // ✅ API 구조에 맞게:
+        // GET /api/admin/dashboard/reports/{targetId}?targetType=TIP_POST
         const { data } = await api.get<DetailResp>(
-          `/api/admin/dashboard/reports/${targetId}`
+          `/api/admin/dashboard/reports/${targetId}`,
+          {
+            params: {
+              targetType, // 예: "TIP_POST"
+            },
+          }
         )
+
         if (!mounted) return
         setData(data)
       } catch (e: any) {
@@ -157,7 +178,6 @@ export default function ReportReasonDetailPage() {
         const fb = fallbackDetailById[idNum]
         if (fb) {
           setData(fb)
-          // 네트워크 실패 등으로 폴백 사용됨을 알림 (선택)
           toastWarn?.('네트워크 오류로 임시 데이터(폴백)를 표시합니다.')
         } else {
           const msg =
@@ -171,10 +191,11 @@ export default function ReportReasonDetailPage() {
         if (mounted) setLoading(false)
       }
     })()
+
     return () => {
       mounted = false
     }
-  }, [targetId])
+  }, [targetId, targetType])
 
   const latestLog = React.useMemo(() => {
     if (!data?.reportLogs?.length) return null
