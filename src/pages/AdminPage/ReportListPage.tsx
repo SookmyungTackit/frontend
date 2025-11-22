@@ -6,7 +6,6 @@ import PaginationGroup from '../../components/Pagination'
 import api from '../../api/api'
 import './ReportListPage.css'
 
-// 서버 응답 스키마에 맞춘 타입
 type TargetType = 'FREE_POST' | 'QNA_POST' | 'TIP_POST' | string
 type RowStatus = 'ACTIVE' | 'DISABLED' | string
 
@@ -20,7 +19,6 @@ type RawReport = {
   lastReportedAt: string
 }
 
-// 뷰 모델
 type ViewReport = {
   reportId: number
   targetId: number
@@ -33,7 +31,6 @@ type ViewReport = {
 
 const PAGE_SIZE = 10
 
-// 게시판 라벨 변환
 function boardLabelOf(t: TargetType): ViewReport['boardLabel'] {
   switch (t) {
     case 'FREE_POST':
@@ -66,28 +63,6 @@ function toView(r: RawReport): ViewReport {
     lastReportedDate: r.lastReportedAt.slice(0, 10),
   }
 }
-
-// 현재 제공된 예시 응답에 맞춘 fallback
-const fallback: RawReport[] = [
-  {
-    reportId: 1,
-    targetId: 1,
-    targetType: 'TIP_POST',
-    title: '팁 제목',
-    status: 'ACTIVE',
-    reportCount: 1,
-    lastReportedAt: '2025-10-24T01:30:31.900332',
-  },
-  {
-    reportId: 2,
-    targetId: 2,
-    targetType: 'FREE_POST',
-    title: '[비활성화] 광고성 글로 신고된 게시글 예시',
-    status: 'DISABLED',
-    reportCount: 3,
-    lastReportedAt: '2025-10-25T09:15:42.123456',
-  },
-]
 
 type Filter = '전체' | '신고 접수' | '비활성화'
 const filterToId = (f: Filter) => (f === '전체' ? 0 : f === '신고 접수' ? 1 : 2)
@@ -168,16 +143,8 @@ export default function AdminReportStatusPage() {
           setTotalPages(res?.data?.totalPages ?? 1)
         }
       } catch {
-        let src: RawReport[] = fallback
-
-        if (filter === '신고 접수') {
-          src = src.filter((r) => r.status === 'ACTIVE')
-        } else if (filter === '비활성화') {
-          src = src.filter((r) => r.status === 'DISABLED')
-        }
-
         if (mounted) {
-          setItems(src.map(toView))
+          setItems([]) // fallback 제거 → 빈 배열 반환
           setTotalPages(1)
         }
       } finally {
