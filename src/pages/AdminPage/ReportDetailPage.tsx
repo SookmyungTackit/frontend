@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import AdminLayout from './layout/AdminLayout'
 import api from '../../api/api'
 import Modal from '../../components/modals/Modal'
-import { toastSuccess, toastWarn, toastError } from '../../utils/toast'
+import { toastSuccess, toastError } from '../../utils/toast'
 
 type ReportReasonEnum =
   | 'ADVERTISEMENT'
@@ -27,27 +27,6 @@ type DetailResp = {
   }>
 }
 
-const listFallback = [
-  {
-    id: 1,
-    type: 'POST' as const,
-    content: '신입사원을 위한 회사생활 꿀팁',
-    reason: '허위 정보 또는 사실 왜곡',
-    status: 'DISABLED' as const,
-    count: 3,
-    createdAt: '2025-06-20',
-  },
-  {
-    id: 2,
-    type: 'COMMENT' as const,
-    content: '신규 고객사 대상 세일즈 전략 관련 질문드립니다',
-    reason: '허위 정보 또는 사실 왜곡',
-    status: 'RECEIVED' as const,
-    count: 2,
-    createdAt: '2025-06-20',
-  },
-]
-
 // 백엔드 코드 → 한글
 function reasonCodeToText(code: string): string {
   switch (code) {
@@ -65,70 +44,6 @@ function reasonCodeToText(code: string): string {
       return '기타'
   }
 }
-
-// 🔧 한글 → enum (fallback 생성용)
-function korReasonToEnum(kor: string): ReportReasonEnum {
-  const s = kor.trim()
-  if (s.includes('광고')) return 'ADVERTISEMENT'
-  if (s.includes('중복') || s.includes('도배')) return 'DUPLICATE'
-  if (s.includes('허위') || s.includes('왜곡')) return 'FALSE_INFO'
-  if (s.includes('관련 없') || s.includes('무관') || s.includes('주제'))
-    return 'IRRELEVANT'
-  return 'ETC'
-}
-
-// 목록 fallback → 상세 fallback으로 변환
-function toDetailFallback(item: (typeof listFallback)[number]): DetailResp {
-  let postType: 'FREE' | 'QNA' | 'TIP' = 'FREE'
-  if (item.content.includes('꿀팁')) postType = 'TIP'
-  if (item.content.includes('질문')) postType = 'QNA'
-
-  const statusMap: Record<string, 'ACTIVE' | 'DISABLED' | 'DELETED'> = {
-    DISABLED: 'DISABLED',
-    RECEIVED: 'ACTIVE',
-  }
-  const status = statusMap[item.status] ?? 'ACTIVE'
-
-  const logs: DetailResp['reportLogs'] = Array.from({ length: item.count }).map(
-    (_, idx) => {
-      const base = new Date(item.createdAt)
-      base.setHours(10 - idx)
-      return {
-        reportId: Number(`${item.id}${idx + 1}`),
-        reporterNickname: `신고자${idx + 1}`,
-        reportReason: korReasonToEnum(item.reason),
-        createdAt: base.toISOString(),
-      }
-    }
-  )
-
-  const targetType =
-    item.type === 'COMMENT'
-      ? postType === 'TIP'
-        ? 'TIP_COMMENT'
-        : postType === 'QNA'
-        ? 'QNA_COMMENT'
-        : 'FREE_COMMENT'
-      : postType === 'TIP'
-      ? 'TIP_POST'
-      : postType === 'QNA'
-      ? 'QNA_POST'
-      : 'FREE_POST'
-
-  return {
-    targetId: item.id,
-    targetType,
-    postType,
-    contentTitle: item.content,
-    contentWriter: postType === 'TIP' ? '작성자1' : '알 수 없음',
-    status,
-    reportLogs: logs,
-  }
-}
-
-const fallbackDetailById: Record<number, DetailResp> = Object.fromEntries(
-  listFallback.map((it) => [it.id, toDetailFallback(it)])
-)
 
 export default function ReportReasonDetailPage() {
   // ✅ 라우트: /admin/reports/:targetType/:targetId 에 맞게 파라미터 2개 받기
@@ -174,19 +89,12 @@ export default function ReportReasonDetailPage() {
         setData(data)
       } catch (e: any) {
         if (!mounted) return
-        const idNum = Number(targetId)
-        const fb = fallbackDetailById[idNum]
-        if (fb) {
-          setData(fb)
-          toastWarn?.('네트워크 오류로 임시 데이터(폴백)를 표시합니다.')
-        } else {
-          const msg =
-            e?.response?.data?.message ||
-            e?.message ||
-            '신고사유 상세 조회 중 오류가 발생했습니다.'
-          setError(msg)
-          toastError(msg)
-        }
+        const msg =
+          e?.response?.data?.message ||
+          e?.message ||
+          '신고사유 상세 조회 중 오류가 발생했습니다.'
+        setError(msg)
+        toastError(msg)
       } finally {
         if (mounted) setLoading(false)
       }
@@ -370,13 +278,12 @@ function humanizeTargetType(t: string) {
 }
 
 function humanizePostType(t: string) {
-  if (t === 'FREE') return '자유롭게 얘기해요'
+  if (t === 'FREE') return '다같이 얘기해요'
   if (t === 'QNA') return '신입이 질문해요'
   if (t === 'TIP') return '선배가 알려줘요'
   return t
 }
 
-/** 2025.06.20 오후 9:18 형태 */
 function formatKSTPretty(iso: string) {
   try {
     const d = new Date(iso)
