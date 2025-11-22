@@ -18,7 +18,6 @@ type RawReport = {
   status: RowStatus
   reportCount: number
   lastReportedAt: string
-  // targetId?: number
 }
 
 // 뷰 모델
@@ -26,26 +25,29 @@ type ViewReport = {
   reportId: number
   targetId: number
   targetType: TargetType
-  boardLabel: '자유게시판' | '질문게시판' | '선임자의 TIP' | string
+  boardLabel: '자유게시판' | '질문게시판' | '선임자의 TIP' | '댓글' | string
   title: string
   statusChip: { label: string; tone: 'neutral' | 'danger' | 'primary' }
   lastReportedDate: string
-  // targetId?: number
 }
 
 const PAGE_SIZE = 10
 
-// 보드 라벨 변환(관리자 콘텍스트에 맞게 게시판명으로 통일)
+// 게시판 라벨 변환
 function boardLabelOf(t: TargetType): ViewReport['boardLabel'] {
-  const upper = t.toUpperCase()
-  if (upper.includes('COMMENT')) return '댓글'
-  if (upper.includes('POST')) return '게시글'
-
-  if (upper === 'FREE_POST') return '게시글'
-  if (upper === 'QNA_POST') return '게시글'
-  if (upper === 'TIP_POST') return '게시글'
-
-  return t
+  switch (t) {
+    case 'FREE_POST':
+      return '자유게시판'
+    case 'QNA_POST':
+      return '질문게시판'
+    case 'TIP_POST':
+      return '선임자의 TIP'
+    default: {
+      const upper = t.toUpperCase()
+      if (upper.includes('COMMENT')) return '댓글'
+      return t
+    }
+  }
 }
 
 function toView(r: RawReport): ViewReport {
@@ -62,7 +64,6 @@ function toView(r: RawReport): ViewReport {
     title: r.title,
     statusChip,
     lastReportedDate: r.lastReportedAt.slice(0, 10),
-    // targetId: r.targetId,
   }
 }
 
@@ -223,7 +224,6 @@ export default function AdminReportStatusPage() {
           <div className="pt-[24px] pb-[12px] px-[24px]">
             <div className="overflow-hidden rounded-xl">
               <table className="w-full table-fixed border-collapse text-[15px]">
-                {/* ✅ 요청 반영: thead 스타일 및 4개 컬럼(유형/신고 내용/상태/신고 일자) */}
                 <thead className="bg-[var(--background-neutral)] text-left text-[var(--label-neutral)] text-body-2">
                   <tr className="h-[48px]">
                     <th className="pl-[24px] w-[20%] font-medium align-middle">
@@ -247,7 +247,9 @@ export default function AdminReportStatusPage() {
 
                   {!loading &&
                     items.map((r, i) => {
-                      const detailHref = `/admin/reports/${r.targetId}`
+                      // ✅ 상세 페이지 경로: /admin/reports/:targetType/:targetId
+                      const detailHref = `/admin/reports/${r.targetType}/${r.targetId}`
+
                       return (
                         <tr
                           key={r.reportId}
